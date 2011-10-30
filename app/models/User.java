@@ -35,12 +35,6 @@ public class User extends Model {
     @NoBinding
     public String password;
 
-    /**
-     * Save user's plain-text password, to get competitor's passwords when they register to try us out.
-     */
-    @NoBinding
-    public String passwordPlainText;
-
     public AccountType accountType = AccountType.BETA;
 
     @Column(name = "is_admin") // "admin" is a reserved keyword.
@@ -136,10 +130,9 @@ public class User extends Model {
             return;
         }
 
-        Logger.info("User %s (id %d) changed password from %s to %s", this, this.id, passwordPlainText, newPassword);
+        Logger.info("User %s (id %d) changed password", this, this.id);
 
         password = BCrypt.hashpw(newPassword, BCrypt.gensalt());
-        passwordPlainText = newPassword;
     }
 
     /**
@@ -157,7 +150,7 @@ public class User extends Model {
         // Check that the unencrypted password "candidate" matches one that has previously been hashed.
         final boolean correct = BCrypt.checkpw(candidate, password);
         if (!correct) {
-            Logger.info("User %s (id %d) failed password check. Expected %s, got %s", this, this.id, passwordPlainText, candidate);
+            Logger.info("User %s (id %d) failed password check", this, this.id);
             loginFailures += 1;
             save();
         }

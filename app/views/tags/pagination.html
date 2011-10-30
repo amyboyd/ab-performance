@@ -1,0 +1,43 @@
+*{
+@param {int} _pageNumber
+@param {int} _pageSize
+@param {int} _totalHits
+@param {string?} _action Defaults to current controller/action.
+}*
+%{
+_pageCount = (int) java.lang.Math.ceil((float) _totalHits / (float) _pageSize);
+if (_action == null) { _action = request.controller + '.' + request.actionMethod; }
+}%
+
+#{if _pageCount > 1}
+    <div id="pagination">
+        %{
+        def page = {
+            args = new java.util.HashMap<String, Object>()
+            args.putAll(params.allSimple())
+            if (it == 1) {
+                args.remove('page')
+            } else {
+                args.put('page', it)
+            }
+            play.mvc.Router.getFullUrl(_action, args)
+        }
+
+        if (_pageNumber == 1) {
+            out.println('<a class="current" href="' + page(1) + '">Page 1</a>')
+        } else {
+            out.println('<a href="' + page(1) + '">Page 1</a>')
+        }
+
+        for (int i = 2; i <= _pageCount; i++) {
+            if (i == _pageNumber) {
+                out.println('<a class="current" href="' + page(_pageNumber) + '">' + _pageNumber + '</a>')
+            } else {
+                out.println('<a href="' + page(i) + '">' + i + '</a>');
+            }
+        }
+        }%
+    </div>
+
+    <div class="clearfix"></div>
+#{/if}

@@ -1,0 +1,6 @@
+#{if request.isAjax()}
+    #{include 'layout-for-ajax.html' /}
+#{/}
+#{else}
+    #{include 'layout-for-normal.html' /}
+#{/}

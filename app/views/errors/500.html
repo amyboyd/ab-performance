@@ -1,0 +1,16 @@
+#{if request.isAjax()}
+    Error: ${exception.getMessage()}
+#{/}
+#{else}
+    #{extends 'layout.html' /}
+    #{set title:'Application error' /}
+
+    #{if com.abperf.Constants.IS_DEV}
+        #{500 exception /}
+    #{/if}
+    #{else}
+        <h1>Oh bummer, something went wrong!</h1>
+        <p>We have been notified and will try to fix it, fast.</p>
+        <h2><em>Sorry</em></h2>
+    #{/else}
+#{/}

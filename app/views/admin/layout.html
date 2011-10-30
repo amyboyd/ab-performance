@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>${request.action}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+        <style>
+            nav             { float: left; width: 200px; }
+            nav ul          { margin: 0; padding: 0; }
+            nav li          { list-style-type: none; }
+            #page-content   { margin-left: 220px; }
+        </style>
+    </head>
+    <body>
+        <p>
+            <a href="/">
+                <img src="@@{'/public/images/logo-150x50-transparent.png'}" width="150" height="50" />
+            </a>
+        </p>
+
+        <nav>
+            <ul>
+                <li><a href="">menu item</a></li>
+            </ul>
+        </nav>
+
+        <section id="page-content">
+            #{if errors.size()}
+                <div class="flash-message flash-message-error">
+                    <ul>
+                        <li><u><b>Errors:</b></u></li>
+
+                        #{list errors}
+                            <li>${_.getKey()} - ${_}</li>
+                        #{/}
+                    </ul>
+                </div>
+            #{/}
+
+            #{if flash?.success}<p class="flash-message">${flash.success}</p>#{/if}
+            #{if flash?.error}<p class="flash-message flash-message-error">${flash.error}</p>#{/if}
+
+            #{doLayout /}
+        </section>
+    </body>
+</html>

@@ -1,0 +1,15 @@
+*{
+@param {play.data.validation.Validation} _arg The "errors" variable available in views.
+}*
+
+#{if com.abperf.Constants.IS_DEV && _arg?.size() > 0}
+    <div class="flash-message flash-message-error">
+        <ul>
+            <li><u><b>Error debugging:</b></u></li>
+
+            #{list _arg}
+                <li>${_.getKey()} - ${_}</li>
+            #{/}
+        </ul>
+    </div>
+#{/}

@@ -1,0 +1,15 @@
+#{if request.isAjax()}
+    Page not found
+#{/}
+#{else}
+    #{extends 'layout.html' /}
+    #{set title:'Not found' /}
+
+    #{if com.abperf.Constants.IS_DEV}
+        #{404 result /}
+    #{/if}
+    #{else}
+        <h2>Not found</h2>
+        <p>The page you were looking for does not exist.</p>
+    #{/else}
+#{/}

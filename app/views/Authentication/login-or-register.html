@@ -1,0 +1,27 @@
+#{extends 'layout.html' /}
+#{set title: 'Login Or Register - ' + SITE_NAME /}
+#{set bodyID: 'login-page' /}
+
+#{if overrideMessage}
+    <div class="flash-message">${overrideMessage.raw()}</div>
+#{/}
+
+<div id="login-column-2" class="login-column">
+    <h1>Login With Email/Password</h1>
+
+    <p>If you have already registered on ${SITE_NAME} with an email address and password, login below.</p>
+
+    #{include 'users/Authentication/_login-form.html' /}
+
+    <p><a href="@{Authentication.forgotPassword}">Forgot your password? Click here to reset it.</a></p>
+</div>
+
+<div id="login-column-3" class="login-column">
+    <h1>Register</h1>
+
+    <p>If you are new to ${SITE_NAME} (hello!), register below. Alternatively, register with your Facebook or Twitter account.</p>
+
+    #{include 'users/Authentication/_register-form.html' /}
+</div>
+
+<div class="clearfix"></div>

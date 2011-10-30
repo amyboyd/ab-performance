@@ -1,0 +1,20 @@
+*{
+@param {String} _arg Form field name.
+@param {String?=} _tag Defaults to 'p'.
+@param {boolean?=} _breakAfter If to insert a 'br' tag after closing '_tag'. Defaults to false.
+}*
+%{
+_tag =  (_tag ? _tag : 'p');
+}%
+
+#{if play.data.validation.Validation.current().hasError(_arg)}
+    #{if _breakBefore}
+        <br />
+    #{/}
+
+    <${_tag} class="field-error">#{error _arg /}</${_tag}>
+
+    #{if _breakAfter}
+        <br />
+    #{/}
+#{/if}

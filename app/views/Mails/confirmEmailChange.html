@@ -1,0 +1,8 @@
+#{extends 'Mails/layout.html' /}
+
+<p>Hello ${user},</p>
+
+<p>
+    Please <a href="@@{Profiles.confirmEmail(user.id, user.getValidationCode())}">click here</a>
+    to confirm your new email address (${user.email}).
+</p>

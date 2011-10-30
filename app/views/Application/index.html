@@ -1,0 +1,5 @@
+#{extends 'layout.html' /}
+#{set title: 'Handmade Arts And Crafts Marketplace - ' + SITE_NAME /}
+#{set bodyID: 'home-page' /}
+#{set cacheByURL: false /} *{ don't cache because this page is meant to show newest items immediately }*
+#{set 'doc-canonical'}@@{Application.index()}#{/}
