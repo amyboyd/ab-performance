@@ -1,0 +1,8 @@
+User(Tester):
+    email: mic.t.boyd@gmail.com
+    password: purple
+    name: Michael Testing
+    admin: true
+    loginCount: 0
+    loginFailures: 0
+    emailConfirmed: true
