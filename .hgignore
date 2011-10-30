@@ -1,0 +1,7 @@
+tmp
+logs
+nbproject
+build.xml
+public/closure
+public/uploads
+public/bundles
