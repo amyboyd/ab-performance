@@ -1,0 +1,27 @@
+/* Pagination ****************************************************************/
+#pagination {
+    color: #000000;
+    font-size: 13px;
+    margin: 30px 0 70px;
+    line-height: 20px;
+    float: left;
+}
+#pagination a {
+    text-decoration: none;
+    float: left;
+    margin-right: 0px;
+    padding: 4px 10px;
+    background-color: #EBEFF9;
+    border-width: 1px 0;
+    border-style: solid;
+    border-color: #6B90DA;
+    font-size: 0.9em;
+    font-weight: normal;
+    color: #333;
+}
+#pagination a.current,
+#pagination a:hover {
+    border-width: 3px 0;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}

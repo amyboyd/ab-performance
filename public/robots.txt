@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin
+Disallow: /api
+Disallow: /meta/report
+Disallow: /manage-shop
+Disallow: /users/authentication/logout
+Disallow: /me

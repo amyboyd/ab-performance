@@ -1,0 +1,366 @@
+html {
+    height: 100%;
+}
+body {
+    min-width: 640px;
+    margin: 0;
+}
+
+
+/* Fonts *********************************************************************/
+body {
+    color: #4e2800;
+    font-size: 14px;
+    font-family: arial, sans-serif;
+}
+input, select, textarea {
+    font-size: 13px;
+    font-family: arial, sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: arial, sans-serif;
+    color: #000;
+    text-shadow: 3px 3px 7px #ddd;
+}
+
+
+/* Common styles *************************************************************/
+a, .fake-link {
+    color: green;
+    text-decoration: underline;
+    cursor: pointer;
+}
+a:hover, .fake-link:hover {
+    color: #d64084;
+}
+textarea {
+    line-height: 1.7em;
+    padding: 0.5em;
+}
+button, input[type="submit"] {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+a.button {
+    padding: 5px 10px;
+    position: relative;
+    top: -5px;
+    color: #000;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: #8BFB79;
+}
+a.button:hover {
+    -moz-box-shadow: 0 1px 3px #666;
+    -webkit-box-shadow: 0 1px 3px #666;
+    box-shadow: 0 1px 3px #666;
+    /* For IE 8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#000000')";
+    /* For IE 5.5 - 7 */
+    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#000000');
+}
+
+
+/* Header ********************************************************************/
+body > header {
+    margin: 0;
+    padding: 10px 20px;
+    border-bottom: 2px solid #999; /* different color from top/left/right */
+    font-family: georgia, arial;
+    background-color: #fff;
+    %{
+    fancyDeboss = play.getFile('/public/images/fancy_deboss.png');
+    base64 = play.libs.Images.toBase64(fancyDeboss)
+    }%
+    background-image: url('${base64}');
+    background-repeat: repeat;
+}
+
+
+/* Logo **********************************************************************/
+@-webkit-keyframes rotateLogo {
+    0% { -webkit-transform: rotate(0deg); }
+    2% { -webkit-transform: rotate(-7deg); }
+    5% { -webkit-transform: rotate(-380deg); }
+    6% { -webkit-transform: rotate(-350deg); }
+    7% { -webkit-transform: rotate(-370deg); }
+    10% { -webkit-transform: rotate(350deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+#logo {
+    float: left;
+    -webkit-animation-duration: 100s;
+    z-index: 5;
+    width: 150px;
+    height: 50px;
+    %{
+    logo = play.getFile('/public/images/logo-150x50-transparent.png');
+    base64 = play.libs.Images.toBase64(logo)
+    }%
+    background-image: url('${base64}');
+    background-repeat: no-repeat;
+}
+#logo:hover {
+    -webkit-animation-name: rotateLogo;
+}
+
+
+/* Navigation links **********************************************************/
+#main-nav {
+    float: left;
+    margin-top: 13px;
+    margin-left: 24px;
+    font-size: 20px;
+    font-family: "georgia", arial, sans-serif;
+    padding: 2px;
+    color: #000;
+}
+#main-nav .bullet {
+    font-size: 16px;
+    color: #000;
+}
+#main-nav a {
+    color: #000;
+}
+
+
+/* Search bar ****************************************************************/
+#main-search {
+    float: right;
+    margin-top: 13px;
+    position: relative;
+}
+#main-search input[type="text"] {
+    font-size: 19px;
+    padding: 0 35px 0 4px;
+    width: 235px;
+    font-family: "georgia";
+}
+#main-search input[type="image"] {
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    border-left: 1px solid #ccc;
+}
+
+
+/* Message to IE 6/7 users ***************************************/
+#ie-upgrade {
+    background-color: #FFF6BF;
+    color: #000000;
+    padding: 0.4em 0.8em 0.8em;
+    border: 2px solid #FFD324;
+    clear: both;
+    margin: 1em 0;
+}
+#ie-upgrade a {
+    color: #000000;
+    font-weight: bold;
+}
+
+
+/* Main page content *********************************************************/
+section#page-content {
+    padding: 40px 20px 20px;
+    background-color: #ffffff;
+    border-top: 2px solid #ccc; /* different from right/left/bottom */
+}
+
+
+/* Footer ********************************************************************/
+#main-footer {
+    margin: 40px 0 0;
+    padding: 12px 20px 1px;
+    color: #FFF;
+    -webkit-box-shadow: 0px -5px 14px #555;
+    -moz-box-shadow: 0px -5px 14px #555;
+    box-shadow: 0px -5px 14px #555;
+    background-color: #000;
+    background-image: url("@{'/public/images/footer-bg.jpg'}");
+    background-repeat: no-repeat;
+    background-position: left top;
+}
+#main-footer h6 {
+    font-family: arial, sans-serif;
+    color: yellow !important;
+    font-size: 36px;
+    letter-spacing: 3px;
+    -webkit-text-shadow: 1px 1px 22px white;
+    -moz-text-shadow: 1px 1px 22px white;
+    text-shadow: 1px 1px 22px white;
+    margin-right: 26px;
+    font-weight: normal !important;
+    text-decoration: none !important;
+    background-color: #000;
+}
+#main-footer-copyright a,
+#main-footer-links a {
+    text-decoration: none;
+    background-color: #000;
+}
+#main-footer-copyright a:hover,
+#main-footer-links a:hover {
+    text-decoration: underline;
+    color: yellow !important;
+}
+#main-footer-copyright a,
+#main-footer-links a {
+    color: #bada55;
+}
+#main-footer-inner-container {
+    max-width: 784px;
+    margin: 0 auto;
+}
+#main-footer h6 {
+    text-align: right;
+    margin-right: 20px;
+}
+#main-footer-copyright {
+    text-align: right;
+    font-style: italic;
+    margin-right: 20px;
+    font-size: 12px;
+}
+#main-footer-links {
+    font-family: "georgia", arial, sans-serif;
+    margin: 2em 0 2em;
+    text-align: center;
+    font-size: 14px;
+    padding: 10px 0;
+    border-width: 1px 0;
+    border-color: #808080;
+    border-style: dotted;
+}
+#main-footer-links .bullet {
+    font-size: 16px;
+    color: #fff;
+}
+#main-footer-trial-disclaimer {
+    font-family: "georgia", arial, sans-serif;
+    margin: 2em auto 3em;
+    color: #ddd;
+    font-size: 12px;
+    max-width: 505px;
+    line-height: 2em;
+}
+#main-footer-trial-disclaimer-image {
+    position: relative;
+    top: 4px;
+    padding-right: 2px;
+    float: left;
+    height: 16px;
+    width: 16px;
+    %{
+    brick = play.getFile('/public/images/famfamfam-icons/brick.png');
+    base64 = play.libs.Images.toBase64(brick)
+    }%
+    background-image: url('${base64}');
+    background-repeat: no-repeat;
+}
+#main-footer-trial-disclaimer a {
+    color: #fff;
+}
+
+
+/* Forms *********************************************************************/
+legend {
+    font-weight: bold;
+}
+label {
+    font-weight: bold;
+    cursor: pointer;
+}
+form table {
+    width: auto;
+}
+form table th {
+    width: 12em;
+    text-align: right;
+}
+form table th,
+form table td {
+    min-height: 2em;
+    line-height: 2em;
+    vertical-align: top;
+}
+form .help {
+    color: #999;
+    font-size: 0.9em;
+    max-width: 30em;
+    line-height: 1.5em;
+    display: inline-block;
+    font-weight: normal;
+}
+form .field-error {
+    padding: 2px 3px 2px 24px;
+    margin-bottom: 0.5em;
+    background-color: #FAF0F0;
+    color: #8a1f11;
+    %{
+    error = play.getFile('/public/images/famfamfam-icons/error.png');
+    base64 = play.libs.Images.toBase64(error)
+    }%
+    background-image: url('${base64}');
+    background-repeat: no-repeat;
+    background-position: 4px center;
+    line-height: 25px;
+    border-left: 2px solid #8A1F11;
+}
+
+
+/* Flash messages ************************************************************/
+.flash-message {
+    padding: 0.8em;
+    margin: 0 auto 40px;
+    background-color: #8BFB79;
+    color: #514721;
+    max-width: 80ex;
+    font-weight: bold;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+}
+.flash-message a {
+    color: #514721;
+    text-decoration: underline;
+}
+.flash-message p:last-child {
+    margin-bottom: 0 !important;
+}
+.flash-message.flash-message-error {
+    padding: 2px 3px 2px 24px;
+    color: #8a1f11;
+    font-weight: normal;
+    background-color: #FAF0F0;
+    background-image: url("@@{'/public/images/famfamfam-icons/error.png'}");
+    background-repeat: no-repeat;
+    background-position: 4px center;
+    line-height: 25px;
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
+    border-left: 2px solid #8A1F11;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+
+/* Text articles, e.g. on the meta pages *************************************/
+article {
+    max-width: 80ex;
+    line-height: 1.7em;
+}
+article ul {
+    list-style: disc;
+    margin: 0 0 1.7em 1.5em;
+}
+article ol {
+    list-style: decimal;
+    margin: 0 0 1.7em 1.5em;
+}
+
+
+/* Print styles **************************************************************/
+@media print {
+}

@@ -1,0 +1,10 @@
+#login-page .login-column {
+    float: left;
+    width: 30%;
+    margin-right: 3%;
+    line-height: 1.5em;
+}
+#login-page .login-column h1 {
+    line-height: 1.1em;
+    height: 2em;
+}
