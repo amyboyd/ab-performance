@@ -1,0 +1,37 @@
+GET     /                                                       Application.index
+GET     /demo                                                   Application.demo
+GET     /about                                                  Application.about
+GET     /terms                                                  Application.terms
+GET     /privacy                                                Application.privacy
+GET     /help                                                   Application.help
+
+
+*       /feedback/{action}                                      SiteFeedbacks.{action}
+*       /authentication/{action}                                Authentication.{action}
+*       /profiles/{action}                                      Profiles.{action}
+
+
+# Admin
+# ~~~~~
+GET     /admin/?                                                admin.Admin.index
+*       /admin/{module}/{action}                                admin.{module}.{action}
+
+
+# JS, CSS, images
+# Serve them from a cookie-free domain when in production.
+# ~~~~~~~~
+
+%{ domain = (com.abperf.Constants.IS_PROD ? 'abperf.alienmegacorp.net' : '') }%
+
+# Update the version number when deploying if we need to force browsers to refresh their cache.
+GET     ${domain}/_/bundles/1/{action}                          Bundles.{action}
+
+GET     /favicon.ico                                            staticFile:public/favicon.ico
+GET     /robots.txt                                             staticFile:public/robots.txt
+GET     /deps.js                                                staticFile:public/closure/closure/goog/deps.js
+
+# These directory routes are sometimes hard-coded, and stored in the database.
+GET     ${domain}/_/b/                                          staticDir:public/uploads/
+GET     ${domain}/_/a/                                          staticDir:public/
+GET     /_/b/                                                   staticDir:public/uploads/
+GET     /_/a/                                                   staticDir:public/
