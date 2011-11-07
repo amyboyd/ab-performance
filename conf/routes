@@ -5,6 +5,9 @@ GET     /terms                                                  Application.term
 GET     /privacy                                                Application.privacy
 GET     /help                                                   Application.help
 
+GET     /beta/client.js                                         Bundles.clientScripts
+HEAD    /beta/report/start                                      Reporting.startBeta
+HEAD    /beta/report/ping                                       Reporting.pingBeta
 
 *       /feedback/{action}                                      SiteFeedbacks.{action}
 *       /authentication/{action}                                Authentication.{action}

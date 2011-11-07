@@ -1,6 +1,6 @@
-goog.provide('abperf.TestGroup');
+goog.provide('abperf.styles.TestGroup');
 
-goog.require('abperf.RememberedTestChoice');
+goog.require('abperf.styles.RememberedTestChoice');
 goog.require('goog.array');
 
 /**
@@ -9,26 +9,27 @@ goog.require('goog.array');
  * @constructor
  * @param {string} name Must not be null or empty.
  */
-abperf.TestGroup = function(name) {
+abperf.styles.TestGroup = function(name) {
     this.name = name;
     this.tests = [];
 }
 
 /**
- * @param {abperf.Test} test
+ * @param {abperf.styles.Test} test
  */
-abperf.TestGroup.prototype.addTest = function(test) {
+abperf.styles.TestGroup.prototype.addTest = function(test) {
     this.tests.push(test);
 }
 
 /**
  * Randomly choose a test to run, or none. If one is chosen, run it immediately.
  */
-abperf.TestGroup.prototype.chooseTestAndRunIt = function() {
+abperf.styles.TestGroup.prototype.chooseTestAndRunIt = function() {
     var test = this.chooseTest();
     if (test !== null) {
         test.run();
     }
+    abperf.styles.runningTests[this.name] = test;
 }
 
 /**
@@ -37,11 +38,11 @@ abperf.TestGroup.prototype.chooseTestAndRunIt = function() {
  * a style is being chosen for this user, it is remembered for next time.
  *
  * @private
- * @return {abperf.Test|null}
+ * @return {abperf.styles.Test|null}
  */
-abperf.TestGroup.prototype.chooseTest = function() {
+abperf.styles.TestGroup.prototype.chooseTest = function() {
     // See if there is a test ID already remembered for this user/test-name combo.
-    var remembered = new abperf.RememberedTestChoice(this.name);
+    var remembered = new abperf.styles.RememberedTestChoice(this.name);
 
     if (remembered.isValid()) {
         if (goog.DEBUG) {

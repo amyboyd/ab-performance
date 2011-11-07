@@ -1,4 +1,4 @@
-goog.provide('abperf.Test');
+goog.provide('abperf.styles.Test');
 
 goog.require('goog.string');
 goog.require('goog.style');
@@ -10,7 +10,7 @@ goog.require('goog.crypt.Md5');
  * @param {string} name The test name.
  * @param {string} css The css rules.
  */
-abperf.Test = function(name, css) {
+abperf.styles.Test = function(name, css) {
     this.name = name;
 
     // Make the CSS pretty so it can be displayed in debuging.
@@ -27,7 +27,7 @@ abperf.Test = function(name, css) {
 /**
  * Run this test.
  */
-abperf.Test.prototype.run = function() {
+abperf.styles.Test.prototype.run = function() {
     // Install the styles inline at the end of the document's body, so they have the highest
     // priority.
     var installed = goog.style.installStyles(this.css, document.body);
@@ -37,10 +37,10 @@ abperf.Test.prototype.run = function() {
 }
 
 /** A hash that uniquely identifies this test. @type {string} */
-abperf.Test.prototype.id = null;
+abperf.styles.Test.prototype.id = null;
 
 /** Pretty-printed CSS. @type {string} */
-abperf.Test.prototype.css = null;
+abperf.styles.Test.prototype.css = null;
 
 /** @type {string} */
-abperf.Test.prototype.name = null;
+abperf.styles.Test.prototype.name = null;
