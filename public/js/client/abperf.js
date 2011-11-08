@@ -6,10 +6,9 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('onDOMContentLoaded');
 
-onDOMContentLoaded(init);
-
-function init() {
-    // Styles starts as soon as possible after all DOM elements are in the DOM tree.
+// Start as soon as possible after all DOM elements are in the DOM tree.
+onDOMContentLoaded(function() {
+    // Styles.
     abperf.styles.start();
 
     // Reporting.
@@ -18,4 +17,4 @@ function init() {
     goog.events.listen(window,
         [goog.events.EventType.MOUSEMOVE, goog.events.EventType.SCROLL, goog.events.EventType.KEYPRESS],
         abperf.reporting.interactionOccurred);
-}
+});
