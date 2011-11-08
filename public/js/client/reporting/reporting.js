@@ -21,6 +21,9 @@ var lastInteraction = Date.now();
 /** @private @type {string} */
 var lastPingStatus = 'active';
 
+/** @private @type {number} */
+var consecutiveActivePings = 0;
+
 /**
  * Start tracking interaction with the page.
  * 
@@ -48,25 +51,28 @@ abperf.reporting.ping = function() {
     var timeSinceLastInteraction = now - lastInteraction;
     var status = (timeSinceLastInteraction > 18000) ? 'inactive' : 'active';
 
-    if (lastPingStatus === 'inactive' && status === 'inactive') {
-        // No need to ping the 'inactive' status because the server already knows the user is inactive.
-        if (goog.DEBUG) {
-            console.log('not pinging - status is still "inactive" - last interaction was ' + (timeSinceLastInteraction/1000) + ' seconds ago');
-        }
-        return;
-    }
-
     if (goog.DEBUG) {
-        console.log('pinging - status is "' + status + '" - last interaction was ' + (timeSinceLastInteraction/1000) + ' seconds ago');
+        console.log('pinging - status is ' + status + ' - last interaction was ' + (timeSinceLastInteraction/1000) + ' seconds ago');
     }
 
-    lastPingStatus = status;
+    if (lastPingStatus === 'inactive' && status === 'inactive') {
+        // No need to ping because the server already knows the user is inactive.
+    } else {
+        lastPingStatus = status;
+        consecutiveActivePings = (status === 'active' ? consecutiveActivePings + 1 : 0);
 
-    abperf.reporting.reportDataToURL_(PING_URL, {
-        guid: START_TIME,
-        status: status,
-        time: now
-    });
+        abperf.reporting.reportDataToURL_(PING_URL, {
+            guid: START_TIME,
+            status: status,
+            time: now
+        });
+    }
+
+    // When the user has been active on the page for a long time, reduce the ping frequency.
+    var pingFrequency = (consecutiveActivePings <= 10 ? 10000
+        : (consecutiveActivePings <= 15 ? 20000
+        : 30000));
+    setTimeout(abperf.reporting.ping, pingFrequency);
 }
 
 /**
@@ -82,6 +88,6 @@ abperf.reporting.interactionOccurred = function() {
  * @private
  */
 abperf.reporting.reportDataToURL_ = function(url, data) {
-    url = url + "?" + goog.uri.utils.buildQueryDataFromMap(data);
+    url = url + '?' + goog.uri.utils.buildQueryDataFromMap(data);
     goog.net.XhrIo.send(url, null, 'HEAD');
 }

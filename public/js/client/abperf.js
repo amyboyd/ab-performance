@@ -13,7 +13,7 @@ onDOMContentLoaded(function() {
 
     // Reporting.
     abperf.reporting.start(abperf.styles.runningTests);
-    setInterval(abperf.reporting.ping, 10000);
+    setTimeout(abperf.reporting.ping, 5000);
     goog.events.listen(window,
         [goog.events.EventType.MOUSEMOVE, goog.events.EventType.SCROLL, goog.events.EventType.KEYPRESS],
         abperf.reporting.interactionOccurred);
