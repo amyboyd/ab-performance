@@ -10,8 +10,8 @@ abperf.styles.RememberedTestChoice = function(testName) {
 
     var obj = store.get('test-' + testName);
     if (obj != null) {
-        this.id = obj.id;
-        this.date = obj.date;
+        this.id = obj['id'];
+        this.date = obj['date'];
     } else {
         this.id = null;
         this.date = 0;
@@ -33,7 +33,7 @@ abperf.styles.RememberedTestChoice.prototype.save = function() {
     this.date = Date.now();
 
     store.set('test-' + this.testName, {
-        id: this.id, 
-        date: this.date
+        'id': this.id, 
+        'date': this.date
     });
 }

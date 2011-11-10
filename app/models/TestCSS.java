@@ -14,8 +14,8 @@ import play.db.jpa.*;
 public class TestCSS extends GenericModel {
     @Id
     @Required
-    @MinSize(32)
-    @MaxSize(32)
+    @MinSize(40)
+    @MaxSize(40)
     public String testId;
 
     @Required

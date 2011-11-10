@@ -3,8 +3,6 @@ goog.provide('abperf.styles');
 goog.require('abperf.constants');
 goog.require('abperf.styles.Test');
 goog.require('abperf.styles.TestGroup');
-goog.require('goog.array');
-goog.require('goog.dom');
 
 abperf.styles.start = function() {
     var elements = abperf.styles.getStyleElements();
@@ -22,7 +20,7 @@ abperf.styles.start = function() {
  * @return {array<HTMLStyleElement>} The <style> elements containing test CSS.
  */
 abperf.styles.getStyleElements = function() {
-    var allStyles = goog.dom.$$('style', null);
+    var allStyles = document.getElementsByTagName('style');
     var abStyles = [];
     for (var i = 0; i < allStyles.length; i++) {
         var tag = allStyles[i]; /** @type {HTMLStyleElement} */ 
@@ -45,7 +43,7 @@ abperf.styles.createTests = function(elements) {
         var css = elements[i].textContent;
         var test = new abperf.styles.Test(groupName, css);
         tests.push(test);
-        goog.dom.removeNode(elements[i]);
+        elements[i].parentNode.removeChild(elements[i]);
     }
     return tests;
 }

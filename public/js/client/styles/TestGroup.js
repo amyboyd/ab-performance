@@ -46,7 +46,7 @@ abperf.styles.TestGroup.prototype.chooseTest = function() {
 
     if (remembered.isValid()) {
         if (goog.DEBUG) {
-            console.log(this.name + ": running " + remembered.id + " (remembered)");
+            console.log(this.name + ': running ' + remembered.id + ' (remembered)');
         }
 
         // Update last page view time.
@@ -76,7 +76,7 @@ abperf.styles.TestGroup.prototype.chooseTest = function() {
     remembered.save();
 
     if (goog.DEBUG) {
-        console.log(this.name + ": running " + remembered.id);
+        console.log(this.name + ': running ' + remembered.id);
     }
 
     return chosen;

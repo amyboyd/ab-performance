@@ -1,8 +1,6 @@
 goog.provide('abperf.tracking');
 
 goog.require('abperf.constants');
-goog.require('goog.events');
-goog.require('goog.events.EventType');
 goog.require('goog.net.XhrIo');
 goog.require('goog.string');
 goog.require('goog.uri.utils');
@@ -109,7 +107,7 @@ abperf.tracking.interactionOccurred = function() {
  * @param {function} callback
  */
 function sendDataToURL(url, data, callback) {
-    if (typeof callback !== "function") {
+    if (typeof callback !== 'function') {
         callback = null;
     }
     goog.net.XhrIo.send(url, callback, 'POST', goog.uri.utils.buildQueryDataFromMap(data));
