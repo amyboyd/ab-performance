@@ -26,13 +26,28 @@ public class PageView extends Model {
     @Required
     public Date time;
 
+    @Lob
     private String tests;
 
     @Transient
     public JsonObject testsJSON;
 
+    @Lob
+    private String pings;
+
+    @Transient
+    public JsonObject pingsJSON;
+
     @Transient
     public List<String> testIDsWithUnknownCSS;
+
+    public static PageView findByGUID(final String guid) {
+        final PageView pageView = find("guid", guid).first();
+        if (pageView == null) {
+            throw new RuntimeException("GUID " + guid + " is not already in the database");
+        }
+        return pageView;
+    }
 
     public PageView(final User user, final String guid, final long time, final String url,
             final Map<String, String> tests) {
@@ -42,6 +57,7 @@ public class PageView extends Model {
         this.guid = guid;
 
         this.testsJSON = new JsonObject();
+        this.pingsJSON = new JsonObject();
         this.testIDsWithUnknownCSS = new ArrayList<String>(tests.size());
 
         for (final String testGroupName: tests.keySet()) {
@@ -59,12 +75,15 @@ public class PageView extends Model {
 
     @PrePersist
     @PreUpdate
-    protected void setTestsStringFromJSON() {
+    public void setJSONstringsFromJSONobjects() {
         tests = testsJSON.toString();
+        pings = pingsJSON.toString();
     }
 
     @PostLoad
-    protected void setTestsJSONfromString() {
-        testsJSON = new JsonParser().parse(tests).getAsJsonObject();
+    protected void setJSONobjectsFromJSONstrings() {
+        final JsonParser parser = new JsonParser();
+        testsJSON = parser.parse(tests).getAsJsonObject();
+        pingsJSON = parser.parse(pings).getAsJsonObject();
     }
 }

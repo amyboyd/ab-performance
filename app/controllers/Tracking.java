@@ -32,26 +32,29 @@ public class Tracking extends BaseController {
         response.print(StringUtils.join(pageView.testIDsWithUnknownCSS, ','));
         ok();
     }
-    
+
     /**
      * @param guid The unique page request ID.
      * @param time Time the page loaded at.
      * @param status "active" or "inactive".
-     */
-    public static void pingBeta(final String guid, final long time, final String status) {
-        onlyPOSTallowed();
-        // @todo
-        ok();
-    }
-
-    /**
      * @param css The keys are the test IDs, the values are the CSS.
      */
-    public static void supplyCssBeta(final Map<String, String> css) {
+    public static void pingBeta(final String guid, final long time, final String status,
+            final Map<String, String> css) {
         onlyPOSTallowed();
+
+        PageView pageView = PageView.findByGUID(guid);
+        pageView.pingsJSON.addProperty(String.valueOf(time), status);
+        // We must call "setJSONstringsFromJSONobjects" manually so that at least one field changes.
+        // If no field changes *before* JPA hooks, then no hooks are called and as a result there is
+        // no need to save the object.
+        pageView.setJSONstringsFromJSONobjects();
+        pageView.save();
+
         for (final String id: css.keySet()) {
             TestCSS.setCSS(id, css.get(id));
         }
+
         ok();
     }
 

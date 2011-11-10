@@ -14,9 +14,6 @@ var START_URL = abperf.constants.SERVER_URL + 'beta/tracking/start';
 var PING_URL = abperf.constants.SERVER_URL + 'beta/tracking/ping';
 
 /** @private @const */
-var SUPPLY_CSS_URL = abperf.constants.SERVER_URL + 'beta/tracking/supplycss';
-
-/** @private @const */
 var START_TIME = Date.now();
 
 /** @private @type {number} */
@@ -28,9 +25,12 @@ var lastPingStatus = 'active';
 /** @private @type {number} */
 var consecutiveActivePings = 0;
 
+/** @private @type {string} Comma-seperated IDs. */
+var cssToSupply = '';
+
 /**
  * Start tracking interaction with the page.
- * 
+ *
  * @param {object<string, Test>} runningTests
  */
 abperf.tracking.start = function(runningTests) {
@@ -42,8 +42,10 @@ abperf.tracking.start = function(runningTests) {
     for (var testName in runningTests) {
         data['tests[' + testName + ']'] = (runningTests[testName] != null ? runningTests[testName].id : 'none');
     }
-
-    sendDataToURL(START_URL, data, abperf.tracking.supplyCSS);
+    sendDataToURL(START_URL, data,
+        function(evt) {
+            cssToSupply = evt.target.getResponseText();
+        });
 }
 
 /**
@@ -65,11 +67,23 @@ abperf.tracking.ping = function() {
         lastPingStatus = status;
         consecutiveActivePings = (status === 'active' ? consecutiveActivePings + 1 : 0);
 
-        sendDataToURL(PING_URL, {
+        var data = {
             guid: START_TIME,
             status: status,
             time: now
-        });
+        };
+
+        if (!goog.string.isEmptySafe(cssToSupply)) {
+            // Server does not know the CSS for at least one test ID, so tell the server what the CSS is.
+            var idArray = cssToSupply.split(',');
+            for (var i = 0; i < idArray.length; i++) {
+                var id = idArray[i];
+                data['css[' + id + ']'] = abperf.styles.findRunningTestByID(id).css;
+            }
+            cssToSupply = null;
+        }
+
+        sendDataToURL(PING_URL, data);
     }
 
     // When the user has been active on the page for a long time, reduce the ping frequency.
@@ -86,24 +100,6 @@ abperf.tracking.ping = function() {
  */
 abperf.tracking.interactionOccurred = function() {
     lastInteraction = Date.now();
-}
-
-abperf.tracking.supplyCSS = function(evt) {
-    var text = evt.target.getResponseText();
-
-    if (!goog.string.isEmptySafe(text)) {
-        // Server does not know the CSS for at least one test ID, so tell the server what the CSS is.
-        var data = {};
-        var idArray = text.split(',');
-        for (var i = 0; i < idArray.length; i++) {
-            var id = idArray[i];
-            if (!goog.string.isEmptySafe(id)) {
-                data['css[' + id + ']'] = abperf.styles.findRunningTestByID(id).css;
-            }
-        }
-
-        sendDataToURL(SUPPLY_CSS_URL, data);
-    }
 }
 
 /**
