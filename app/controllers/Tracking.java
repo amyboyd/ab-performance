@@ -2,7 +2,10 @@ package controllers;
 
 import java.util.*;
 import models.*;
+import org.apache.commons.lang.StringUtils;
+import play.Logger;
 import play.mvc.Http.StatusCode;
+import play.mvc.Util;
 
 public class Tracking extends BaseController {
     /**
@@ -11,54 +14,48 @@ public class Tracking extends BaseController {
      * @param url
      * @param tests The map key is the test group name and the value is the test ID.
      */
-    public static void startBeta(String guid, long time, String url, Map<String, String> tests) {
+    public static void startBeta(final String guid, final long time, final String url,
+            final Map<String, String> tests) {
         onlyPOSTallowed();
 
-        Domain domain = Domain.findDomainByURL(url);
+        final Domain domain = Domain.findDomainByURL(url);
         if (domain == null) {
             response.status = StatusCode.INTERNAL_ERROR;
+            Logger.error("URL is on an unregistered domain:" + url);
             return;
         }
 
-        User account = domain.account;
-
-        PageView pageView = new PageView();
-        pageView.account = account;
-        pageView.url = url;
-        pageView.time = new Date(time);
-        pageView.guid = guid;
-
-        for (final String testGroupName: tests.keySet()) {
-            final String testId = tests.get(testGroupName);
-
-            pageView.testsJSON.addProperty(testGroupName, testId);
-
-            // Check if we already know the CSS for this ID. If we don't know the CSS, request it.
-            if (!TestCSS.cssIsKnown(testId)) {
-                response.print(testId);
-                response.print(",");
-            }
-        }
+        final PageView pageView = new PageView(domain.user, guid, time, url, tests);
+        pageView.save();
 
         response.setHeader("Content-Type", "text/plain");
+        response.print(StringUtils.join(pageView.testIDsWithUnknownCSS, ','));
         ok();
     }
 
     public static void pingBeta() {
         onlyPOSTallowed();
+        // @todo
         ok();
     }
 
-    public static void supplyCssBeta() {
+    /**
+     * @param css The keys are the test IDs, the values are the CSS.
+     */
+    public static void supplyCssBeta(final Map<String, String> css) {
         onlyPOSTallowed();
+        for (final String id: css.keySet()) {
+            TestCSS.setCSS(id, css.get(id));
+        }
         ok();
     }
 
     /**
      * Only POST is allowed in production. In development, GET is allowed just to make debugging easier.
      */
+    @Util
     private static void onlyPOSTallowed() {
-        if (com.abperf.Constants.IS_DEV) {
+        if (com.abperf.Constants.IS_PROD) {
             requireHttpMethod("POST");
         }
     }

@@ -93,16 +93,16 @@ abperf.tracking.supplyCSS = function(evt) {
 
     if (!goog.string.isEmptySafe(text)) {
         // Server does not know the CSS for at least one test ID, so tell the server what the CSS is.
-        var css = {};
+        var data = {};
         var idArray = text.split(',');
         for (var i = 0; i < idArray.length; i++) {
             var id = idArray[i];
             if (!goog.string.isEmptySafe(id)) {
-                css[id] = abperf.styles.findRunningTestByID(id).css;
+                data['css[' + id + ']'] = abperf.styles.findRunningTestByID(id).css;
             }
         }
 
-        sendDataToURL(SUPPLY_CSS_URL, css);
+        sendDataToURL(SUPPLY_CSS_URL, data);
     }
 }
 

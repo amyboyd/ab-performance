@@ -56,7 +56,7 @@ public class User extends Model {
     @Temporal(TemporalType.TIMESTAMP)
     public Date registeredAt;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "user")
     public Set<Domain> domains;
 
     public static User findByEmail(final String email) {

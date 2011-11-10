@@ -9,9 +9,9 @@ User(Tester):
     password: purple
 
 Domain(Domain_1):
-    account: Tester
+    user: Tester
     domain: localhost
 
 Domain(Domain_2):
-    account: Tester
+    user: Tester
     domain: dev.abperf.com

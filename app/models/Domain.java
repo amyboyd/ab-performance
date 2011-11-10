@@ -18,7 +18,7 @@ public class Domain extends GenericModel {
 
     @Required
     @ManyToOne(optional = false)
-    public User account;
+    public User user;
 
     @Required
     @Temporal(TemporalType.TIMESTAMP)
@@ -33,14 +33,25 @@ public class Domain extends GenericModel {
 
     public static Domain findDomainByURL(final String url) {
         try {
-            return find("domain", new URL(url).getHost()).first();
+            String domain = new URL(url).getHost();
+            domain = removeWWW(domain);
+
+            return find("domain", domain).first();
         } catch (MalformedURLException ex) {
             throw new RuntimeException("Malformed URL: " + url);
         }
     }
 
+    public void setDomain(final String domain) {
+        this.domain = removeWWW(domain);
+    }
+
     @Override
     public Object _key() {
         return domain;
+    }
+    
+    private static String removeWWW(final String domain) {
+        return (domain.startsWith("www.") ? domain.substring(4) : domain);
     }
 }

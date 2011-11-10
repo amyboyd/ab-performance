@@ -12,16 +12,9 @@ goog.require('goog.crypt.Md5');
  */
 abperf.styles.Test = function(testGroupName, css) {
     this.testGroupName = testGroupName;
-
-    // Make the CSS pretty so it can be displayed in debuging.
-    this.css = goog.string.trim(css);
-    this.css = goog.string.normalizeWhitespace(this.css);
-    this.css = goog.string.normalizeSpaces(this.css);
-
+    this.css = formatCSS(css);
     // This test's ID is the pretty-print (normalized) CSS, hashed.
-    var md5 = new goog.crypt.Md5();
-    md5.update(this.css);
-    this.id = goog.crypt.byteArrayToHex(md5.digest());
+    this.id = md5(this.css);
 }
 
 /**
@@ -32,8 +25,8 @@ abperf.styles.Test.prototype.run = function() {
     // priority.
     var installed = goog.style.installStyles(this.css, document.body);
     // IE doesn't allow setAttribute() on HTMLStyleElement.
-    installed.className = 'ab-perf';
-    installed.name = this.testGroupName;
+    installed.className = 'abperf';
+    installed.id = 'abperf-' + this.testGroupName;
 }
 
 /** A hash that uniquely identifies this test. @type {string} */
@@ -44,3 +37,22 @@ abperf.styles.Test.prototype.css = null;
 
 /** @type {string} */
 abperf.styles.Test.prototype.testGroupName = null;
+
+/**
+ * Make the CSS pretty so it can be displayed nicely in debuging.
+ *
+ * @private
+ */
+function formatCSS(css) {
+    css = goog.string.trim(css);
+    css = goog.string.normalizeWhitespace(css);
+    css = goog.string.normalizeSpaces(css);
+    css = css.replace(/\} /, '}\n');
+    return css;
+}
+
+function md5(input) {
+    var md5 = new goog.crypt.Md5();
+    md5.update(input);
+    return goog.crypt.byteArrayToHex(md5.digest());
+}

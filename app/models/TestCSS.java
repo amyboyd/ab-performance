@@ -19,18 +19,19 @@ public class TestCSS extends GenericModel {
     public String testId;
 
     @Required
+    @Lob
     public String css;
 
-    public static boolean cssIsKnown(String testId) {
+    public static boolean cssIsKnown(final String testId) {
         if (testId.equals("none")) {
             return true;
         }
 
-        String cacheKey = "cssIsKnown-" + testId;
-        String isKnown = play.cache.Cache.get(cacheKey, String.class);
+        final String cacheKey = getCacheKey(testId);
+        final String isKnown = play.cache.Cache.get(cacheKey, String.class);
 
         if (isKnown == null) {
-            TestCSS css = findByTestId(testId);
+            final TestCSS css = findByTestId(testId);
             if (css == null || css.css == null) {
                 play.cache.Cache.set(cacheKey, "0");
                 return false;
@@ -43,16 +44,26 @@ public class TestCSS extends GenericModel {
         }
     }
 
-    public static TestCSS findByTestId(String testId) {
+    public static void setCSS(final String testId, final String css) {
+        TestCSS obj = TestCSS.findByTestId(testId);
+        if (obj == null) {
+            obj = new TestCSS(testId);
+        }
+        obj.css = css;
+        obj.save();
+        play.cache.Cache.set(getCacheKey(testId), "1");
+    }
+
+    public static TestCSS findByTestId(final String testId) {
         idMustNotBeNone(testId);
         return find("testId", testId).first();
     }
 
-    public TestCSS(String testId) {
+    public TestCSS(final String testId) {
         setTestId(testId);
     }
 
-    public void setTestId(String testId) {
+    public void setTestId(final String testId) {
         idMustNotBeNone(testId);
         if (testId == null) {
             throw new IllegalArgumentException("testId must not be null");
@@ -60,7 +71,7 @@ public class TestCSS extends GenericModel {
         this.testId = testId;
     }
 
-    public void setCss(String css) {
+    public void setCss(final String css) {
         if (css == null) {
             throw new IllegalArgumentException("css must not be null");
         }
@@ -72,9 +83,13 @@ public class TestCSS extends GenericModel {
         return testId;
     }
 
-    private static void idMustNotBeNone(String testId) {
+    private static void idMustNotBeNone(final String testId) {
         if ("none".equals(testId)) {
             throw new IllegalArgumentException("Do not use StyleTest for ID = none");
         }
+    }
+
+    private static String getCacheKey(final String testId) {
+        return "cssIsKnown-" + testId;
     }
 }

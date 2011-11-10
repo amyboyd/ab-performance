@@ -27,7 +27,7 @@ abperf.styles.getStyleElements = function() {
     for (var i = 0; i < allStyles.length; i++) {
         var tag = allStyles[i]; /** @type {HTMLStyleElement} */ 
 
-        if (tag.getAttribute('type') === 'ab-perf') {
+        if (tag.getAttribute('type') === 'abperf') {
             abStyles.push(tag);
         }
     }
