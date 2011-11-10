@@ -4,6 +4,7 @@ goog.require('abperf.constants');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.net.XhrIo');
+goog.require('goog.string');
 goog.require('goog.uri.utils');
 
 /** @private @const */
@@ -11,6 +12,9 @@ var START_URL = abperf.constants.SERVER_URL + 'beta/report/start';
 
 /** @private @const */
 var PING_URL = abperf.constants.SERVER_URL + 'beta/report/ping';
+
+/** @private @const */
+var SUPPLY_CSS_URL = abperf.constants.SERVER_URL + 'beta/report/supplycss';
 
 /** @private @const */
 var START_TIME = Date.now();
@@ -33,13 +37,13 @@ abperf.reporting.start = function(runningTests) {
     var data = {
         guid: START_TIME,
         time: START_TIME,
-        pageURL: window.location.toString()
+        url: window.location.toString()
     };
     for (var testName in runningTests) {
         data['tests[' + testName + ']'] = (runningTests[testName] != null ? runningTests[testName].id : 'none');
     }
 
-    abperf.reporting.reportDataToURL_(START_URL, data);
+    abperf.reporting.reportDataToURL_(START_URL, data, abperf.reporting.supplyCSS);
 }
 
 /**
@@ -56,7 +60,7 @@ abperf.reporting.ping = function() {
     }
 
     if (lastPingStatus === 'inactive' && status === 'inactive') {
-        // No need to ping because the server already knows the user is inactive.
+        // Don't need to ping because the server already knows the user is inactive.
     } else {
         lastPingStatus = status;
         consecutiveActivePings = (status === 'active' ? consecutiveActivePings + 1 : 0);
@@ -84,10 +88,27 @@ abperf.reporting.interactionOccurred = function() {
     lastInteraction = Date.now();
 }
 
+abperf.reporting.supplyCSS = function(evt) {
+    var text = evt.target.getResponseText();
+
+    if (!goog.string.isEmptySafe(text)) {
+        // Server does not know the CSS for at least one test ID, so tell the server what the CSS is.
+        var css = {};
+        var idArray = text.split(',');
+        for (var i = 0; i < idArray.length; i++) {
+            var id = idArray[i];
+            if (!goog.string.isEmptySafe(id)) {
+                css[id] = abperf.styles.findRunningTestByID(id).css;
+            }
+        }
+
+        abperf.reporting.reportDataToURL_(SUPPLY_CSS_URL, css);
+    }
+}
+
 /**
  * @private
  */
-abperf.reporting.reportDataToURL_ = function(url, data) {
-    url = url + '?' + goog.uri.utils.buildQueryDataFromMap(data);
-    goog.net.XhrIo.send(url, null, 'HEAD');
+abperf.reporting.reportDataToURL_ = function(url, data, callback) {
+    goog.net.XhrIo.send(url, callback, 'POST', goog.uri.utils.buildQueryDataFromMap(data));
 }

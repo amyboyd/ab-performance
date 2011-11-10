@@ -11,8 +11,8 @@ import play.mvc.Router.ActionDefinition;
  * For example: "Read this [link] [delete]".
  */
 @Entity
-@Table(name = "user_notification")
-public class UserNotification extends Model {
+@Table(name = "account_notification")
+public class AccountNotification extends Model {
     @Required
     @MinSize(10)
     @MaxSize(255)
@@ -26,13 +26,13 @@ public class UserNotification extends Model {
 
     @Required
     @ManyToOne
-    public User user;
+    public Account user;
 
-    public static List<UserNotification> findByUser(final User user, final int limit) {
+    public static List<AccountNotification> findByUser(final Account user, final int limit) {
         return find("user", user).fetch(limit);
     }
 
-    public UserNotification(String text, ActionDefinition url, User user) {
+    public AccountNotification(String text, ActionDefinition url, Account user) {
         this.text = text;
         this.user = user;
 
@@ -40,13 +40,13 @@ public class UserNotification extends Model {
         this.url = url.url;
     }
 
-    public UserNotification(final String text, final String url, final User user) {
+    public AccountNotification(final String text, final String url, final Account user) {
         this.text = text;
         this.url = url;
         this.user = user;
     }
 
-    public UserNotification(final String text, final User user) {
+    public AccountNotification(final String text, final Account user) {
         this.text = text;
         this.user = user;
     }

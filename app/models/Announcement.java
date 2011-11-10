@@ -35,7 +35,7 @@ public class Announcement extends Model {
     @Temporal(TemporalType.TIMESTAMP)
     public Date createdAt;
 
-    public static List<Announcement> findApplicableToUser(final User user, final int limit) {
+    public static List<Announcement> findApplicableToUser(final Account user, final int limit) {
         if (user.accountType.equals(AccountType.BETA)) {
             return find("toBetaUsers", true).fetch(limit);
         } else if (user.accountType.equals(AccountType.FREE)) {
@@ -47,7 +47,7 @@ public class Announcement extends Model {
         }
     }
 
-    public boolean appliesToUser(final User user) {
+    public boolean appliesToUser(final Account user) {
         if (user.accountType.equals(AccountType.BETA)) {
             return toBetaUsers;
         } else if (user.accountType.equals(AccountType.FREE)) {
@@ -69,10 +69,10 @@ public class Announcement extends Model {
     @Override
     public void _save() {
         // Notify all targetted users of the announcement.
-        final List<User> users = User.all().fetch();
-        for (final User user: users) {
+        final List<Account> users = Account.all().fetch();
+        for (final Account user: users) {
             if (appliesToUser(user)) {
-                new UserNotification(title, url, user).create();
+                new AccountNotification(title, url, user).create();
             }
         }
         users.clear();

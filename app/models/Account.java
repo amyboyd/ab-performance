@@ -13,8 +13,8 @@ import play.libs.Codec;
 import play.templates.JavaExtensions;
 
 @Entity
-@Table(name = "user")
-public class User extends Model {
+@Table(name = "account")
+public class Account extends Model {
     @Required
     @MaxSize(40)
     @MinSize(2)
@@ -56,7 +56,10 @@ public class User extends Model {
     @Temporal(TemporalType.TIMESTAMP)
     public Date registeredAt;
 
-    public static User findByEmail(final String email) {
+    @OneToMany(mappedBy = "account")
+    public Set<Domain> domains;
+
+    public static Account findByEmail(final String email) {
         return find("email", email).first();
     }
 
@@ -70,15 +73,15 @@ public class User extends Model {
      * @param email
      * @return Null if no user with the email and password.
      */
-    public static User findByEmailAndPassword(final String email, final String password) {
-        final User user = User.find("email", email).first();
+    public static Account findByEmailAndPassword(final String email, final String password) {
+        final Account user = Account.find("email", email).first();
         if ((user != null) && user.checkPassword(password)) {
             return user;
         }
         return null;
     }
 
-    public User(final String email, final String password) {
+    public Account(final String email, final String password) {
         this.email = email;
         // Try to parse name from email, e.g. "mic.t.boyd@gmail.com" becomes "Mic T Boyd".
         this.name = JavaExtensions.capitalizeWords(email.substring(0, email.indexOf('@')).replaceAll("[.-_]", " ").
@@ -87,7 +90,7 @@ public class User extends Model {
         this.password = password;
     }
 
-    public User(final String email, final String password, final String name) {
+    public Account(final String email, final String password, final String name) {
         this(email, password);
         this.name = name;
     }
@@ -99,7 +102,7 @@ public class User extends Model {
 
     public void onLogin() {
         if (lastLogin != null) {
-            new UserNotification(
+            new AccountNotification(
                     "Your last login was on " + JavaExtensions.format(lastLogin, "EEEE d MMMM, yyyy").toString(),
                     this).create();
         }

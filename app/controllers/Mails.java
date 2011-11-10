@@ -1,7 +1,7 @@
 package controllers;
 
 import com.abperf.Bootstrap;
-import models.User;
+import models.Account;
 import play.mvc.Mailer;
 import static com.abperf.Constants.SITE_NAME;
 
@@ -22,7 +22,7 @@ public class Mails extends Mailer {
      * After registering, send a welcome email, which also has a confirmation link.
      * @param user The new user.
      */
-    public static void welcome(final User user) {
+    public static void welcome(final Account user) {
         setSubject("Your new %s account", SITE_NAME);
         addRecipient(formatAddress(user));
         setFrom(OUTBOUND_ADDRESS);
@@ -31,7 +31,7 @@ public class Mails extends Mailer {
         send(user);
     }
 
-    public static void forgotPassword(final User user) {
+    public static void forgotPassword(final Account user) {
         setSubject("Forgot your password on " + SITE_NAME + "? Create a new password here");
         addRecipient(formatAddress(user));
         setFrom(OUTBOUND_ADDRESS);
@@ -40,7 +40,7 @@ public class Mails extends Mailer {
         send(user);
     }
 
-    public static void confirmEmailChange(final User user) {
+    public static void confirmEmailChange(final Account user) {
         setSubject("Confirm your new email address");
         addRecipient(user.email);
         setFrom(OUTBOUND_ADDRESS);
@@ -49,7 +49,7 @@ public class Mails extends Mailer {
         send(user);
     }
 
-    private static String formatAddress(final User user) {
+    private static String formatAddress(final Account user) {
         if (user.email == null) {
             if (Bootstrap.isRunning) {
                 return play.Play.configuration.getProperty("application.testEmailAddress");

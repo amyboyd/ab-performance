@@ -1,6 +1,6 @@
 package controllers;
 
-import models.User;
+import models.Account;
 import play.Logger;
 import play.data.validation.Validation;
 
@@ -21,7 +21,7 @@ public class Profiles extends BaseController {
         requireHttpMethod("POST");
         checkAuthenticity();
 
-        final User user = requireAuthenticatedUser();
+        final Account user = requireAuthenticatedUser();
         user.edit("user", params.all());
 
         validation.valid(user);
@@ -52,12 +52,12 @@ public class Profiles extends BaseController {
         checkAuthenticity();
         requireHttpMethod("POST");
 
-        final User user = requireAuthenticatedUser();
+        final Account user = requireAuthenticatedUser();
 
         Validation.required("newEmail", newEmail).message("Please enter your new email address");
         Validation.email("newEmail", newEmail).message("That is not a valid format for an email address");
         Validation.isTrue("newEmail", !user.email.equals(newEmail)).message("You are already using that email address!");
-        Validation.isTrue("newEmail", User.count("email", newEmail) == 0L).message("Another user is already using that email address. If this is a problem, please contact us.");
+        Validation.isTrue("newEmail", Account.count("email", newEmail) == 0L).message("Another user is already using that email address. If this is a problem, please contact us.");
 
         if (Validation.hasErrors()) {
             params.flash();
@@ -83,7 +83,7 @@ public class Profiles extends BaseController {
     }
 
     public static void confirmEmail(final Long id, final String code) {
-        final User user = User.findById(id);
+        final Account user = Account.findById(id);
         if (user == null) {
             error("No user with ID: " + id);
         } else if (user.getValidationCode().equals(code)) {
@@ -98,7 +98,7 @@ public class Profiles extends BaseController {
     }
 
     public static void resendConfirmationEmail(String forward) {
-        final User user = requireAuthenticatedUser();
+        final Account user = requireAuthenticatedUser();
         if (user.emailConfirmed) {
             flash.error("Your email address is already confirmed");
             redirectToForwardURL();
@@ -123,7 +123,7 @@ public class Profiles extends BaseController {
         if (!validation.email(email).ok) {
             renderText("This is not a valid email address.");
         }
-        final User user = User.find("email = ?", email).first();
+        final Account user = Account.find("email = ?", email).first();
         if (user != null) {
             renderText("This email is registered to a user.");
         } else {

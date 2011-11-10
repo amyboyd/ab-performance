@@ -7,11 +7,11 @@ goog.require('goog.crypt.Md5');
 
 /**
  * @constructor
- * @param {string} name The test name.
- * @param {string} css The css rules.
+ * @param {string} testGroupName The TestGroup name.
+ * @param {string} css The CSS rules.
  */
-abperf.styles.Test = function(name, css) {
-    this.name = name;
+abperf.styles.Test = function(testGroupName, css) {
+    this.testGroupName = testGroupName;
 
     // Make the CSS pretty so it can be displayed in debuging.
     this.css = goog.string.trim(css);
@@ -33,7 +33,7 @@ abperf.styles.Test.prototype.run = function() {
     var installed = goog.style.installStyles(this.css, document.body);
     // IE doesn't allow setAttribute() on HTMLStyleElement.
     installed.className = 'ab-perf';
-    installed.name = this.name;
+    installed.name = this.testGroupName;
 }
 
 /** A hash that uniquely identifies this test. @type {string} */
@@ -43,4 +43,4 @@ abperf.styles.Test.prototype.id = null;
 abperf.styles.Test.prototype.css = null;
 
 /** @type {string} */
-abperf.styles.Test.prototype.name = null;
+abperf.styles.Test.prototype.testGroupName = null;

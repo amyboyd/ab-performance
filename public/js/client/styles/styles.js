@@ -6,11 +6,10 @@ goog.require('abperf.styles.TestGroup');
 goog.require('goog.array');
 goog.require('goog.dom');
 
-abperf.styles.runningTests = {};
-
 abperf.styles.start = function() {
     var elements = abperf.styles.getStyleElements();
-    var testGroups = abperf.styles.createTestGroups(elements);
+    var tests = abperf.styles.createTests(elements);
+    var testGroups = abperf.styles.createTestGroups(tests);
 
     if (goog.DEBUG) {
         console.log('All test groups:', testGroups);
@@ -37,30 +36,58 @@ abperf.styles.getStyleElements = function() {
 
 /**
  * @param {array<HTMLStyleElement>} elements
- * @return {object<string, abperf.TestGroup>}
+ * @return {array<abperf.styles.Test>}
  */
-abperf.styles.createTestGroups = function(elements) {
-    var tests = {};
+abperf.styles.createTests = function(elements) {
+    var tests = [];
     for (var i = 0; i < elements.length; i++) {
-        var name = elements[i].getAttribute('name') || 'EMPTY NAME';
+        var groupName = elements[i].getAttribute('name') || 'EMPTY NAME';
         var css = elements[i].textContent;
-
-        if (typeof tests[name] === 'undefined') {
-            tests[name] = new abperf.styles.TestGroup(name);
-        }
-
-        tests[name].addTest(new abperf.styles.Test(name, css));
-
+        var test = new abperf.styles.Test(groupName, css);
+        tests.push(test);
         goog.dom.removeNode(elements[i]);
     }
     return tests;
 }
 
 /**
- * @param {object<string, abperf.TestGroup>} testGroups
+ * @param {array<abperf.styles.Test>} tests
+ * @return {object<string, abperf.styles.TestGroup>}
+ */
+abperf.styles.createTestGroups = function(tests) {
+    var groups = {};
+    for (var i = 0; i < tests.length; i++) {
+        var groupName = tests[i].testGroupName;
+        if (typeof groups[groupName] === 'undefined') {
+            groups[groupName] = new abperf.styles.TestGroup(groupName);
+        }
+        groups[groupName].addTest(tests[i]);
+    }
+    return groups;
+}
+
+/**
+ * @param {object<string, abperf.styles.TestGroup>} testGroups
  */
 abperf.styles.runTestGroups = function(testGroups) {
     for (var key in testGroups) {
         testGroups[key].chooseTestAndRunIt();
     }
+}
+
+/** @type {object<string, abperf.styles.Test>} The key is the test group name */
+abperf.styles.runningTests = {};
+
+/**
+ * @param {string} id
+ * @return {abperf.styles.Test}
+ */
+abperf.styles.findRunningTestByID = function(id) {
+    for (var key in abperf.styles.runningTests) {
+        var test = abperf.styles.runningTests[key];
+        if (test.id == id) {
+            return test;
+        }
+    }
+    return null;
 }

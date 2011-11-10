@@ -6,8 +6,15 @@ GET     /privacy                                                Application.priv
 GET     /help                                                   Application.help
 
 GET     /beta/client.js                                         Bundles.clientScripts
-HEAD    /beta/report/start                                      Reporting.startBeta
-HEAD    /beta/report/ping                                       Reporting.pingBeta
+POST    /beta/report/start                                      Reporting.startBeta
+POST    /beta/report/ping                                       Reporting.pingBeta
+POST    /beta/report/supplycss                                  Reporting.supplyCssBeta
+#{if com.abperf.Constants.IS_DEV}
+    GET     /beta/report/start                                      Reporting.startBeta
+    GET     /beta/report/ping                                       Reporting.pingBeta
+    GET     /beta/report/supplycss                                  Reporting.supplyCssBeta
+    GET     /deps.js                                                staticFile:public/closure/closure/goog/deps.js
+#{/if}
 
 *       /feedback/{action}                                      SiteFeedbacks.{action}
 *       /authentication/{action}                                Authentication.{action}
@@ -31,7 +38,6 @@ GET     ${domain}/_/bundles/1/{action}                          Bundles.{action}
 
 GET     /favicon.ico                                            staticFile:public/favicon.ico
 GET     /robots.txt                                             staticFile:public/robots.txt
-GET     /deps.js                                                staticFile:public/closure/closure/goog/deps.js
 
 # These directory routes are sometimes hard-coded, and stored in the database.
 GET     ${domain}/_/b/                                          staticDir:public/uploads/

@@ -1,7 +1,7 @@
 package controllers;
 
 import com.abperf.Constants;
-import models.User;
+import models.Account;
 import play.Logger;
 import play.data.validation.*;
 import play.libs.Crypto;
@@ -13,10 +13,10 @@ public class Authentication extends BaseController {
     private static final String REMEMBER_COOKIE = "remember";
 
     @Util
-    public static User findLoggedInUser() {
+    public static Account findLoggedInUser() {
         // Already logged in through the active session?
         if (session.contains(LOGIN_SESSION)) {
-            User sessionUser = User.find("email", session.get(LOGIN_SESSION)).first();
+            Account sessionUser = Account.find("email", session.get(LOGIN_SESSION)).first();
             if (sessionUser != null) {
                 return sessionUser;
             } else {
@@ -35,7 +35,7 @@ public class Authentication extends BaseController {
             String sign = remember.value.substring(0, remember.value.indexOf("-"));
             String email = remember.value.substring(remember.value.indexOf("-") + 1);
             if (Crypto.sign(email).equals(sign)) {
-                User cookieUser = User.findByEmail(email);
+                Account cookieUser = Account.findByEmail(email);
                 if (cookieUser != null) {
                     Logger.info("Login cookie is signed correctly. Logging in as: " + email);
                     session.put(LOGIN_SESSION, email);
@@ -62,7 +62,7 @@ public class Authentication extends BaseController {
 
         String errorMessage = null;
 
-        final User existingUserByEmail = User.findByEmail(email);
+        final Account existingUserByEmail = Account.findByEmail(email);
         if (existingUserByEmail != null) {
             if (existingUserByEmail.checkPassword(password)) {
                 // Login (even though this is the register action).
@@ -99,7 +99,7 @@ public class Authentication extends BaseController {
         }
 
         // Everything is OK, register.
-        User user = new User(email, password);
+        Account user = new Account(email, password);
         user.create();
         play.Logger.info("User has registered. ID = %d, email = %s", user.id, user.email);
 
@@ -123,8 +123,8 @@ public class Authentication extends BaseController {
             redirect(request.headers.get("referer").value());
         }
 
-        User user = User.findByEmailAndPassword(email, password);
-        if (user instanceof User) {
+        Account user = Account.findByEmailAndPassword(email, password);
+        if (user instanceof Account) {
             // Correct email/password. Set cookie and session data so the user is logged in for 90 days.
             session.put(LOGIN_SESSION, user.email);
             flash.success("You are now logged in, " + user.name + ".");
@@ -164,7 +164,7 @@ public class Authentication extends BaseController {
             forgotPassword();
         }
 
-        User user = User.findByEmail(email);
+        Account user = Account.findByEmail(email);
         if (user != null) {
             Mails.forgotPassword(user);
             flash.success("We have sent an email to your registered email address. Please open the email and follow the instructions inside. You will be able to reset your password.");
@@ -186,7 +186,7 @@ public class Authentication extends BaseController {
     public static void resetPassword(final Long u, final String vc) {
         Logger.info("On reset password page, user ID %d, validation code %s, IP address %s", u, vc, request.remoteAddress);
 
-        final User user = User.findById(u);
+        final Account user = Account.findById(u);
         if (user == null) {
             error("No user with ID: " + u);
         } else if (user.getValidationCode().equals(vc)) {
@@ -203,7 +203,7 @@ public class Authentication extends BaseController {
 
         checkAuthenticity();
 
-        final User user = User.findById(u);
+        final Account user = Account.findById(u);
         if (user == null) {
             error("No user with ID: " + u);
         } else if (!password.equals(password2)) {
@@ -243,7 +243,7 @@ public class Authentication extends BaseController {
         checkAuthenticity();
         requireHttpMethod("POST");
 
-        final User user = requireAuthenticatedUser();
+        final Account user = requireAuthenticatedUser();
 
         Validation.isTrue("oldPassword", user.checkPassword(oldPassword)).message("The old password you entered is not correct");
         Validation.required("newPassword1", newPassword1).message("Please enter your new password");

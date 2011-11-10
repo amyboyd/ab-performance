@@ -1,7 +1,7 @@
 package controllers;
 
 import models.SiteFeedback;
-import models.User;
+import models.Account;
 
 /**
  * Also see {@link SiteFeedback}
@@ -27,7 +27,7 @@ public class SiteFeedbacks extends BaseController {
             form(forward);
         }
 
-        new SiteFeedback(message, request.remoteAddress, (User) request.args.get("currentUser")).create();
+        new SiteFeedback(message, request.remoteAddress, (Account) request.args.get("currentUser")).create();
 
         if (request.isAjax()) {
             ok();
