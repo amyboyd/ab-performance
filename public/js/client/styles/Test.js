@@ -2,8 +2,6 @@ goog.provide('abperf.styles.Test');
 
 goog.require('goog.string');
 goog.require('goog.style');
-goog.require('goog.crypt');
-goog.require('goog.crypt.Md5');
 
 /**
  * @constructor
@@ -14,7 +12,7 @@ abperf.styles.Test = function(testGroupName, css) {
     this.testGroupName = testGroupName;
     this.css = formatCSS(css);
     // This test's ID is the pretty-print (normalized) CSS, hashed.
-    this.id = md5(this.css);
+    this.id = hash(this.css);
 }
 
 /**
@@ -51,8 +49,11 @@ function formatCSS(css) {
     return css;
 }
 
-function md5(input) {
-    var md5 = new goog.crypt.Md5();
-    md5.update(input);
-    return goog.crypt.byteArrayToHex(md5.digest());
+goog.require('goog.crypt');
+goog.require('goog.crypt.Sha1');
+
+function hash(input) {
+    var hash = new goog.crypt.Sha1();
+    hash.update(input);
+    return goog.crypt.byteArrayToHex(hash.digest());
 }
