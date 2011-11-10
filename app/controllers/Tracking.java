@@ -32,8 +32,13 @@ public class Tracking extends BaseController {
         response.print(StringUtils.join(pageView.testIDsWithUnknownCSS, ','));
         ok();
     }
-
-    public static void pingBeta() {
+    
+    /**
+     * @param guid The unique page request ID.
+     * @param time Time the page loaded at.
+     * @param status "active" or "inactive".
+     */
+    public static void pingBeta(final String guid, final long time, final String status) {
         onlyPOSTallowed();
         // @todo
         ok();

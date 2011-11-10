@@ -32,7 +32,7 @@ public class PageView extends Model {
     public JsonObject testsJSON;
 
     @Transient
-    public String[] testIDsWithUnknownCSS;
+    public List<String> testIDsWithUnknownCSS;
 
     public PageView(final User user, final String guid, final long time, final String url,
             final Map<String, String> tests) {
@@ -42,18 +42,17 @@ public class PageView extends Model {
         this.guid = guid;
 
         this.testsJSON = new JsonObject();
-        this.testIDsWithUnknownCSS = new String[tests.size()];
-        int i = 0;
+        this.testIDsWithUnknownCSS = new ArrayList<String>(tests.size());
 
         for (final String testGroupName: tests.keySet()) {
             final String testId = tests.get(testGroupName);
 
             testsJSON.addProperty(testGroupName, testId);
 
-            // Check if we already know the CSS for this ID. If we don't know the CSS, request it.
+            // Check if we already know the CSS for this ID. If we don't know the CSS,
+            // request that client.js supplies it.
             if (!TestCSS.cssIsKnown(testId)) {
-                testIDsWithUnknownCSS[i] = testId;
-                i++;
+                testIDsWithUnknownCSS.add(testId);
             }
         }
     }
