@@ -6,14 +6,14 @@ GET     /privacy                                                Application.priv
 GET     /help                                                   Application.help
 
 GET     /beta/client.js                                         Bundles.clientScripts
-POST    /beta/report/start                                      Reporting.startBeta
-POST    /beta/report/ping                                       Reporting.pingBeta
-POST    /beta/report/supplycss                                  Reporting.supplyCssBeta
+POST    /beta/tracking/start                                    Tracking.startBeta
+POST    /beta/tracking/ping                                     Tracking.pingBeta
+POST    /beta/tracking/supplycss                                Tracking.supplyCssBeta
 #{if com.abperf.Constants.IS_DEV}
-    GET     /beta/report/start                                      Reporting.startBeta
-    GET     /beta/report/ping                                       Reporting.pingBeta
-    GET     /beta/report/supplycss                                  Reporting.supplyCssBeta
-    GET     /deps.js                                                staticFile:public/closure/closure/goog/deps.js
+    GET     /beta/tracking/start                                Tracking.startBeta
+    GET     /beta/tracking/ping                                 Tracking.pingBeta
+    GET     /beta/tracking/supplycss                            Tracking.supplyCssBeta
+    GET     /deps.js                                            staticFile:public/closure/closure/goog/deps.js
 #{/if}
 
 *       /feedback/{action}                                      SiteFeedbacks.{action}

@@ -4,7 +4,7 @@ import java.util.*;
 import models.*;
 import play.mvc.Http.StatusCode;
 
-public class Reporting extends BaseController {
+public class Tracking extends BaseController {
     /**
      * @param guid A unique page request ID.
      * @param time Time the page loaded at.

@@ -1,4 +1,4 @@
-goog.provide('abperf.reporting');
+goog.provide('abperf.tracking');
 
 goog.require('abperf.constants');
 goog.require('goog.events');
@@ -8,13 +8,13 @@ goog.require('goog.string');
 goog.require('goog.uri.utils');
 
 /** @private @const */
-var START_URL = abperf.constants.SERVER_URL + 'beta/report/start';
+var START_URL = abperf.constants.SERVER_URL + 'beta/tracking/start';
 
 /** @private @const */
-var PING_URL = abperf.constants.SERVER_URL + 'beta/report/ping';
+var PING_URL = abperf.constants.SERVER_URL + 'beta/tracking/ping';
 
 /** @private @const */
-var SUPPLY_CSS_URL = abperf.constants.SERVER_URL + 'beta/report/supplycss';
+var SUPPLY_CSS_URL = abperf.constants.SERVER_URL + 'beta/tracking/supplycss';
 
 /** @private @const */
 var START_TIME = Date.now();
@@ -33,7 +33,7 @@ var consecutiveActivePings = 0;
  * 
  * @param {object<string, Test>} runningTests
  */
-abperf.reporting.start = function(runningTests) {
+abperf.tracking.start = function(runningTests) {
     var data = {
         guid: START_TIME,
         time: START_TIME,
@@ -43,14 +43,14 @@ abperf.reporting.start = function(runningTests) {
         data['tests[' + testName + ']'] = (runningTests[testName] != null ? runningTests[testName].id : 'none');
     }
 
-    abperf.reporting.reportDataToURL_(START_URL, data, abperf.reporting.supplyCSS);
+    sendDataToURL(START_URL, data, abperf.tracking.supplyCSS);
 }
 
 /**
  * Tell the server if the user is active on the page, or inactive (in another tab, AFK, etc).
  * This data is used to keep temporal analytics (time spent on page, etc) accurate.
  */
-abperf.reporting.ping = function() {
+abperf.tracking.ping = function() {
     var now = Date.now();
     var timeSinceLastInteraction = now - lastInteraction;
     var status = (timeSinceLastInteraction > 18000) ? 'inactive' : 'active';
@@ -65,7 +65,7 @@ abperf.reporting.ping = function() {
         lastPingStatus = status;
         consecutiveActivePings = (status === 'active' ? consecutiveActivePings + 1 : 0);
 
-        abperf.reporting.reportDataToURL_(PING_URL, {
+        sendDataToURL(PING_URL, {
             guid: START_TIME,
             status: status,
             time: now
@@ -76,7 +76,7 @@ abperf.reporting.ping = function() {
     var pingFrequency = (consecutiveActivePings <= 10 ? 10000
         : (consecutiveActivePings <= 15 ? 20000
         : 30000));
-    setTimeout(abperf.reporting.ping, pingFrequency);
+    setTimeout(abperf.tracking.ping, pingFrequency);
 }
 
 /**
@@ -84,11 +84,11 @@ abperf.reporting.ping = function() {
  * and not away making tea or fighting zombies. This data is used to keep
  * temporal analytics (time spent on page, etc) accurate.
  */
-abperf.reporting.interactionOccurred = function() {
+abperf.tracking.interactionOccurred = function() {
     lastInteraction = Date.now();
 }
 
-abperf.reporting.supplyCSS = function(evt) {
+abperf.tracking.supplyCSS = function(evt) {
     var text = evt.target.getResponseText();
 
     if (!goog.string.isEmptySafe(text)) {
@@ -102,13 +102,19 @@ abperf.reporting.supplyCSS = function(evt) {
             }
         }
 
-        abperf.reporting.reportDataToURL_(SUPPLY_CSS_URL, css);
+        sendDataToURL(SUPPLY_CSS_URL, css);
     }
 }
 
 /**
  * @private
+ * @param {string} url
+ * @param {object<string, *>} data
+ * @param {function} callback
  */
-abperf.reporting.reportDataToURL_ = function(url, data, callback) {
+function sendDataToURL (url, data, callback) {
+    if (typeof callback !== "function") {
+        callback = null;
+    }
     goog.net.XhrIo.send(url, callback, 'POST', goog.uri.utils.buildQueryDataFromMap(data));
 }
