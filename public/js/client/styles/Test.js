@@ -21,10 +21,10 @@ abperf.styles.Test = function(testGroupName, css) {
  * Run this test.
  */
 abperf.styles.Test.prototype.run = function() {
-    // Install the styles inline at the end of the document's body, so they have the highest
-    // priority.
-    var installed = goog.style.installStyles(this.css, document.body);
-    // IE doesn't allow setAttribute() on HTMLStyleElement.
+    // Install the styles inline so they have high priority.
+    // Line breaks must be removed because Chrome changes them to <br/> (a bug?).
+    var installed = goog.style.installStyles(this.css.replace('\n', ' '));
+    // IE doesn't allow setAttribute() on HTMLStyleElement, so set these directly.
     installed.className = 'abperf';
     installed.id = 'abperf-' + this.testGroupName;
 }

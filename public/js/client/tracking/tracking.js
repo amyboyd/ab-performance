@@ -35,9 +35,9 @@ var cssToSupply = '';
  */
 abperf.tracking.start = function(runningTests) {
     var data = {
-        guid: START_TIME,
-        time: START_TIME,
-        url: window.location.toString()
+        'guid': START_TIME,
+        'time': START_TIME,
+        'url': window.location.toString()
     };
     for (var testName in runningTests) {
         data['tests[' + testName + ']'] = (runningTests[testName] != null ? runningTests[testName].id : 'none');
@@ -68,9 +68,9 @@ abperf.tracking.ping = function() {
         consecutiveActivePings = (status === 'active' ? consecutiveActivePings + 1 : 0);
 
         var data = {
-            guid: START_TIME,
-            status: status,
-            time: now
+            'guid': START_TIME,
+            'status': status,
+            'time': now
         };
 
         if (!goog.string.isEmptySafe(cssToSupply)) {
@@ -108,7 +108,7 @@ abperf.tracking.interactionOccurred = function() {
  * @param {object<string, *>} data
  * @param {function} callback
  */
-function sendDataToURL (url, data, callback) {
+function sendDataToURL(url, data, callback) {
     if (typeof callback !== "function") {
         callback = null;
     }

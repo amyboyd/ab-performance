@@ -41,5 +41,5 @@ GET     /favicon.ico                                            staticFile:publi
 GET     /robots.txt                                             staticFile:public/robots.txt
 
 # These directory routes are sometimes hard-coded, and stored in the database.
-GET     ${domain}/public                                        staticDir:public/
+GET     ${domain}/public/                                       staticDir:public/
 GET     /public/                                                staticDir:public/

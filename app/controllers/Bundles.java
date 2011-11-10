@@ -19,8 +19,8 @@ public class Bundles extends Controller {
     private static final Bundle clientScripts = new ClosureBundle(
             "client.js",
             "public/closure/closure/bin/build/closurebuilder.py",
-            null,
-//            CompilationLevel.ADVANCED_OPTIMIZATIONS,
+//            null,
+            CompilationLevel.ADVANCED_OPTIMIZATIONS,
             new String[] {
                 "public/closure/closure/goog",
                 "public/closure/third_party/closure",
