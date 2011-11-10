@@ -1,8 +1,10 @@
 package controllers;
 
+import com.google.javascript.jscomp.*;
 import java.util.*;
 import models.*;
 import org.apache.commons.lang.StringUtils;
+import play.libs.optimization.ClosureBundle;
 import play.Logger;
 import play.mvc.Http.StatusCode;
 import play.mvc.Util;
@@ -56,6 +58,28 @@ public class Tracking extends BaseController {
         }
 
         ok();
+    }
+
+    public static void clientScripts() {
+        response.cacheFor("61d");
+        clientScripts.applyToResponse(request, response);
+    }
+
+    private static final ClosureBundle clientScripts = createClientScriptsBundle();
+
+    @Util
+    private static ClosureBundle createClientScriptsBundle() {
+        final ClosureBundle bundle = new ClosureBundle(
+                "client-beta.js",
+                "public/closure/closure/bin/build/closurebuilder.py",
+                CompilationLevel.ADVANCED_OPTIMIZATIONS,
+                new String[] {
+                    "public/closure/closure/goog",
+                    "public/closure/third_party/closure",
+                    "public/js/client", },
+                new String[] { "abperf" });
+        bundle.setOutputWrapper("(function(){ %output% })();");
+        return bundle;
     }
 
     /**

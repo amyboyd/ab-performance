@@ -5,14 +5,12 @@ GET     /terms                                                  Application.term
 GET     /privacy                                                Application.privacy
 GET     /help                                                   Application.help
 
-GET     /beta/client.js                                         Bundles.clientScripts
+GET     /beta/client.js                                         Tracking.clientScripts
 POST    /beta/tracking/start                                    Tracking.startBeta
 POST    /beta/tracking/ping                                     Tracking.pingBeta
-POST    /beta/tracking/supplycss                                Tracking.supplyCssBeta
 #{if com.abperf.Constants.IS_DEV}
     GET     /beta/tracking/start                                Tracking.startBeta
     GET     /beta/tracking/ping                                 Tracking.pingBeta
-    GET     /beta/tracking/supplycss                            Tracking.supplyCssBeta
     GET     /deps.js                                            staticFile:public/closure/closure/goog/deps.js
 #{/if}
 
