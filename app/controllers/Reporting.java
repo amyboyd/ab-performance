@@ -20,7 +20,7 @@ public class Reporting extends BaseController {
             return;
         }
 
-        Account account = domain.account;
+        User account = domain.account;
 
         PageView pageView = new PageView();
         pageView.account = account;

@@ -3,7 +3,7 @@ package models;
 import com.abperf.MoneyUtils;
 import java.math.BigDecimal;
 
-public enum AccountType {
+public enum UserAccountType {
     BETA() {
         {
             price = MoneyUtils.ZERO;

@@ -1,6 +1,6 @@
 package controllers;
 
-import models.Account;
+import models.User;
 import java.util.Map;
 import play.Logger;
 import play.mvc.Before;
@@ -55,7 +55,7 @@ public class Checks extends Controller {
             case NOT_LOGGED_IN:
                 return !auth;
             case IS_ADMIN:
-                Account user = (Account) httpParams.get("currentUser");
+                User user = (User) httpParams.get("currentUser");
                 boolean isAdmin = auth && user.admin;
 
                 if (!isAdmin) {

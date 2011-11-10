@@ -25,7 +25,7 @@ abstract public class BaseController extends Controller {
             session.put("forward", params.get("forward"));
         }
 
-        Account user = Authentication.findLoggedInUser();
+        User user = Authentication.findLoggedInUser();
         if (user != null) {
             postSuccessfulAuthenticate(user);
             return;
@@ -45,7 +45,7 @@ abstract public class BaseController extends Controller {
     }
 
     @Util
-    private static void postSuccessfulAuthenticate(Account user) {
+    private static void postSuccessfulAuthenticate(User user) {
         request.args.put("isAuth", true);
         renderArgs.put("isAuth", true);
 
@@ -55,7 +55,7 @@ abstract public class BaseController extends Controller {
         // Put some extra values in render args if not AJAX.
         if (!request.isAjax()) {
             // Limit number of notifications so they don't take up too much screen space.
-            renderArgs.put("notifications", AccountNotification.findByUser(user, 5));
+            renderArgs.put("notifications", UserNotification.findByUser(user, 5));
         }
     }
 
@@ -73,9 +73,9 @@ abstract public class BaseController extends Controller {
      * Otherwise redirects to the login page.
      */
     @Util
-    protected static Account requireAuthenticatedUser() {
+    protected static User requireAuthenticatedUser() {
         if (isAuth()) {
-            return (Account) request.args.get("currentUser");
+            return (User) request.args.get("currentUser");
         } else {
             flash.error("You must be logged in to see that page");
             Authentication.login(request.url, null);

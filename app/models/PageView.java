@@ -11,7 +11,7 @@ import play.data.validation.*;
 public class PageView extends Model {
     @Required
     @ManyToOne(optional = false)
-    public Account account;
+    public User account;
 
     /**
      * A unique page view ID.

@@ -18,7 +18,7 @@ public class Domain extends GenericModel {
 
     @Required
     @ManyToOne(optional = false)
-    public Account account;
+    public User account;
 
     @Required
     @Temporal(TemporalType.TIMESTAMP)

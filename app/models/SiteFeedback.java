@@ -18,12 +18,12 @@ public class SiteFeedback extends Model {
     public String ipAddress;
 
     @ManyToOne
-    public Account user;
+    public User user;
 
     @Temporal(TemporalType.TIMESTAMP)
     public Date createdAt;
 
-    public SiteFeedback(String message, String ipAddress, Account user) {
+    public SiteFeedback(String message, String ipAddress, User user) {
         this.message = message;
         this.ipAddress = ipAddress;
         this.user = user;

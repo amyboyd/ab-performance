@@ -32,7 +32,7 @@ public class Bootstrap extends Job {
 
         isRunning = true;
 
-        if (Constants.IS_DEV && Account.count() == 0L) {
+        if (Constants.IS_DEV && User.count() == 0L) {
             loadFixtures();
         }
 

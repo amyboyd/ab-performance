@@ -13,8 +13,8 @@ import play.libs.Codec;
 import play.templates.JavaExtensions;
 
 @Entity
-@Table(name = "account")
-public class Account extends Model {
+@Table(name = "user")
+public class User extends Model {
     @Required
     @MaxSize(40)
     @MinSize(2)
@@ -35,7 +35,7 @@ public class Account extends Model {
     @NoBinding
     public String password;
 
-    public AccountType accountType = AccountType.BETA;
+    public UserAccountType accountType = UserAccountType.BETA;
 
     @Column(name = "is_admin") // "admin" is a reserved keyword.
     public boolean admin;
@@ -59,7 +59,7 @@ public class Account extends Model {
     @OneToMany(mappedBy = "account")
     public Set<Domain> domains;
 
-    public static Account findByEmail(final String email) {
+    public static User findByEmail(final String email) {
         return find("email", email).first();
     }
 
@@ -73,15 +73,15 @@ public class Account extends Model {
      * @param email
      * @return Null if no user with the email and password.
      */
-    public static Account findByEmailAndPassword(final String email, final String password) {
-        final Account user = Account.find("email", email).first();
+    public static User findByEmailAndPassword(final String email, final String password) {
+        final User user = User.find("email", email).first();
         if ((user != null) && user.checkPassword(password)) {
             return user;
         }
         return null;
     }
 
-    public Account(final String email, final String password) {
+    public User(final String email, final String password) {
         this.email = email;
         // Try to parse name from email, e.g. "mic.t.boyd@gmail.com" becomes "Mic T Boyd".
         this.name = JavaExtensions.capitalizeWords(email.substring(0, email.indexOf('@')).replaceAll("[.-_]", " ").
@@ -90,7 +90,7 @@ public class Account extends Model {
         this.password = password;
     }
 
-    public Account(final String email, final String password, final String name) {
+    public User(final String email, final String password, final String name) {
         this(email, password);
         this.name = name;
     }
@@ -102,7 +102,7 @@ public class Account extends Model {
 
     public void onLogin() {
         if (lastLogin != null) {
-            new AccountNotification(
+            new UserNotification(
                     "Your last login was on " + JavaExtensions.format(lastLogin, "EEEE d MMMM, yyyy").toString(),
                     this).create();
         }
