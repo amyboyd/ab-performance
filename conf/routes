@@ -34,13 +34,12 @@ GET     /admin/?                                                admin.Admin.inde
 %{ domain = (com.abperf.Constants.IS_PROD ? 'abperf.alienmegacorp.net' : '') }%
 
 # Update the version number when deploying if we need to force browsers to refresh their cache.
-GET     ${domain}/_/bundles/1/{action}                          Bundles.{action}
+GET     ${domain}/public/bundles/1/{action}                     Bundles.{action}
+GET     /public/bundles/1/{action}                              Bundles.{action}
 
 GET     /favicon.ico                                            staticFile:public/favicon.ico
 GET     /robots.txt                                             staticFile:public/robots.txt
 
 # These directory routes are sometimes hard-coded, and stored in the database.
-GET     ${domain}/_/b/                                          staticDir:public/uploads/
-GET     ${domain}/_/a/                                          staticDir:public/
-GET     /_/b/                                                   staticDir:public/uploads/
-GET     /_/a/                                                   staticDir:public/
+GET     ${domain}/public                                        staticDir:public/
+GET     /public/                                                staticDir:public/

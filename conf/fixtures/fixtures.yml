@@ -1,4 +1,4 @@
-Account(Tester):
+User(Tester):
     accountType: BETA
     admin: true
     email: amy@amyboyd.co.uk
