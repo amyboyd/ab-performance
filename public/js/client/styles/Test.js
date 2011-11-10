@@ -13,6 +13,7 @@ abperf.styles.Test = function(testGroupName, css) {
     this.css = formatCSS(css);
     // This test's ID is the pretty-print (normalized) CSS, hashed.
     this.id = hash(this.css);
+    this.isRunning = false;
 }
 
 /**
@@ -22,9 +23,14 @@ abperf.styles.Test.prototype.run = function() {
     // Install the styles inline so they have high priority.
     // Line breaks must be removed because Chrome changes them to <br/> (a bug?).
     var installed = goog.style.installStyles(this.css.replace('\n', ' '));
+
     // IE doesn't allow setAttribute() on HTMLStyleElement, so set these directly.
     installed.className = 'abperf';
-    installed.id = 'abperf-' + this.testGroupName;
+
+    // HTML doesn't allow spaces in the ID attribute.
+    installed.id = 'abperf-' + this.testGroupName.replace(' ', '-space-');
+
+    this.isRunning = true;
 }
 
 /** A hash that uniquely identifies this test. @type {string} */

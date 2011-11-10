@@ -60,6 +60,10 @@ public class TrackingBeta extends BaseController {
     }
 
     public static void clientScripts() {
+        if (com.abperf.Constants.IS_DEV) {
+            clientScripts.getBundleFile().delete();
+        }
+
         response.cacheFor("61d");
         clientScripts.applyToResponse(request, response);
     }
@@ -76,7 +80,7 @@ public class TrackingBeta extends BaseController {
                     "public/closure/closure/goog",
                     "public/closure/third_party/closure",
                     "public/js/client", },
-                new String[] { "abperf" });
+                new String[] { "abperf", "abperf.debug" });
         bundle.setOutputWrapper("(function(){ %output% })();");
         return bundle;
     }

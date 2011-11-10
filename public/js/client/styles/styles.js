@@ -6,14 +6,14 @@ goog.require('abperf.styles.TestGroup');
 
 abperf.styles.start = function() {
     var elements = abperf.styles.getStyleElements();
-    var tests = abperf.styles.createTests(elements);
-    var testGroups = abperf.styles.createTestGroups(tests);
+    abperf.styles.tests = abperf.styles.createTests(elements);
+    abperf.styles.testGroups = abperf.styles.createTestGroups(abperf.styles.tests);
 
     if (goog.DEBUG) {
-        console.log('All test groups:', testGroups);
+        console.log('All test groups:', abperf.styles.testGroups);
     }
 
-    abperf.styles.runTestGroups(testGroups);
+    abperf.styles.runTestGroups(abperf.styles.testGroups);
 }
 
 /**
@@ -72,6 +72,12 @@ abperf.styles.runTestGroups = function(testGroups) {
         testGroups[key].chooseTestAndRunIt();
     }
 }
+
+/** @type {array<abperf.styles.Test>} */
+abperf.styles.tests = [];
+
+/** @type {object<string, abperf.styles.TestGroup>} */
+abperf.styles.testGroups = {};
 
 /** @type {object<string, abperf.styles.Test>} The key is the test group name */
 abperf.styles.runningTests = {};
