@@ -9,14 +9,14 @@ import play.Logger;
 import play.mvc.Http.StatusCode;
 import play.mvc.Util;
 
-public class Tracking extends BaseController {
+public class TrackingBeta extends BaseController {
     /**
      * @param guid A unique page request ID.
      * @param time Time the page loaded at.
      * @param url
      * @param tests The map key is the test group name and the value is the test ID.
      */
-    public static void startBeta(final String guid, final long time, final String url,
+    public static void start(final String guid, final long time, final String url,
             final Map<String, String> tests) {
         onlyPOSTallowed();
 
@@ -41,7 +41,7 @@ public class Tracking extends BaseController {
      * @param status "active" or "inactive".
      * @param css The keys are the test IDs, the values are the CSS.
      */
-    public static void pingBeta(final String guid, final long time, final String status,
+    public static void ping(final String guid, final long time, final String status,
             final Map<String, String> css) {
         onlyPOSTallowed();
 
