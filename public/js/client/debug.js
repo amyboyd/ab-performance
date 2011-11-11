@@ -8,7 +8,18 @@ goog.require('goog.style');
 
 goog.exportSymbol('abperf.debug', abperf.debug);
 
+/** @private @type {boolean} */
+var debugHasStarted = false;
+
 abperf.debug = function() {
+    // Don't run more than once.
+    if (debugHasStarted === true) {
+        console.log('The debug interface is already open.');
+        return;
+    }
+    debugHasStarted = true;
+    console.log('Opening the debug interface.');
+
     addStyles();
     var container = addContainer();
     for (var testGroupName in abperf.styles.testGroups) {
@@ -16,7 +27,9 @@ abperf.debug = function() {
     }
 }
 
-/** @private */
+/**
+ * @private
+ */
 function addStyles() {
     goog.style.installStyles('\
 #abperf-debug { font-family: sans-serif; position: fixed; bottom: 0; left: 100px; right: 100px; background-color: black; padding: 10px; color: beige; } \
@@ -104,13 +117,13 @@ function changeTest(evt) {
     var newTestEl = evt.target;
     var newTestID = newTestEl.textContent;
     
-    // Remove class "running" from the old test.
+    // Remove class 'running' from the old test.
     var oldTest = goog.dom.$$('li', 'running', newTestEl.parentNode)[0];
     if (oldTest != null) {
         oldTest.setAttribute('class', null);
     }
 
-    // Add class "running" to the new test.
+    // Add class 'running' to the new test.
     newTestEl.setAttribute('class', 'running');
 
     // Run the new test.
