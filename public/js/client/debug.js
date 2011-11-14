@@ -115,18 +115,22 @@ function addTest(test, list) {
  */
 function changeTest(evt) {
     var newTestEl = evt.target;
-    var newTestID = newTestEl.textContent;
-    
-    // Remove class 'running' from the old test.
-    var oldTest = goog.dom.$$('li', 'running', newTestEl.parentNode)[0];
+    var newTest = abperf.styles.findTestByID(newTestEl.textContent);
+    var oldTestEl = goog.dom.$$('li', 'running', newTestEl.parentNode)[0];
+    var oldTest = abperf.styles.findTestByID(oldTestEl.textContent);
+    var testGroupName = goog.dom.$$('h6', null, newTestEl.parentNode.parentNode)[0].textContent;
+
+    // Uninstall the old test.
+    oldTestEl.setAttribute('class', null);
     if (oldTest != null) {
-        oldTest.setAttribute('class', null);
+        oldTest.uninstall();
     }
 
-    // Add class 'running' to the new test.
+    // Install the new test.
     newTestEl.setAttribute('class', 'running');
+    if (newTest != null) {
+        newTest.install();
+    }
 
-    // Run the new test.
-    var testGroupName = goog.dom.$$('h6', null, newTestEl.parentNode.parentNode)[0].textContent;
-    console.log('Changing ' + testGroupName + ' from  ' + oldTest.textContent + ' to ' + newTestID);
+    console.log('Changing ' + testGroupName + ' from ' + (oldTest != null ? oldTest.id : 'none') + ' to ' + (newTest != null ? newTest.id : 'none'));
 }

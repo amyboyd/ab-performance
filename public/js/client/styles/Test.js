@@ -1,5 +1,6 @@
 goog.provide('abperf.styles.Test');
 
+goog.require('goog.dom');
 goog.require('goog.string');
 goog.require('goog.style');
 
@@ -16,21 +17,24 @@ abperf.styles.Test = function(testGroupName, css) {
     this.isRunning = false;
 }
 
-/**
- * Run this test.
- */
-abperf.styles.Test.prototype.run = function() {
+abperf.styles.Test.prototype.install = function() {
     // Install the styles inline so they have high priority.
     // Line breaks must be removed because Chrome changes them to <br/> (a bug?).
     var installed = goog.style.installStyles(this.css.replace('\n', ' '));
-
     // IE doesn't allow setAttribute() on HTMLStyleElement, so set these directly.
-    installed.className = 'abperf';
-
-    // HTML doesn't allow spaces in the ID attribute.
-    installed.id = 'abperf-' + this.testGroupName.replace(' ', '-space-');
+    installed.className = 'abperf abperf-' + this.testGroupName.replace(' ', '-');
+    installed.id = 'abperf-' + this.id;
 
     this.isRunning = true;
+}
+
+abperf.styles.Test.prototype.uninstall = function() {
+    var installed = goog.dom.$('abperf-' + this.id);
+    if (installed != null) {
+        goog.dom.removeNode(installed);
+    }
+
+    this.isRunning = false;
 }
 
 /** A hash that uniquely identifies this test. @type {string} */

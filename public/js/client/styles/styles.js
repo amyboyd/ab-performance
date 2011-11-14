@@ -69,7 +69,7 @@ abperf.styles.createTestGroups = function(tests) {
  */
 abperf.styles.runTestGroups = function(testGroups) {
     for (var key in testGroups) {
-        testGroups[key].chooseTestAndRunIt();
+        testGroups[key].chooseTestAndInstallIt();
     }
 }
 
@@ -89,7 +89,21 @@ abperf.styles.runningTests = {};
 abperf.styles.findRunningTestByID = function(id) {
     for (var key in abperf.styles.runningTests) {
         var test = abperf.styles.runningTests[key];
-        if (test.id == id) {
+        if (test !== null && test.id === id) {
+            return test;
+        }
+    }
+    return null;
+}
+
+/**
+ * @param {string} id
+ * @return {abperf.styles.Test}
+ */
+abperf.styles.findTestByID = function(id) {
+    for (var i = 0; i < abperf.styles.tests.length; i++) {
+        var test = abperf.styles.tests[i];
+        if (test.id === id) {
             return test;
         }
     }

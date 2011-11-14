@@ -24,10 +24,10 @@ abperf.styles.TestGroup.prototype.addTest = function(test) {
 /**
  * Randomly choose a test to run, or none. If one is chosen, run it immediately.
  */
-abperf.styles.TestGroup.prototype.chooseTestAndRunIt = function() {
+abperf.styles.TestGroup.prototype.chooseTestAndInstallIt = function() {
     var test = this.chooseTest();
     if (test !== null) {
-        test.run();
+        test.install();
     }
     abperf.styles.runningTests[this.name] = test;
 }
