@@ -59,6 +59,12 @@ public class User extends Model {
     @OneToMany(mappedBy = "user")
     public Set<Domain> domains;
 
+    public int pageViews;
+
+    public int purchasedPageViews;
+
+    public int generousPurchasedPageViews;
+
     public static User findByEmail(final String email) {
         return find("email", email).first();
     }
@@ -98,6 +104,10 @@ public class User extends Model {
     @Override
     public String toString() {
         return name;
+    }
+
+    public boolean hasReachedMaxPageViews() {
+        return pageViews >= generousPurchasedPageViews;
     }
 
     public void onLogin() {

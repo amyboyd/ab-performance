@@ -10,6 +10,8 @@ import play.mvc.Util;
 
 public class TrackingBeta extends BaseController {
     /**
+     * Response code may be 200, 402 or 429.
+     *
      * @param guid A unique page request ID.
      * @param time Time the page loaded at.
      * @param url
@@ -22,13 +24,25 @@ public class TrackingBeta extends BaseController {
 
         final Domain domain = Domain.findDomainByURL(url);
         if (domain == null) {
-            response.status = StatusCode.INTERNAL_ERROR;
+            response.status = StatusCode.PAYMENT_REQUIRED; // 402
+            response.print("This domain is not registered to any user");
             Logger.error("URL is on an unregistered domain:" + url);
+            return;
+        }
+
+        final User user = domain.user;
+        if (user.hasReachedMaxPageViews()) {
+            // 429 is a proposed status code. See here: http://tools.ietf.org/html/draft-nottingham-http-new-status-02#section-4
+            response.status = 429;
+            response.print("Page view limit has been reached");
             return;
         }
 
         final PageView pageView = new PageView(domain.user, guid, time, url, tests);
         pageView.save();
+
+        user.pageViews++;
+        user.save();
 
         response.setHeader("Content-Type", "text/plain");
         response.print(StringUtils.join(pageView.testIDsWithUnknownCSS, ','));

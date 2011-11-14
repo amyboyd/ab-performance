@@ -42,7 +42,29 @@ abperf.tracking.start = function(runningTests) {
     }
     sendDataToURL(START_URL, data,
         function(evt) {
-            cssToSupply = evt.target.getResponseText();
+            var status = evt.target.getStatus();
+            if (status === 200) {
+                // Everything is OK.
+                // The response text is the comma-seperated IDs of any CSS that needs to be
+                // supplied to the server. These are sent to the sever in the next ping.
+                cssToSupply = evt.target.getResponseText();
+
+                setTimeout(abperf.tracking.ping, 5000);
+
+                goog.events.listen(
+                    window,
+                    [goog.events.EventType.MOUSEMOVE, goog.events.EventType.SCROLL, goog.events.EventType.KEYPRESS],
+                    abperf.tracking.interactionOccurred);
+            } else if (status === 402 || status === 429) {
+                // Domain is not registered or page view limit has been exceeded.
+                if (typeof console !== 'undefined') {
+                    console.log('AB Perf:', evt.target.getResponseText());
+                }
+            } else {
+                if (goog.DEBUG) {
+                    console.log('Unexpected status:', status);
+                }
+            }
         });
 }
 
@@ -60,7 +82,7 @@ abperf.tracking.ping = function() {
     }
 
     if (lastPingStatus === 'inactive' && status === 'inactive') {
-        // Don't need to ping because the server already knows the user is inactive.
+    // Don't need to ping because the server already knows the user is inactive.
     } else {
         lastPingStatus = status;
         consecutiveActivePings = (status === 'active' ? consecutiveActivePings + 1 : 0);
@@ -87,7 +109,7 @@ abperf.tracking.ping = function() {
     // When the user has been active on the page for a long time, reduce the ping frequency.
     var pingFrequency = (consecutiveActivePings <= 10 ? 10000
         : (consecutiveActivePings <= 15 ? 20000
-        : 30000));
+            : 30000));
     setTimeout(abperf.tracking.ping, pingFrequency);
 }
 
