@@ -29,16 +29,16 @@ var cssToSupply = '';
 /**
  * Start tracking interaction with the page.
  *
- * @param {object<string, Test>} runningTests
+ * @param {object<string, Test>} installedTests
  */
-abperf.tracking.start = function(runningTests) {
+abperf.tracking.start = function(installedTests) {
     var data = {
         'guid': START_TIME,
         'time': START_TIME,
         'url': window.location.toString()
     };
-    for (var testName in runningTests) {
-        data['tests[' + testName + ']'] = (runningTests[testName] != null ? runningTests[testName].id : 'none');
+    for (var testName in installedTests) {
+        data['tests[' + testName + ']'] = (installedTests[testName] != null ? installedTests[testName].id : 'none');
     }
     sendDataToURL(START_URL, data,
         function(evt) {
@@ -98,7 +98,7 @@ abperf.tracking.ping = function() {
             var idArray = cssToSupply.split(',');
             for (var i = 0; i < idArray.length; i++) {
                 var id = idArray[i];
-                data['css[' + id + ']'] = abperf.styles.findRunningTestByID(id).css;
+                data['css[' + id + ']'] = abperf.styles.findTestByID(id).css;
             }
             cssToSupply = null;
         }

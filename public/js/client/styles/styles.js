@@ -80,21 +80,7 @@ abperf.styles.tests = [];
 abperf.styles.testGroups = {};
 
 /** @type {object<string, abperf.styles.Test>} The key is the test group name */
-abperf.styles.runningTests = {};
-
-/**
- * @param {string} id
- * @return {abperf.styles.Test}
- */
-abperf.styles.findRunningTestByID = function(id) {
-    for (var key in abperf.styles.runningTests) {
-        var test = abperf.styles.runningTests[key];
-        if (test !== null && test.id === id) {
-            return test;
-        }
-    }
-    return null;
-}
+abperf.styles.installedTests = {};
 
 /**
  * @param {string} id

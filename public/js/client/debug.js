@@ -12,7 +12,7 @@ goog.exportSymbol('abperf.debug', abperf.debug);
 var debugHasStarted = false;
 
 abperf.debug = function() {
-    // Don't run more than once.
+    // Don't open the debugger more than once.
     if (debugHasStarted === true) {
         console.log('The debug interface is already open.');
         return;
@@ -38,7 +38,7 @@ function addStyles() {
 #abperf-debug .group ol { margin: 0; padding: 0 0 0 11px; } \
 #abperf-debug .group li { color: beige; font-size: 12px; cursor: pointer; margin: 0.5em 0 0.5em 1em; } \
 #abperf-debug .group li:hover { color: orange; } \
-#abperf-debug .group li.running { color: orange; text-decoration: underline; } \
+#abperf-debug .group li.installed { color: orange; text-decoration: underline; } \
 ')
 }
 
@@ -86,7 +86,7 @@ function addTestGroup(testGroup, debugContainer) {
  */
 function addNoTest(testGroup, list) {
     var listItem = goog.dom.createDom('li', {
-        'class': (abperf.styles.runningTests[testGroup.name] == null ? 'running' : '')
+        'class': (abperf.styles.installedTests[testGroup.name] === null ? 'installed' : '')
     });
 
     goog.dom.setTextContent(listItem, 'none');
@@ -102,7 +102,7 @@ function addNoTest(testGroup, list) {
  */
 function addTest(test, list) {
     var listItem = goog.dom.createDom('li', {
-        'class': (test.isRunning ? 'running' : '')
+        'class': (test.isInstalled ? 'installed' : '')
     });
     goog.dom.setTextContent(listItem, test.id);
     goog.dom.appendChild(list, listItem);
@@ -116,7 +116,7 @@ function addTest(test, list) {
 function changeTest(evt) {
     var newTestEl = evt.target;
     var newTest = abperf.styles.findTestByID(newTestEl.textContent);
-    var oldTestEl = goog.dom.$$('li', 'running', newTestEl.parentNode)[0];
+    var oldTestEl = goog.dom.$$('li', 'installed', newTestEl.parentNode)[0];
     var oldTest = abperf.styles.findTestByID(oldTestEl.textContent);
     var testGroupName = goog.dom.$$('h6', null, newTestEl.parentNode.parentNode)[0].textContent;
 
@@ -127,7 +127,7 @@ function changeTest(evt) {
     }
 
     // Install the new test.
-    newTestEl.setAttribute('class', 'running');
+    newTestEl.setAttribute('class', 'installed');
     if (newTest != null) {
         newTest.install();
     }

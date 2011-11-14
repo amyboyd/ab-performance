@@ -14,7 +14,7 @@ abperf.styles.Test = function(testGroupName, css) {
     this.css = formatCSS(css);
     // This test's ID is the pretty-print (normalized) CSS, hashed.
     this.id = hash(this.css);
-    this.isRunning = false;
+    this.isInstalled = false;
 }
 
 abperf.styles.Test.prototype.install = function() {
@@ -25,7 +25,7 @@ abperf.styles.Test.prototype.install = function() {
     installed.className = 'abperf abperf-' + this.testGroupName.replace(' ', '-');
     installed.id = 'abperf-' + this.id;
 
-    this.isRunning = true;
+    this.isInstalled = true;
 }
 
 abperf.styles.Test.prototype.uninstall = function() {
@@ -34,7 +34,7 @@ abperf.styles.Test.prototype.uninstall = function() {
         goog.dom.removeNode(installed);
     }
 
-    this.isRunning = false;
+    this.isInstalled = false;
 }
 
 /** A hash that uniquely identifies this test. @type {string} */

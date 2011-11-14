@@ -9,5 +9,5 @@ goog.require('onDOMContentLoaded');
 // Start as soon as possible after all DOM elements are in the DOM tree.
 onDOMContentLoaded(function() {
     abperf.styles.start();
-    abperf.tracking.start(abperf.styles.runningTests);
+    abperf.tracking.start(abperf.styles.installedTests);
 });

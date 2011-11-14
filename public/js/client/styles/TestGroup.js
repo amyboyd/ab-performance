@@ -22,18 +22,18 @@ abperf.styles.TestGroup.prototype.addTest = function(test) {
 }
 
 /**
- * Randomly choose a test to run, or none. If one is chosen, run it immediately.
+ * Randomly choose a test to install, or none. If one is chosen, install it immediately.
  */
 abperf.styles.TestGroup.prototype.chooseTestAndInstallIt = function() {
     var test = this.chooseTest();
     if (test !== null) {
         test.install();
     }
-    abperf.styles.runningTests[this.name] = test;
+    abperf.styles.installedTests[this.name] = test;
 }
 
 /**
- * Choose which test to run, or none. If this has already been chosen before for this user, the
+ * Choose which test to install, or none. If this has already been chosen before for this user, the
  * same test as before is returned for a consistent design for the user. If this is the first time
  * a style is being chosen for this user, it is remembered for next time.
  *
@@ -46,7 +46,7 @@ abperf.styles.TestGroup.prototype.chooseTest = function() {
 
     if (remembered.isValid()) {
         if (goog.DEBUG) {
-            console.log(this.name + ': running ' + remembered.id + ' (remembered)');
+            console.log(this.name + ': chose ' + remembered.id + ' (remembered)');
         }
 
         // Update last page view time.
@@ -76,7 +76,7 @@ abperf.styles.TestGroup.prototype.chooseTest = function() {
     remembered.save();
 
     if (goog.DEBUG) {
-        console.log(this.name + ': running ' + remembered.id);
+        console.log(this.name + ': chose ' + remembered.id);
     }
 
     return chosen;
