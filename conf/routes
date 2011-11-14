@@ -1,3 +1,5 @@
+%{ domain = (com.abperf.Constants.IS_PROD ? 'abperf.com' : 'dev.abperf.com') }%
+
 GET     /                                                       Application.index
 GET     /demo                                                   Application.demo
 GET     /about                                                  Application.about
@@ -5,13 +7,13 @@ GET     /terms                                                  Application.term
 GET     /privacy                                                Application.privacy
 GET     /help                                                   Application.help
 
-GET     /beta/client.js                                         TrackingBeta.clientScripts
-POST    /beta/tracking/start                                    TrackingBeta.start
-POST    /beta/tracking/ping                                     TrackingBeta.ping
+GET     ${domain}/beta/client.js                                TrackingBeta.clientScripts
+POST    ${domain}/beta/tracking/start                           TrackingBeta.start
+POST    ${domain}/beta/tracking/ping                            TrackingBeta.ping
 #{if com.abperf.Constants.IS_DEV}
-    GET     /beta/tracking/start                                TrackingBeta.start
-    GET     /beta/tracking/ping                                 TrackingBeta.ping
-    GET     /deps.js                                            staticFile:public/closure/closure/goog/deps.js
+    GET     ${domain}/beta/tracking/start                       TrackingBeta.start
+    GET     ${domain}/beta/tracking/ping                        TrackingBeta.ping
+    GET     ${domain}/deps.js                                   staticFile:public/closure/closure/goog/deps.js
 #{/if}
 
 *       /feedback/{action}                                      SiteFeedbacks.{action}
@@ -28,8 +30,6 @@ GET     /admin/?                                                admin.Admin.inde
 # JS, CSS, images
 # Serve them from a cookie-free domain when in production.
 # ~~~~~~~~
-
-%{ domain = (com.abperf.Constants.IS_PROD ? 'abperf.alienmegacorp.net' : '') }%
 
 # Update the version number when deploying if we need to force browsers to refresh their cache.
 GET     ${domain}/public/bundles/1/{action}                     Bundles.{action}

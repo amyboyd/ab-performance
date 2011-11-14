@@ -1,4 +1,4 @@
 goog.provide('abperf.constants');
 
 /** @const */
-abperf.constants.SERVER_URL = 'http://localhost:8090/';
+abperf.constants.SERVER_URL = (goog.DEBUG ? 'http://dev.abperf.com/' : 'http://abperf.com/');

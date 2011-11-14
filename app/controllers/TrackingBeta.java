@@ -17,6 +17,7 @@ public class TrackingBeta extends BaseController {
      */
     public static void start(final String guid, final long time, final String url,
             final Map<String, String> tests) {
+        allowCrossDomain();
         onlyPOSTallowed();
 
         final Domain domain = Domain.findDomainByURL(url);
@@ -42,6 +43,7 @@ public class TrackingBeta extends BaseController {
      */
     public static void ping(final String guid, final long time, final String status,
             final Map<String, String> css) {
+        allowCrossDomain();
         onlyPOSTallowed();
 
         PageView pageView = PageView.findByGUID(guid);
@@ -75,7 +77,8 @@ public class TrackingBeta extends BaseController {
         final ClosureBundle bundle = new ClosureBundle(
                 "client-beta.js",
                 "public/closure/closure/bin/build/closurebuilder.py",
-                com.google.javascript.jscomp.CompilationLevel.ADVANCED_OPTIMIZATIONS,
+                null,
+                //com.google.javascript.jscomp.CompilationLevel.ADVANCED_OPTIMIZATIONS,
                 new String[] {
                     "public/closure/closure/goog",
                     "public/closure/third_party/closure",
@@ -93,5 +96,10 @@ public class TrackingBeta extends BaseController {
         if (com.abperf.Constants.IS_PROD) {
             requireHttpMethod("POST");
         }
+    }
+
+    @Util
+    private static void allowCrossDomain() {
+        response.setHeader("Access-Control-Allow-Origin", "*");
     }
 }
