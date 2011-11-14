@@ -102,7 +102,8 @@ function addNoTest(testGroup, list) {
  */
 function addTest(test, list) {
     var listItem = goog.dom.createDom('li', {
-        'class': (test.isInstalled ? 'installed' : '')
+        'class': (test.isInstalled ? 'installed' : ''),
+        'title': test.css
     });
     goog.dom.setTextContent(listItem, test.id);
     goog.dom.appendChild(list, listItem);
