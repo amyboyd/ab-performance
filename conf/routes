@@ -2,11 +2,14 @@
 
 GET     /                                                       Application.index
 GET     /demo                                                   Application.demo
-GET     /about                                                  Application.about
 GET     /terms                                                  Application.terms
 GET     /privacy                                                Application.privacy
-GET     /help                                                   Application.help
+*       /authentication/{action}                                Authentication.{action}
+*       /profiles/{action}                                      Profiles.{action}
 
+
+# Tracking
+# ~~~~~~~~
 GET     ${domain}/beta/client.js                                TrackingBeta.clientScripts
 POST    ${domain}/beta/tracking/start                           TrackingBeta.start
 POST    ${domain}/beta/tracking/ping                            TrackingBeta.ping
@@ -16,10 +19,6 @@ POST    ${domain}/beta/tracking/ping                            TrackingBeta.pin
     GET     ${domain}/deps.js                                   staticFile:public/closure/closure/goog/deps.js
 #{/if}
 
-*       /feedback/{action}                                      SiteFeedbacks.{action}
-*       /authentication/{action}                                Authentication.{action}
-*       /profiles/{action}                                      Profiles.{action}
-
 
 # Admin
 # ~~~~~
@@ -28,8 +27,7 @@ GET     /admin/?                                                admin.Admin.inde
 
 
 # JS, CSS, images
-# Serve them from a cookie-free domain when in production.
-# ~~~~~~~~
+# ~~~~~~~~~~~~~~~
 
 # Update the version number when deploying if we need to force browsers to refresh their cache.
 GET     ${domain}/public/bundles/1/{action}                     Bundles.{action}
