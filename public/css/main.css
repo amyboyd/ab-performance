@@ -1,13 +1,197 @@
-html {
-    height: 100%;
+/* General styles *****************************************/
+html, body {
+    background-color: #EFEFEF;
 }
 body {
-    min-width: 640px;
-    margin: 0;
+    font-size:        14px;
+    font-family:      "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
+    color:            #313131;
+}
+a {
+    color:           #08C;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+strong {
+    font-weight: bold;
+}
+em {
+    font-style: italic;
+}
+h1, h2, h3 {
+    font-family:    Georgia, "Times New Roman", Times, serif;
+    color:          #404040;
+}
+h1 {
+    font-size:      41px;
+    padding-bottom: 30px;
+}
+h2 {
+    font-weight:   bold;
+    color:         #FFFFFF;
+    /* Font is duplicated of body (sans-serif) */
+    font-family:      "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
+    margin-bottom:    20px;
+    background-color: #aacd4e;
+    padding:          2px 4px;
+    display:          inline-block;
+    text-transform:   uppercase;
+
+}
+p {
+    line-height:    20px;
+    padding-bottom: 20px;
+    margin-bottom:  0;
+}
+ul, ol
+{
+    padding-left: 20px;
+}
+li {
+    padding-bottom: 18px;
+}
+ol li {
+    list-style-type: lower-greek;
+}
+ul li {
+    list-style-type: lower-greek;
+}
+input[type=text], input[type=password] {
+    border:      1px solid #DADADA;
+    background:  white url('/bundles/games/images/field-background.gif') repeat-x left top;
+    padding:     5px 6px;
+    color:       #565656;
+    font-family: 'Lucida Sans Unicode', 'Lucida Grande', Verdana, Arial, Helvetica, sans-serif;
+    font-size:   12px;
+}
+.button-grey,
+.button-green {
+    font-size: 0.85em;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    display: inline-block;
+    outline: none;
+
+    text-align:     center;
+    text-transform: uppercase;
+
+    padding: 3px 10px;
+
+    text-shadow: 0 1px 1px rgba(0,0,0,.3);
+
+    -webkit-border-radius: 4px;
+    -moz-border-radius:    4px;
+    border-radius:         4px;
+}
+.button-grey {
+    color:       #868686;
+    font-weight: normal;
+    padding:    5px 10px;
+    border:     solid 1px #d7d7d7;
+    background: #ffffff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#d7d7d7));
+    background: -moz-linear-gradient(top,  #ffffff,  #d7d7d7);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#d7d7d7');
+}
+.button-green {
+    padding: 5px 12px;
+    color: white;
+    border:     solid 1px #a7da39;
+    background: #a7da39;
+    background: -webkit-gradient(linear, left top, left bottom, from(#a7da39), to(#6a9211));
+    background: -moz-linear-gradient(top,  #a7da39,  #6a9211);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#a7da39', endColorstr='#6a9211');
+}
+.error {
+    color: red;
 }
 
 
-/* Fonts *********************************************************************/
+/* Header (logo, menu) ************************************/
+
+#header {
+    height: 96px;
+    margin-bottom: 20px;
+    background: #5B5B5B;
+    background: -moz-linear-gradient(center top , #5B5B5B, #060606) repeat scroll 0 0 transparent;
+    background: -webkit-gradient(linear, left top, left bottom, from(#5B5B5B), to(#060606));
+}
+#header-inside {
+    width: 960px;
+    margin: 0 auto;
+    padding: 0 30px 0px 30px;
+}
+#logo {
+    float: left;
+}
+ul#menu {
+    float: right;
+    margin: 37px 0 0;
+    padding: 0;
+}
+#menu li {
+    display: inline;
+    padding-left: 0;
+    margin-right: 14px;
+}
+#menu li:last-child {
+    margin-right: 0;
+}
+#menu li,
+#menu li a {
+    color: #DCD9CB;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+/* Main content *******************************************/
+
+#wrapper {
+    width: 960px;
+    margin: 0 auto;
+}
+#content {
+    background-color:           white;
+    border:                     1px solid #DFDFDF;
+    padding:                    50px;
+    -moz-border-radius:         16px;
+    -webkit-border-radius:      16px;
+    border-radius:              16px;
+    margin-bottom:              50px;
+    word-wrap:                  break-word;
+}
+.flash-message {
+    padding: 10px;
+    margin: 5px;
+    margin-top: 15px;
+    background-color: #ffe;
+}
+
+
+/* Footer ****************************************************/
+
+#footer {
+    text-align: center;
+    font-size: 0.9em;
+}
+
+
+/* Index *****************************************************/
+
+#index-instructions {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+
+/*
+/* Fonts *********************************************************************
 body {
     color: #4e2800;
     font-size: 14px;
@@ -24,7 +208,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-/* Common styles *************************************************************/
+/* Common styles *************************************************************
 a, .fake-link {
     color: green;
     text-decoration: underline;
@@ -61,208 +245,88 @@ a.button:hover {
 }
 
 
-/* Header ********************************************************************/
+/* Header ********************************************************************
 body > header {
     margin: 0;
-    padding: 10px 20px;
-    border-bottom: 2px solid #999; /* different color from top/left/right */
-    font-family: georgia, arial;
-    background-color: #fff;
-    %{
-    fancyDeboss = play.getFile('/public/images/fancy_deboss.png');
-    base64 = play.libs.Images.toBase64(fancyDeboss)
-    }%
-    background-image: url('${base64}');
-    background-repeat: repeat;
+    padding: 30px 0;
 }
 
 
-/* Logo **********************************************************************/
+/* Logo **********************************************************************
 @-webkit-keyframes rotateLogo {
     0% { -webkit-transform: rotate(0deg); }
-    2% { -webkit-transform: rotate(-7deg); }
-    5% { -webkit-transform: rotate(-380deg); }
-    6% { -webkit-transform: rotate(-350deg); }
-    7% { -webkit-transform: rotate(-370deg); }
-    10% { -webkit-transform: rotate(350deg); }
+    15% { -webkit-transform: rotate(-7deg); }
+    30% { -webkit-transform: rotate(-380deg); }
+    45% { -webkit-transform: rotate(-350deg); }
+    60% { -webkit-transform: rotate(-370deg); }
     100% { -webkit-transform: rotate(360deg); }
 }
 #logo {
-    float: left;
-    -webkit-animation-duration: 100s;
-    z-index: 5;
-    width: 150px;
-    height: 50px;
     %{
     logo = play.getFile('/public/images/logo-150x50-transparent.png');
     base64 = play.libs.Images.toBase64(logo)
     }%
     background-image: url('${base64}');
     background-repeat: no-repeat;
+    float: left;
+    z-index: 5;
+    width: 150px;
+    height: 50px;
+    text-decoration: none;
+    -webkit-animation-duration: 10s;
 }
 #logo:hover {
     -webkit-animation-name: rotateLogo;
 }
 
 
-/* Navigation links **********************************************************/
-#main-nav {
-    float: left;
-    margin-top: 13px;
-    margin-left: 24px;
-    font-size: 20px;
-    font-family: "georgia", arial, sans-serif;
-    padding: 2px;
-    color: #000;
-}
-#main-nav .bullet {
-    font-size: 16px;
-    color: #000;
-}
-#main-nav a {
-    color: #000;
-}
-
-
-/* Search bar ****************************************************************/
-#main-search {
+/* Navigation links **********************************************************
+body > header > nav {
     float: right;
-    margin-top: 13px;
-    position: relative;
-}
-#main-search input[type="text"] {
-    font-size: 19px;
-    padding: 0 35px 0 4px;
-    width: 235px;
-    font-family: "georgia";
-}
-#main-search input[type="image"] {
-    position: absolute;
-    top: 0px;
-    right: 5px;
-    border-left: 1px solid #ccc;
-}
-
-
-/* Message to IE 6/7 users ***************************************/
-#ie-upgrade {
-    background-color: #FFF6BF;
-    color: #000000;
-    padding: 0.4em 0.8em 0.8em;
-    border: 2px solid #FFD324;
-    clear: both;
-    margin: 1em 0;
-}
-#ie-upgrade a {
-    color: #000000;
+    padding: 9px 13px;
+    background-color: #3b372e;
     font-weight: bold;
+    -webkit-border-radius: 13px;
+    -moz-border-radius: 13px;
+    border-radius: 13px;
+}
+body > header > nav a {
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    float: left;
+    padding: 7px 10px;
+    font-size: 18px;
+    text-decoration: none;
+    background-color: #3b372e;
+    color: #f0efe7;
+}
+body > header > nav a:hover {
+    background-color: #cf5b37;
+    color: #f0efe7;
 }
 
 
-/* Main page content *********************************************************/
-section#page-content {
-    padding: 40px 20px 20px;
-    background-color: #ffffff;
-    border-top: 2px solid #ccc; /* different from right/left/bottom */
+/* Content *******************************************************************
+#content {
+}
+#content h1 {
+    color: #cf5b37;
 }
 
 
-/* Footer ********************************************************************/
-#main-footer {
+/* Footer ********************************************************************
+#footer {
     margin: 40px 0 0;
     padding: 12px 20px 1px;
     color: #FFF;
     -webkit-box-shadow: 0px -5px 14px #555;
     -moz-box-shadow: 0px -5px 14px #555;
     box-shadow: 0px -5px 14px #555;
-    background-color: #000;
-    background-image: url("@{'/public/images/footer-bg.jpg'}");
-    background-repeat: no-repeat;
-    background-position: left top;
-}
-#main-footer h6 {
-    font-family: arial, sans-serif;
-    color: yellow !important;
-    font-size: 36px;
-    letter-spacing: 3px;
-    -webkit-text-shadow: 1px 1px 22px white;
-    -moz-text-shadow: 1px 1px 22px white;
-    text-shadow: 1px 1px 22px white;
-    margin-right: 26px;
-    font-weight: normal !important;
-    text-decoration: none !important;
-    background-color: #000;
-}
-#main-footer-copyright a,
-#main-footer-links a {
-    text-decoration: none;
-    background-color: #000;
-}
-#main-footer-copyright a:hover,
-#main-footer-links a:hover {
-    text-decoration: underline;
-    color: yellow !important;
-}
-#main-footer-copyright a,
-#main-footer-links a {
-    color: #bada55;
-}
-#main-footer-inner-container {
-    max-width: 784px;
-    margin: 0 auto;
-}
-#main-footer h6 {
-    text-align: right;
-    margin-right: 20px;
-}
-#main-footer-copyright {
-    text-align: right;
-    font-style: italic;
-    margin-right: 20px;
-    font-size: 12px;
-}
-#main-footer-links {
-    font-family: "georgia", arial, sans-serif;
-    margin: 2em 0 2em;
-    text-align: center;
-    font-size: 14px;
-    padding: 10px 0;
-    border-width: 1px 0;
-    border-color: #808080;
-    border-style: dotted;
-}
-#main-footer-links .bullet {
-    font-size: 16px;
-    color: #fff;
-}
-#main-footer-trial-disclaimer {
-    font-family: "georgia", arial, sans-serif;
-    margin: 2em auto 3em;
-    color: #ddd;
-    font-size: 12px;
-    max-width: 505px;
-    line-height: 2em;
-}
-#main-footer-trial-disclaimer-image {
-    position: relative;
-    top: 4px;
-    padding-right: 2px;
-    float: left;
-    height: 16px;
-    width: 16px;
-    %{
-    brick = play.getFile('/public/images/famfamfam-icons/brick.png');
-    base64 = play.libs.Images.toBase64(brick)
-    }%
-    background-image: url('${base64}');
-    background-repeat: no-repeat;
-}
-#main-footer-trial-disclaimer a {
-    color: #fff;
 }
 
 
-/* Forms *********************************************************************/
+/* Forms *********************************************************************
 legend {
     font-weight: bold;
 }
@@ -296,19 +360,12 @@ form .field-error {
     margin-bottom: 0.5em;
     background-color: #FAF0F0;
     color: #8a1f11;
-    %{
-    error = play.getFile('/public/images/famfamfam-icons/error.png');
-    base64 = play.libs.Images.toBase64(error)
-    }%
-    background-image: url('${base64}');
-    background-repeat: no-repeat;
-    background-position: 4px center;
     line-height: 25px;
     border-left: 2px solid #8A1F11;
 }
 
 
-/* Flash messages ************************************************************/
+/* Flash messages ************************************************************
 .flash-message {
     padding: 0.8em;
     margin: 0 auto 40px;
@@ -332,9 +389,6 @@ form .field-error {
     color: #8a1f11;
     font-weight: normal;
     background-color: #FAF0F0;
-    background-image: url("@@{'/public/images/famfamfam-icons/error.png'}");
-    background-repeat: no-repeat;
-    background-position: 4px center;
     line-height: 25px;
     border-top: none;
     border-bottom: none;
@@ -346,7 +400,7 @@ form .field-error {
 }
 
 
-/* Text articles, e.g. on the meta pages *************************************/
+/* Text articles, e.g. on the meta pages *************************************
 article {
     max-width: 80ex;
     line-height: 1.7em;
@@ -361,6 +415,7 @@ article ol {
 }
 
 
-/* Print styles **************************************************************/
+/* Print styles **************************************************************
 @media print {
 }
+*/

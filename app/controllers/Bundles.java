@@ -16,6 +16,9 @@ public class Bundles extends Controller {
                 "public/css/users.css", });
 
     public static void siteStyles() {
+        siteStyles.getBundleFile().delete();
+        siteStyles.getBundleFileGzip().delete();
+
         response.cacheFor("70d");
         siteStyles.applyToResponse(request, response);
     }
