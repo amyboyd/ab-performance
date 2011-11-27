@@ -4,6 +4,7 @@ goog.require('abperf.styles');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
+goog.require('goog.fx.Dragger');
 goog.require('goog.style');
 
 goog.exportSymbol('abperf.debug', abperf.debug);
@@ -32,14 +33,14 @@ abperf.debug = function() {
  */
 function addStyles() {
     goog.style.installStyles('\
-#abperf-debug { font-family: sans-serif; position: fixed; bottom: 0; left: 100px; right: 100px; background-color: black; padding: 10px; color: beige; } \
+#abperf-debug { cursor: move; position: fixed; bottom: 1em; right: 1em; background-color: black; padding: 10px; color: beige; font-family: sans-serif;  } \
 #abperf-debug .group { float: left; margin-right: 10px; } \
 #abperf-debug .group h6 { color: beige; font-size: 15px; font-weight: bold; margin: 0 0 0.5em; padding: 0; } \
 #abperf-debug .group ol { margin: 0; padding: 0 0 0 11px; } \
 #abperf-debug .group li { color: beige; font-size: 12px; cursor: pointer; margin: 0.5em 0 0.5em 1em; } \
 #abperf-debug .group li:hover { color: orange; } \
 #abperf-debug .group li.installed { color: orange; text-decoration: underline; } \
-')
+');
 }
 
 /**
@@ -51,6 +52,16 @@ function addContainer() {
         'id': 'abperf-debug'
     });
     goog.dom.appendChild(document.body, container);
+
+    // Make it draggable.
+    var dragger = new goog.fx.Dragger(container);
+    dragger.defaultAction = function(x, y) {
+        this.target.style.left = x + 'px';
+        this.target.style.top = y + 'px';
+        this.target.style.bottom = 'auto';
+        this.target.style.right = 'auto';
+    };
+
     return container;
 }
 
