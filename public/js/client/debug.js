@@ -133,7 +133,7 @@ function changeTest(evt) {
     var testGroupName = goog.dom.$$('h6', null, newTestEl.parentNode.parentNode)[0].textContent;
 
     // Uninstall the old test.
-    oldTestEl.setAttribute('class', null);
+    oldTestEl.setAttribute('class', '');
     if (oldTest != null) {
         oldTest.uninstall();
     }

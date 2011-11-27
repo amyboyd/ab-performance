@@ -1,12 +1,12 @@
 #{set 'demoTests'}
 <style type="abperf" name="content">
     body { width: 800px; margin: 0 auto; }
-    p { padding: 6px; }
-    a { color: aqua; }
+    p { padding: 9px; text-align: justify; }
+    a { color: green; }
 </style>
 
 <style type="abperf" name="content">
-    p { padding: 6px; }
+    p { padding: 9px; }
     a { color: red; background-color: white; }
 </style>
 
@@ -21,15 +21,18 @@
         <title>${SITE_NAME} Demo</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <style>
-            p { background-color: brown; color: white; padding: 10px; font-weight: bold; }
-            a { color: yellow; text-decoration: none; }
-            code { padding: 6px 6px 6px 15px; display: block; }
+            /* These are the default page styles, not from a test */
+            p { background-color: #ddd; color: black; font-weight: bold; padding: 5px;
+                margin: 5px; max-width: 80ex; }
+            a { color: blue; text-decoration: underline; }
+            code { padding: 5px 5px 5px 15px; display: block; margin: 5px; }
             pre { padding: 0; margin: 0; }
+            h1 { margin-top: 0; }
         </style>
         <script src="@@{TrackingBeta.clientScripts}"></script>
     </head>
     <body>
-        <h1>Demo</h1>
+        <h1>Demo (this page might look ugly - that is deliberate!)</h1>
 
         <p>In this page's HTML, there are three tests:</p>
 
@@ -42,9 +45,26 @@
                 .replace('&lt;/style&gt;', '<span style="color:blue;">&lt;/style&gt;</span>')
             }%</pre></code>
 
-        <p></p>
+        <p>The debugger has opened in the bottom right corner. You can open this at
+            any time during development by calling <tt>abperf.debug()</tt>, in the Chrome
+            or Firebug console. Click each test to see how it looks.</p>
 
-        <p><a href="@{index()}">&raquo; Back to the features page.</a></p>
+        <p>You are automatically shown zero or one
+            <span style="color:#E08700;">name="content"</span> test, and zero or one
+            <span style="color:#E08700;">name="background color"</span> test. Other users
+            are also shown zero or one of each test. The test you are shown stays the same
+            for your entire visit.</p>
+
+        <p>How you interact with pages is gathered. We then produce a report showing how each
+            design performed in key areas, like page views, time on site, number of people who
+            register, etc.</p>
+
+        <p>
+            What now? You can go back to
+            <a href="@{Application.features()}">the features page</a>
+            or
+            <a href="@{Authentication.register()}">try it now</a>.
+        </p>
 
         ${demoTests.raw()}
 

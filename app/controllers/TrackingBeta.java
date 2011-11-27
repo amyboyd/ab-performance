@@ -76,9 +76,9 @@ public class TrackingBeta extends BaseController {
     }
 
     public static void clientScripts() {
-//        if (com.abperf.Constants.IS_DEV) {
-//            clientScripts.getBundleFile().delete();
-//        }
+        if (com.abperf.Constants.IS_DEV) {
+            clientScripts.getBundleFile().delete();
+        }
 
         response.cacheFor("61d");
         clientScripts.applyToResponse(request, response);
