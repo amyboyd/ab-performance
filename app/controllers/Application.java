@@ -1,11 +1,15 @@
 package controllers;
 
 public class Application extends BaseController {
-    public static void demo() {
+    public static void index() {
         render();
     }
 
-    public static void index() {
+    public static void features() {
+        render();
+    }
+
+    public static void demo() {
         render();
     }
 

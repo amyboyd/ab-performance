@@ -2,10 +2,11 @@
 
 GET     /                                                       Application.index
 GET     /demo                                                   Application.demo
+GET     /features                                               Application.features
 GET     /terms                                                  Application.terms
 GET     /privacy                                                Application.privacy
-*       /authentication/{action}                                Authentication.{action}
-*       /profiles/{action}                                      Profiles.{action}
+*       /auth/{action}                                          Authentication.{action}
+*       /me/{action}                                            Users.{action}
 
 
 # Tracking

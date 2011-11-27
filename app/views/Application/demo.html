@@ -1,38 +1,53 @@
+#{set 'demoTests'}
+<style type="abperf" name="content">
+    body { width: 800px; margin: 0 auto; }
+    p { padding: 6px; }
+    a { color: aqua; }
+</style>
+
+<style type="abperf" name="content">
+    p { padding: 6px; }
+    a { color: red; background-color: white; }
+</style>
+
+<style type="abperf" name="background color">
+    body { background-color: black; color: white; }
+</style>
+#{/}
+
 <!DOCTYPE html>
 <html "♥♥♥" lang="en">
     <head>
         <title>${SITE_NAME} Demo</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
         <style>
-            p {
-                background-color: brown;
-                color: white;
-                padding: 10px;
-                font-weight: bold;
-            }
-            a {
-                color: yellow;
-                text-decoration: none;
-            }
+            p { background-color: brown; color: white; padding: 10px; font-weight: bold; }
+            a { color: yellow; text-decoration: none; }
+            code { padding: 6px 6px 6px 15px; display: block; }
+            pre { padding: 0; margin: 0; }
         </style>
-
         <script src="@@{TrackingBeta.clientScripts}"></script>
     </head>
     <body>
-        <p>Demo text. <a href="">Link</a>.</p>
+        <h1>Demo</h1>
 
-        <style type="abperf" name="content">
-            body { width: 800px; margin: 0 auto; }
-            p { padding: 6px; }
-            a { color: aqua; }
-        </style>
-        <style type="abperf" name="content">
-            p { padding: 6px; }
-            a { color: red; background-color: white; }
-        </style>
-        <style type="abperf" name="background color">
-            body { background: black; }
-        </style>
+        <p>In this page's HTML, there are three tests:</p>
+
+        <code><pre>%{
+            print demoTests.escape().toString()
+                .replaceAll(/( [a-z]+\=)/, '<span style="color:green;">$1</span>')
+                .replaceAll(/(&quot;[\w ]+&quot;)/, '<span style="color:#E08700;">$1</span>')
+                .replace('&lt;style', '<span style="color:blue;">&lt;style</span>')
+                .replace('&quot;&gt;', '&quot;<span style="color:blue;">&gt;</span>')
+                .replace('&lt;/style&gt;', '<span style="color:blue;">&lt;/style&gt;</span>')
+            }%</pre></code>
+
+        <p></p>
+
+        <p><a href="@{index()}">&raquo; Back to the features page.</a></p>
+
+        ${demoTests.raw()}
+
+        <script> setTimeout(abperf.debug, 700); </script>
     </body>
 </html>
