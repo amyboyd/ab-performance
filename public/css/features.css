@@ -1,0 +1,12 @@
+#features-left {
+    float: left;
+    width: 47%;
+    text-align: justify;
+}
+
+#features-right {
+    float: left;
+    width: 49%;
+    margin-left: 4%;
+    text-align: justify;
+}

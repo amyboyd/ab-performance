@@ -14,6 +14,7 @@ public class Bundles extends Controller {
                 "public/css/main.css",
                 "public/css/tags.css",
                 "public/css/index.css",
+                "public/css/features.css",
                 "public/css/users.css", });
 
     public static void siteStyles() {

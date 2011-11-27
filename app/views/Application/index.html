@@ -8,31 +8,18 @@
 </div>
 
 <div id="index-right">
-    <h3>How it works</h3>
-
-    <ul>
-        <li><b>Include our JavaScript</b> file on your website.</li>
-        <li><b>Write CSS</b> to alter your page design. It's so easy because web developers
-            already know how to write CSS!</li>
-        <li>We automatically decide which users will see each design, and gather statistics
-            about how each design performs.</li>
-        <li><b>We send you a detailed, interactive report</b>, so you can make an informed
-            design descision, <i>proven</i> to improve conversion rates, make users stay
-            longer, or reach your goal!</li>
-    </ul>
-
-    <p>
-        <a href="@{Authentication.register()}" class="call-to-action">Try it now</a>,
-        <a href="@{demo()}">see a demo</a></span>,
-        or <a href="@{features()}">read more</a></span>.
-    </p>
+    #{include 'Application/_how-it-works.html' /}
+    #{include 'Application/_try-it-now-button.html' /}
 </div>
 
 <div class="clearfix"></div>
 
 <div id="index-beta">
-    <h3>Beta</h3>
+    <h2>Beta</h2>
+
     <p>Although we are confident that our methodology works, ${SITE_NAME} is in beta, so we
         can't make any promises. It is free for up to 1,000 page views per website, though!
         You have nothing to lose, and possibly a lot to gain.</p>
+
+    <p>If you think ${SITE_NAME} is not right for you or your company, please <a href="mailto:${play.configuration.getProperty('application.teamEmailAddress')}">tell us</a> what is not good enough and features you need.</p>
 </div>

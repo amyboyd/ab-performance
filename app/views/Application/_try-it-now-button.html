@@ -1,0 +1,11 @@
+<p>
+    <a href="@{Authentication.register()}" class="cta" id="try-it-now-cta">Try it now</a>,
+
+    #{if request.actionMethod == 'features'}
+        or <a href="@{Application.demo()}">see a demo</a></span>
+    #{/}
+    #{else}
+        <a href="@{Application.demo()}">see a demo</a></span>,
+        or <a href="@{Application.features()}">read more</a></span>.
+    #{/}
+</p>

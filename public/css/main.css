@@ -25,10 +25,14 @@ h1, h2, h3 {
     color: #404040;
 }
 h1 {
-    font-size: 41px;
+    font-size: 31px;
     padding-bottom: 30px;
 }
 h2 {
+    font-size:      18px;
+    padding-bottom: 10px;
+}
+h3 {
     font-weight: bold;
     color: #FFFFFF;
     /* Font is duplicated of body (sans-serif) */
@@ -39,10 +43,6 @@ h2 {
     display:          inline-block;
     text-transform:   uppercase;
 
-}
-h3 {
-    font-size:      18px;
-    padding-bottom: 10px;
 }
 p {
     line-height:    20px;
@@ -129,9 +129,42 @@ input[type=text], input[type=password] {
     margin: 0 auto;
     padding: 0 30px 0px 30px;
 }
+
+
+/* Logo **********************************************************************/
 #logo {
     float: left;
 }
+@-webkit-keyframes rotateLogo {
+    0% { -webkit-transform: rotate(0deg); }
+    15% { -webkit-transform: rotate(-7deg); }
+    30% { -webkit-transform: rotate(-380deg); }
+    45% { -webkit-transform: rotate(-350deg); }
+    60% { -webkit-transform: rotate(-370deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+#logo {
+    %{
+    logo = play.getFile('/public/images/logo.png');
+    base64 = play.libs.Images.toBase64(logo)
+    }%
+    background-image: url('${base64}');
+    background-repeat: no-repeat;
+    float: left;
+    margin: 9px 0 0 18px;
+    width: 251px;
+    height: 54px;
+    z-index: 5;
+    text-decoration: none;
+    -webkit-animation-duration: 10s;
+}
+#logo:hover {
+    -webkit-animation-name: rotateLogo;
+}
+
+
+/* Navigation menu ***********************************************************/
+
 ul#menu {
     float: right;
     margin: 25px 0 0;
@@ -199,8 +232,8 @@ ul#menu {
 
 /* Buttons ***************************************************/
 
-a.call-to-action,
-button.call-to-action {
+a.cta,
+button.cta {
     cursor: pointer;
     display: inline-block;
     outline: none;
@@ -223,31 +256,14 @@ button.call-to-action {
     background: -moz-linear-gradient(top, #71C0E5, #285EE6);
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#71C0E5', endColorstr='#285EE6');
 }
-a.call-to-action:hover,
-button.call-to-action:hover {
+a.cta:hover,
+button.cta:hover {
     border-color: #285EE6;
     text-decoration: underline;
 }
 
 
 /*
-/* Fonts *********************************************************************
-body {
-    color: #4e2800;
-    font-size: 14px;
-    font-family: arial, sans-serif;
-}
-input, select, textarea {
-    font-size: 13px;
-    font-family: arial, sans-serif;
-}
-h1, h2, h3, h4, h5, h6 {
-    font-family: arial, sans-serif;
-    color: #000;
-    text-shadow: 3px 3px 7px #ddd;
-}
-
-
 /* Common styles *************************************************************
 a, .fake-link {
     color: green;
@@ -260,109 +276,6 @@ a:hover, .fake-link:hover {
 textarea {
     line-height: 1.7em;
     padding: 0.5em;
-}
-button, input[type="submit"] {
-    font-weight: bold;
-    font-size: 1.1em;
-}
-a.button {
-    padding: 5px 10px;
-    position: relative;
-    top: -5px;
-    color: #000;
-    font-weight: bold;
-    text-decoration: none;
-    background-color: #8BFB79;
-}
-a.button:hover {
-    -moz-box-shadow: 0 1px 3px #666;
-    -webkit-box-shadow: 0 1px 3px #666;
-    box-shadow: 0 1px 3px #666;
-    /* For IE 8 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#000000')";
-    /* For IE 5.5 - 7 */
-    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#000000');
-}
-
-
-/* Header ********************************************************************
-body > header {
-    margin: 0;
-    padding: 30px 0;
-}
-
-
-/* Logo **********************************************************************
-@-webkit-keyframes rotateLogo {
-    0% { -webkit-transform: rotate(0deg); }
-    15% { -webkit-transform: rotate(-7deg); }
-    30% { -webkit-transform: rotate(-380deg); }
-    45% { -webkit-transform: rotate(-350deg); }
-    60% { -webkit-transform: rotate(-370deg); }
-    100% { -webkit-transform: rotate(360deg); }
-}
-#logo {
-    %{
-    logo = play.getFile('/public/images/logo-150x50-transparent.png');
-    base64 = play.libs.Images.toBase64(logo)
-    }%
-    background-image: url('${base64}');
-    background-repeat: no-repeat;
-    float: left;
-    z-index: 5;
-    width: 150px;
-    height: 50px;
-    text-decoration: none;
-    -webkit-animation-duration: 10s;
-}
-#logo:hover {
-    -webkit-animation-name: rotateLogo;
-}
-
-
-/* Navigation links **********************************************************
-body > header > nav {
-    float: right;
-    padding: 9px 13px;
-    background-color: #3b372e;
-    font-weight: bold;
-    -webkit-border-radius: 13px;
-    -moz-border-radius: 13px;
-    border-radius: 13px;
-}
-body > header > nav a {
-    -webkit-border-radius: 9px;
-    -moz-border-radius: 9px;
-    border-radius: 9px;
-    float: left;
-    padding: 7px 10px;
-    font-size: 18px;
-    text-decoration: none;
-    background-color: #3b372e;
-    color: #f0efe7;
-}
-body > header > nav a:hover {
-    background-color: #cf5b37;
-    color: #f0efe7;
-}
-
-
-/* Content *******************************************************************
-#content {
-}
-#content h1 {
-    color: #cf5b37;
-}
-
-
-/* Footer ********************************************************************
-#footer {
-    margin: 40px 0 0;
-    padding: 12px 20px 1px;
-    color: #FFF;
-    -webkit-box-shadow: 0px -5px 14px #555;
-    -moz-box-shadow: 0px -5px 14px #555;
-    box-shadow: 0px -5px 14px #555;
 }
 
 
