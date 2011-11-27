@@ -4,7 +4,7 @@ import models.User;
 import play.Logger;
 import play.data.validation.Validation;
 
-public class Profiles extends BaseController {
+public class Users extends BaseController {
     /**
      * Form to editPublicProfile profile.
      * Show subscription information (if Pro), and links to upgrade, downgrade and close shop.

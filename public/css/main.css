@@ -3,13 +3,13 @@ html, body {
     background-color: #EFEFEF;
 }
 body {
-    font-size:        14px;
-    font-family:      "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
-    color:            #313131;
+    font-size: 14px;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
+    color: #313131;
 }
 a {
-    color:           #08C;
-    text-decoration: none;
+    color: #08C;
+    text-decoration: underline;
 }
 a:hover {
     text-decoration: underline;
@@ -21,16 +21,16 @@ em {
     font-style: italic;
 }
 h1, h2, h3 {
-    font-family:    Georgia, "Times New Roman", Times, serif;
-    color:          #404040;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    color: #404040;
 }
 h1 {
-    font-size:      41px;
+    font-size: 41px;
     padding-bottom: 30px;
 }
 h2 {
-    font-weight:   bold;
-    color:         #FFFFFF;
+    font-weight: bold;
+    color: #FFFFFF;
     /* Font is duplicated of body (sans-serif) */
     font-family:      "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
     margin-bottom:    20px;
@@ -39,6 +39,10 @@ h2 {
     display:          inline-block;
     text-transform:   uppercase;
 
+}
+h3 {
+    font-size:      18px;
+    padding-bottom: 10px;
 }
 p {
     line-height:    20px;
@@ -114,11 +118,11 @@ input[type=text], input[type=password] {
 /* Header (logo, menu) ************************************/
 
 #header {
-    height: 96px;
+    height: 70px;
     margin-bottom: 20px;
-    background: #5B5B5B;
-    background: -moz-linear-gradient(center top , #5B5B5B, #060606) repeat scroll 0 0 transparent;
-    background: -webkit-gradient(linear, left top, left bottom, from(#5B5B5B), to(#060606));
+    background: #71C0E5;
+    background: -moz-linear-gradient(center top , #71C0E5, #285EE6) repeat scroll 0 0 transparent;
+    background: -webkit-gradient(linear, left top, left bottom, from(#71C0E5), to(#285EE6));
 }
 #header-inside {
     width: 960px;
@@ -130,7 +134,7 @@ input[type=text], input[type=password] {
 }
 ul#menu {
     float: right;
-    margin: 37px 0 0;
+    margin: 25px 0 0;
     padding: 0;
 }
 #menu li {
@@ -143,9 +147,13 @@ ul#menu {
 }
 #menu li,
 #menu li a {
-    color: #DCD9CB;
+    color: #fff;
     font-size: 16px;
     font-weight: bold;
+}
+#menu li a {
+    text-decoration: none;
+    border-bottom: 1px solid #fff;
 }
 
 
@@ -188,6 +196,38 @@ ul#menu {
     font-weight: bold;
 }
 
+
+/* Buttons ***************************************************/
+
+a.call-to-action,
+button.call-to-action {
+    cursor: pointer;
+    display: inline-block;
+    outline: none;
+    padding: 5px 12px;
+
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(0,0,0,.3);
+    text-decoration: none;
+    color: white;
+    font-size: 0.85em;
+    font-weight: bold;
+
+    border: solid 1px #fff;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+
+    background: #71C0E5;
+    background: -webkit-gradient(linear, left top, left bottom, from(#71C0E5), to(#285EE6));
+    background: -moz-linear-gradient(top, #71C0E5, #285EE6);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#71C0E5', endColorstr='#285EE6');
+}
+a.call-to-action:hover,
+button.call-to-action:hover {
+    border-color: #285EE6;
+    text-decoration: underline;
+}
 
 
 /*

@@ -1,0 +1,26 @@
+#index-left {
+    float: left;
+    width: 47%;
+    text-align: justify;
+}
+#index-left h1 {
+    font-size: 31px;
+    margin-bottom: 0;
+}
+
+#index-right {
+    float: left;
+    width: 49%;
+    margin-left: 4%;
+    margin-top: 8px;
+    text-align: justify;
+}
+#index-right .call-to-action {
+    font-size: 18px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+#index-beta, #index-beta h3 {
+    color: #888;
+}

@@ -52,6 +52,14 @@ public class Authentication extends BaseController {
         return null;
     }
 
+    public static void register(String forward) {
+        if (isAuth()) {
+            redirectToForwardURL();
+            renderText("forward not set");
+        }
+        render("Authentication/register.html", forward);
+    }
+
     /**
      * Receive and validate the register form.
      * If an already-registered email address is submitted and the password is correct, user is logged in.
@@ -112,6 +120,19 @@ public class Authentication extends BaseController {
     }
 
     /**
+     * These params can be put in the query string:
+     * - forward - although this exists for all pages, it is most relevant here.
+     * - overrideMessage - overrides the "flash" message on the page.
+     */
+    public static void login(String forward, String overrideMessage) {
+        if (isAuth()) {
+            redirectToForwardURL();
+            renderText("forward not set");
+        }
+        render("Authentication/login.html", forward, overrideMessage);
+    }
+
+    /**
      * Receive and validate the login form.
      */
     @Check(value = Checks.Condition.NOT_LOGGED_IN, onFail = Checks.FailAction.GO_TO_INDEX)
@@ -152,7 +173,7 @@ public class Authentication extends BaseController {
 
     @Check(value = Checks.Condition.NOT_LOGGED_IN, onFail = Checks.FailAction.GO_TO_INDEX)
     public static void forgotPassword() {
-        render("users/UserAuth/forgot-password.html");
+        render("Authentication/forgot-password.html");
     }
 
     @Check(value = Checks.Condition.NOT_LOGGED_IN, onFail = Checks.FailAction.GO_TO_INDEX)
@@ -190,7 +211,7 @@ public class Authentication extends BaseController {
         if (user == null) {
             error("No user with ID: " + u);
         } else if (user.getValidationCode().equals(vc)) {
-            render("users/UserAuth/reset-password.html", user);
+            render("Authentication/reset-password.html", user);
         } else {
             error("Wrong code for user " + user.name);
         }
@@ -231,7 +252,7 @@ public class Authentication extends BaseController {
      * Form to change password.
      */
     public static void changePassword(String forward) {
-        render("users/UserAuth/change-password.html", forward);
+        render("Authentication/change-password.html", forward);
     }
 
     /**
@@ -261,18 +282,5 @@ public class Authentication extends BaseController {
         user.save();
         flash.success("Your password has been changed");
         redirectToForwardURL();
-    }
-
-    /**
-     * These params can be put in the query string:
-     * - forward - although this exists for all pages, it is most relevant here.
-     * - overrideMessage - overrides the "flash" message on the page.
-     */
-    public static void login(String forward, String overrideMessage) {
-        if (isAuth()) {
-            redirectToForwardURL();
-            renderText("forward not set");
-        }
-        render("users/Authentication/login.html", forward, overrideMessage);
     }
 }
