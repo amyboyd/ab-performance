@@ -10,8 +10,8 @@
 </div>
 
 <div id="index-right">
-    #{include 'Application/_how-it-works.html' /}
-    #{include 'Application/_try-it-now-button.html' /}
+    #{text/how-it-works /}
+    #{text/try-it-now-button /}
 </div>
 
 <div class="clearfix"></div>
@@ -23,5 +23,5 @@
         can't make any promises. It is free for up to 1,000 page views per website, though!
         You have nothing to lose, and possibly a lot to gain.</p>
 
-    <p>If you think ${SITE_NAME} is not right for you or your company, please <a href="mailto:${play.configuration.getProperty('application.teamEmailAddress')}">tell us</a> what is not good enough and features you need.</p>
+    #{text/tell-us-why-not /}
 </div>
