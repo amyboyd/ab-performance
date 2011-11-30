@@ -1,0 +1,39 @@
+#{form @Authentication.registerHandler(forward), method:'post', onsubmit:"this.submit.value='Registering...';this.submit.disabled=1;"}
+    #{if flash.userRegisterError}<p class="flash-message">${flash.userRegisterError}</p>#{/if}
+
+    <p>
+        <label for="rf1-name">Company or project name:</label>
+        <br />
+        <input required="required" name="name" tabindex="300" id="rf1-name" size="40"
+               value="${flash.name}" />
+    </p>
+
+    <p>
+        <label for="rf1-public-domains">Public domains your website runs on:</label>
+        <br />
+        <textarea required="required" name="publicDomains" cols="50" rows="4"
+                  placeholder="e.g. example.com, blog.example.com, forum.example.com"
+                  tabindex="301" id="rf1-public-domains">${flash.publicDomains}</textarea>
+    </p>
+
+    <p>
+        <label for="rf1-private-domains">Private domains you do development on:</label>
+        <br />
+        <textarea required="required" name="privateDomains" cols="50" rows="4"
+                  placeholder="e.g. localhost, dev.example.com, staff.example.com"
+                  tabindex="302" id="rf1-private-domains">${flash.privateDomains}</textarea>
+        <br />
+        (page views on private domains do not count towards your limit)
+    </p>
+
+    <p>
+        <label>Page view quota:</label>
+        <br />
+        <input type="radio" name="plan" tabindex="304" id="rf1-quota-1" checked />
+        <label class="radio" for="rf1-quota-1">1,000 page views - free while in beta</label>
+    </p>
+
+    <p>
+        <input type="submit" value="Continue" tabindex="303" />
+    </p>
+#{/form}

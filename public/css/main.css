@@ -62,6 +62,12 @@ ol li {
 ul li {
     list-style-type: lower-greek;
 }
+label {
+    font-weight: bold;
+}
+label.radio {
+    font-weight: normal;
+}
 input[type=text], input[type=password] {
     border:      1px solid #DADADA;
     background:  white url('/bundles/games/images/field-background.gif') repeat-x left top;
@@ -125,16 +131,13 @@ input[type=text], input[type=password] {
     background: -webkit-gradient(linear, left top, left bottom, from(#71C0E5), to(#285EE6));
 }
 #header-inside {
-    width: 960px;
+    width: 900px;
     margin: 0 auto;
-    padding: 0 30px 0px 30px;
 }
 
 
 /* Logo **********************************************************************/
-#logo {
-    float: left;
-}
+
 @-webkit-keyframes rotateLogo {
     0% { -webkit-transform: rotate(0deg); }
     15% { -webkit-transform: rotate(-7deg); }
@@ -151,9 +154,9 @@ input[type=text], input[type=password] {
     background-image: url('${base64}');
     background-repeat: no-repeat;
     float: left;
-    margin: 9px 0 0 18px;
-    width: 251px;
-    height: 54px;
+    margin: 17px 0 0 18px;
+    width: 266px;
+    height: 36px;
     z-index: 5;
     text-decoration: none;
     -webkit-animation-duration: 10s;
@@ -282,10 +285,6 @@ textarea {
 /* Forms *********************************************************************
 legend {
     font-weight: bold;
-}
-label {
-    font-weight: bold;
-    cursor: pointer;
 }
 form table {
     width: auto;
