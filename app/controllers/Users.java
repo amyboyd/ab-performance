@@ -9,7 +9,7 @@ public class Users extends BaseController {
      * Form to editPublicProfile profile.
      * Show subscription information (if Pro), and links to upgrade, downgrade and close shop.
      */
-    public static void editPublicProfile(String forward) {
+    public static void editDetails(String forward) {
         requireAuthenticatedUser();
         render("Sell/profile.html");
     }
@@ -17,7 +17,7 @@ public class Users extends BaseController {
     /**
      * Save profile details. Avatar and images are not submitted to this action.
      */
-    public static void editPublicProfileHandler(String forward) {
+    public static void editDetailsHandler(String forward) {
         requireHttpMethod("POST");
         checkAuthenticity();
 
@@ -29,7 +29,7 @@ public class Users extends BaseController {
             Validation.keep();
             params.flash();
             flash.error(com.abperf.Constants.FORM_HAD_ERRORS_MESSAGE);
-            editPublicProfile(forward);
+            editDetails(forward);
         }
 
         user.save();

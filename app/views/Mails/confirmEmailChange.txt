@@ -1,3 +1,3 @@
 Hello ${user},
 
-Please click here to confirm your new email address (${user.email}): @@{Profiles.confirmEmail(user.id, user.getValidationCode())}
+Please click here to confirm your new email address (${user.email}): @@{Users.confirmEmail(user.id, user.getValidationCode())}

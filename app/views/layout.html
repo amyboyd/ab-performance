@@ -68,8 +68,8 @@ Optional args:
 
         <section id="content">
             #{debug-form-errors errors /}
-            #{if flash?.success}<p class="flash-message">${flash.success}</p>#{/if}
-            #{if flash?.error}<p class="flash-message flash-message-error">${flash.error}</p>#{/if}
+            #{if flash?.success}<p class="flash-message">${flash.success}</p><div style="clear: both;"></div>#{/if}
+            #{if flash?.error}<p class="flash-message flash-message-error">${flash.error}</p><div style="clear: both;"></div>#{/if}
 
             #{doLayout /}
         </section>

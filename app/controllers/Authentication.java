@@ -1,9 +1,8 @@
 package controllers;
 
-import com.abperf.Constants;
-import java.util.Set;
 import models.Domain;
 import models.User;
+import models.UserAccountType;
 import play.Logger;
 import play.data.validation.*;
 import play.libs.Crypto;
@@ -56,8 +55,7 @@ public class Authentication extends BaseController {
 
     public static void register(String forward) {
         if (isAuth()) {
-            redirectToForwardURL();
-            renderText("forward not set");
+            // @todo - where to?
         }
         render("Authentication/register.html", forward);
     }
@@ -68,7 +66,7 @@ public class Authentication extends BaseController {
      */
     @Check(value = Checks.Condition.NOT_LOGGED_IN, onFail = Checks.FailAction.GO_TO_INDEX)
     public static void registerHandler(String forward, String name, String publicDomains,
-            String privateDomains, int quota, String email, String password) {
+            String privateDomains, UserAccountType accountType, String email, String password) {
         checkAuthenticity();
 
         String errorMessage = null;
@@ -89,9 +87,6 @@ public class Authentication extends BaseController {
             }
         }
 
-        Set<Domain> publicDomainsSet = Domain.toDomains(publicDomains);
-        Set<Domain> privateDomainsSet = Domain.toDomains(privateDomains);
-
         if (!validation.email(email).ok) {
             errorMessage = "Please enter a valid email address.";
         } else if (!validation.required(name).ok) {
@@ -102,7 +97,7 @@ public class Authentication extends BaseController {
 
         if (errorMessage != null) {
             // Errors -- go back to the form.
-            Logger.info("At least one error in registration form. Email = %s, password = %s, name = %s, publicDomains = %s, privateDomains = %s, quota = %s", email, password, name, publicDomains, privateDomains, quota);
+            Logger.info("At least one error in registration form. Email = %s, password = %s, name = %s, publicDomains = %s, privateDomains = %s, accountType = %s", email, password, name, publicDomains, privateDomains, accountType);
             flash.put("userRegisterError", errorMessage);
             params.flash();
             Validation.keep();
@@ -110,20 +105,23 @@ public class Authentication extends BaseController {
             if (request.headers.containsKey("referer")) {
                 redirect(request.headers.get("referer").value());
             } else {
-                Authentication.login(forward, null);
+                Authentication.register(forward);
             }
         }
 
         // Everything is OK, register.
-        User user = new User(email, password);
+        User user = new User(email, password, name, accountType);
         user.create();
-        play.Logger.info("User has registered. ID = %d, email = %s", user.id, user.email);
+        Domain.createAll(Domain.toPublicDomains(publicDomains, user));
+        Domain.createAll(Domain.toPrivateDomains(privateDomains, user));
+
+        play.Logger.info("User has registered. ID = %d, name = %s", user.id, user.name);
 
         // Login.
         session.put(LOGIN_SESSION, email);
         response.setCookie(REMEMBER_COOKIE, Crypto.sign(email) + "-" + email, "30d");
-        flash.success("We hope you enjoy using %s! Remember to bookmark us.", Constants.SITE_NAME);
         redirectToForwardURL();
+        // @todo - where to?
         redirect("/");
     }
 

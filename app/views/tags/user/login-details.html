@@ -7,7 +7,7 @@
 <p>
     You login to this account with your email address and password.
     <br />
-    Your email address is: ${_arg.email} (<a href="@{Profiles.changeEmail().add('forward', request.url)}">change it here</a>).
+    Your email address is: ${_arg.email} (<a href="@{Users.changeEmail().add('forward', request.url)}">change it here</a>).
     <br />
     If you want to change your password, <a href="@{Authentication.changePassword().add('forward', request.url)}">click here</a>.
 </p>

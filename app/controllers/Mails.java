@@ -14,9 +14,7 @@ public class Mails extends Mailer {
             SITE_NAME,
             play.Play.configuration.getProperty("application.outboundEmailAddress"));
 
-    private static final String TEAM_ADDRESS = String.format("%s <%s>",
-            SITE_NAME,
-            play.Play.configuration.getProperty("application.teamEmailAddress"));
+    private static final String TEAM_ADDRESS = play.Play.configuration.getProperty("application.teamEmailAddress");
 
     /**
      * After registering, send a welcome email, which also has a confirmation link.

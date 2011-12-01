@@ -28,9 +28,16 @@
 
     <p>
         <label>Page view quota:</label>
-        <br />
-        <input type="radio" name="quota" id="reg-quota-1" checked value="1000" />
-        <label class="radio" for="reg-quota-1">1,000 page views - free while in beta</label>
+
+        #{list models.UserAccountType.values()}
+            <br />
+            <input type="radio" name="accountType" id="reg-accountType-${_index}" tabindex="${305 + _index}"
+                   value="${_.name()}" #{if !_.paid}checked#{/} />
+            <label class="radio" for="reg-accountType-${_index}">
+                ${_.pageViewQuota.format('#,###')} page views
+                #{if !_.paid}- free while in beta #{/}
+            </label>
+        #{/}
     </p>
 
     <p>

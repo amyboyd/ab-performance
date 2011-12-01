@@ -38,7 +38,8 @@ public class User extends Model {
     @NoBinding
     public String password;
 
-    public UserAccountType accountType = UserAccountType.BETA;
+    @Enumerated(EnumType.STRING)
+    public UserAccountType accountType;
 
     @Column(name = "is_admin") // "admin" is a reserved keyword.
     public boolean admin;
@@ -64,9 +65,9 @@ public class User extends Model {
 
     public int pageViews;
 
-    public int purchasedPageViews;
+    public int pageViewQuota;
 
-    public int generousPurchasedPageViews;
+    public int pageViewQuotaGenerous;
 
     public static User findByEmail(final String email) {
         return find("email", email).first();
@@ -90,18 +91,13 @@ public class User extends Model {
         return null;
     }
 
-    public User(final String email, final String password) {
+    public User(String email, String password, String name, UserAccountType accountType) {
         this.email = email;
-        // Try to parse name from email, e.g. "mic.t.boyd@gmail.com" becomes "Mic T Boyd".
-        this.name = JavaExtensions.capitalizeWords(email.substring(0, email.indexOf('@')).replaceAll("[.-_]", " ").
-                toLowerCase());
-        Logger.info("Parsed email %s to name %s", this.email, this.name);
         this.password = password;
-    }
-
-    public User(final String email, final String password, final String name) {
-        this(email, password);
         this.name = name;
+        this.accountType = accountType;
+        this.pageViewQuota = accountType.pageViewQuota;
+        this.pageViewQuotaGenerous = (int) (accountType.pageViewQuota + (Math.floor(Math.random() * 100.0d + 1.0d)));
     }
 
     @Override
@@ -109,8 +105,8 @@ public class User extends Model {
         return name;
     }
 
-    public boolean hasReachedMaxPageViews() {
-        return pageViews >= generousPurchasedPageViews;
+    public boolean hasReachedPageViewQuota() {
+        return pageViews >= pageViewQuotaGenerous;
     }
 
     public void onLogin() {
@@ -146,7 +142,9 @@ public class User extends Model {
             return;
         }
 
-        Logger.info("User %s (id %d) changed password", this, this.id);
+        if (id != null) {
+            Logger.info("User %s (id %d) changed password", this, this.id);
+        }
 
         password = BCrypt.hashpw(newPassword, BCrypt.gensalt());
     }
@@ -177,6 +175,8 @@ public class User extends Model {
     protected void prePersist() {
         if (registeredAt == null) {
             registeredAt = new Date();
+        } else if (accountType == null) {
+            throw new IllegalStateException("User must have an account type");
         }
     }
 
