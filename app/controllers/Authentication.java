@@ -1,6 +1,8 @@
 package controllers;
 
 import com.abperf.Constants;
+import java.util.Set;
+import models.Domain;
 import models.User;
 import play.Logger;
 import play.data.validation.*;
@@ -65,7 +67,8 @@ public class Authentication extends BaseController {
      * If an already-registered email address is submitted and the password is correct, user is logged in.
      */
     @Check(value = Checks.Condition.NOT_LOGGED_IN, onFail = Checks.FailAction.GO_TO_INDEX)
-    public static void registerHandler(String forward, String email, String password, String password2) {
+    public static void registerHandler(String forward, String name, String publicDomains,
+            String privateDomains, int quota, String email, String password) {
         checkAuthenticity();
 
         String errorMessage = null;
@@ -86,15 +89,20 @@ public class Authentication extends BaseController {
             }
         }
 
+        Set<Domain> publicDomainsSet = Domain.toDomains(publicDomains);
+        Set<Domain> privateDomainsSet = Domain.toDomains(privateDomains);
+
         if (!validation.email(email).ok) {
             errorMessage = "Please enter a valid email address.";
-        } else if (!password.equals(password2)) {
-            errorMessage = "Passwords must match.";
+        } else if (!validation.required(name).ok) {
+            errorMessage = "Please enter a company or project name.";
+        } else if (!validation.required(password).ok) {
+            errorMessage = "Please enter a password.";
         }
 
         if (errorMessage != null) {
             // Errors -- go back to the form.
-            Logger.info("At least one error in registration form. Email = %s, password = %s, password2 = %s", email, password, password2);
+            Logger.info("At least one error in registration form. Email = %s, password = %s, name = %s, publicDomains = %s, privateDomains = %s, quota = %s", email, password, name, publicDomains, privateDomains, quota);
             flash.put("userRegisterError", errorMessage);
             params.flash();
             Validation.keep();

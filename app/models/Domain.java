@@ -16,6 +16,8 @@ public class Domain extends GenericModel {
     @Match(value = "([a-zA-Z0-9-]+\\.)+[a-zA-Z]+", message = "That isn't a valid domain format")
     public String domain;
 
+    public boolean isPublic;
+
     @Required
     @ManyToOne(optional = false)
     public User user;
@@ -42,6 +44,10 @@ public class Domain extends GenericModel {
         }
     }
 
+    public static Set<Domain> toDomains(String publicDomains) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
     public void setDomain(final String domain) {
         this.domain = removeWWW(domain);
     }
@@ -50,7 +56,7 @@ public class Domain extends GenericModel {
     public Object _key() {
         return domain;
     }
-    
+
     private static String removeWWW(final String domain) {
         return (domain.startsWith("www.") ? domain.substring(4) : domain);
     }

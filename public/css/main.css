@@ -68,13 +68,19 @@ label {
 label.radio {
     font-weight: normal;
 }
-input[type=text], input[type=password] {
-    border:      1px solid #DADADA;
-    background:  white url('/bundles/games/images/field-background.gif') repeat-x left top;
+input[type=""], input[type=text], input[type=password], input[type=email], textarea {
+    border:      1px solid #AAAAAA;
+    background:  white url('/public/images/field-background.gif') repeat-x left top;
     padding:     5px 6px;
-    color:       #565656;
+    color:       #343434;
     font-family: 'Lucida Sans Unicode', 'Lucida Grande', Verdana, Arial, Helvetica, sans-serif;
-    font-size:   12px;
+    font-size:   13px;
+}
+::-webkit-input-placeholder {
+   color: #747474;
+}
+:-moz-placeholder {
+   color: #747474;
 }
 .button-grey,
 .button-green {
@@ -210,10 +216,12 @@ ul#menu {
     word-wrap:                  break-word;
 }
 .flash-message {
-    padding: 10px;
-    margin: 5px;
-    margin-top: 15px;
-    background-color: #ffe;
+    margin-bottom: 20px;
+    padding: 5px;
+    color: #000;
+    background-color: #C2E779;
+    display: block;
+    display: inline-block;
 }
 
 
@@ -225,18 +233,11 @@ ul#menu {
 }
 
 
-/* Index *****************************************************/
-
-#index-instructions {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-
 /* Buttons ***************************************************/
 
 a.cta,
-button.cta {
+button.cta,
+input.cta {
     cursor: pointer;
     display: inline-block;
     outline: none;
@@ -246,7 +247,6 @@ button.cta {
     text-shadow: 0 1px 1px rgba(0,0,0,.3);
     text-decoration: none;
     color: white;
-    font-size: 0.85em;
     font-weight: bold;
 
     border: solid 1px #fff;
@@ -260,7 +260,8 @@ button.cta {
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#71C0E5', endColorstr='#285EE6');
 }
 a.cta:hover,
-button.cta:hover {
+button.cta:hover,
+input.cta:hover {
     border-color: #285EE6;
     text-decoration: underline;
 }

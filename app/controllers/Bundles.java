@@ -12,10 +12,10 @@ public class Bundles extends Controller {
             new String[] {
                 "public/css/html5-reset.css",
                 "public/css/main.css",
-                "public/css/tags.css",
-                "public/css/index.css",
-                "public/css/features.css",
-                "public/css/users.css", });
+                "public/css/site/tags.css",
+                "public/css/site/index.css",
+                "public/css/site/features.css",
+                "public/css/site/auth.css", });
 
     public static void siteStyles() {
         siteStyles.getBundleFile().delete();

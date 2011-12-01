@@ -15,6 +15,9 @@ import play.templates.JavaExtensions;
 @Entity
 @Table(name = "user")
 public class User extends Model {
+    /**
+     * Company or project name.
+     */
     @Required
     @MaxSize(40)
     @MinSize(2)
