@@ -26,7 +26,7 @@ h1, h2, h3 {
 }
 h1 {
     font-size: 31px;
-    padding-bottom: 30px;
+    padding-bottom: 26px;
 }
 h2 {
     font-size:      18px;
@@ -129,15 +129,15 @@ input[type=""], input[type=text], input[type=password], input[type=email], texta
 
 /* Header (logo, menu) ************************************/
 
-#header {
+header {
     height: 70px;
     margin-bottom: 20px;
     background: #71C0E5;
     background: -moz-linear-gradient(center top , #71C0E5, #285EE6) repeat scroll 0 0 transparent;
     background: -webkit-gradient(linear, left top, left bottom, from(#71C0E5), to(#285EE6));
 }
-#header-inside {
-    width: 900px;
+header > nav {
+    width: 940px;
     margin: 0 auto;
 }
 
@@ -160,7 +160,7 @@ input[type=""], input[type=text], input[type=password], input[type=email], texta
     background-image: url('${base64}');
     background-repeat: no-repeat;
     float: left;
-    margin: 17px 0 0 18px;
+    margin: 17px 0 0;
     width: 266px;
     height: 36px;
     z-index: 5;
@@ -201,19 +201,16 @@ ul#menu {
 
 /* Main content *******************************************/
 
-#wrapper {
-    width: 960px;
-    margin: 0 auto;
-}
 #content {
-    background-color:           white;
-    border:                     1px solid #DFDFDF;
-    padding:                    50px;
-    -moz-border-radius:         16px;
-    -webkit-border-radius:      16px;
-    border-radius:              16px;
-    margin-bottom:              50px;
-    word-wrap:                  break-word;
+    width: 940px;
+    margin: 0 auto 50px;
+    padding: 40px;
+    background-color: white;
+    border: 1px solid #DFDFDF;
+    -moz-border-radius: 16px;
+    -webkit-border-radius: 16px;
+    border-radius: 16px;
+    word-wrap: break-word;
 }
 .flash-message {
     margin-bottom: 20px;
@@ -227,7 +224,9 @@ ul#menu {
 
 /* Footer ****************************************************/
 
-#footer {
+footer {
+    width: 680px;
+    margin: 0 auto;
     text-align: center;
     font-size: 0.9em;
 }

@@ -41,8 +41,8 @@ Optional args:
         #{get 'moreHead' /}
     </head>
     <body #{if bodyID != null} id="${bodyID.raw()}" #{/} #{if bodyClass != null} class="${bodyClass.raw()}" #{/} >
-        <div id="header">
-            <div id="header-inside">
+        <header>
+            <nav>
                 <a href="/" id="logo"></a>
 
                 <ul id="menu">
@@ -63,32 +63,30 @@ Optional args:
                 </ul>
 
                 <div style="clear: both;"></div>
-            </div>
-        </div>
+            </nav>
+        </header>
 
-        <div id="wrapper">
+        <section id="content">
             #{debug-form-errors errors /}
             #{if flash?.success}<p class="flash-message">${flash.success}</p>#{/if}
             #{if flash?.error}<p class="flash-message flash-message-error">${flash.error}</p>#{/if}
 
-            <div id="content">
-                #{doLayout /}
-            </div>
+            #{doLayout /}
+        </section>
 
-            <div id="footer">
-                <p>
-                    &copy; ${SITE_NAME}
-                    -
-                    <a href="@{Application.index}">Home</a>
-                    -
-                    <a href="@{Application.terms}">Terms Of Use</a>
-                    -
-                    <a href="@{Application.privacy}">Privacy Policy</a>
-                    -
-                    <a href="mailto:${play.configuration.getProperty('application.teamEmailAddress')}">Contact Us</a>
-                </p>
-            </div>
-        </div>
+        <footer>
+            <p>
+                &copy; ${SITE_NAME}
+                -
+                <a href="@{Application.index}">Home</a>
+                -
+                <a href="@{Application.terms}">Terms Of Use</a>
+                -
+                <a href="@{Application.privacy}">Privacy Policy</a>
+                -
+                <a href="mailto:${play.configuration.getProperty('application.teamEmailAddress')}">Contact Us</a>
+            </p>
+        </footer>
 
         *{ JavaScript. }*
         #{get 'moreScripts' /}
