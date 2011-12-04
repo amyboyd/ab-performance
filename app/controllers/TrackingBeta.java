@@ -31,7 +31,7 @@ public class TrackingBeta extends BaseController {
         }
 
         final User user = domain.user;
-        if (user.hasReachedMaxPageViews()) {
+        if (user.hasReachedPageViewQuota()) {
             // 429 is a proposed status code. See here: http://tools.ietf.org/html/draft-nottingham-http-new-status-02#section-4
             response.status = 429;
             response.print("Page view limit has been reached");
@@ -92,7 +92,7 @@ public class TrackingBeta extends BaseController {
                 "client-beta.js",
                 "public/closure/closure/bin/build/closurebuilder.py",
                 null,
-                //com.google.javascript.jscomp.CompilationLevel.ADVANCED_OPTIMIZATIONS,
+//                com.google.javascript.jscomp.CompilationLevel.ADVANCED_OPTIMIZATIONS,
                 new String[] {
                     "public/closure/closure/goog",
                     "public/closure/third_party/closure",

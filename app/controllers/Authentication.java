@@ -55,7 +55,7 @@ public class Authentication extends BaseController {
 
     public static void register(String forward) {
         if (isAuth()) {
-            // @todo - where to?
+            Users.overview();
         }
         render("Authentication/register.html", forward);
     }
@@ -64,9 +64,12 @@ public class Authentication extends BaseController {
      * Receive and validate the register form.
      * If an already-registered email address is submitted and the password is correct, user is logged in.
      */
-    @Check(value = Checks.Condition.NOT_LOGGED_IN, onFail = Checks.FailAction.GO_TO_INDEX)
-    public static void registerHandler(String forward, String name, String publicDomains,
+    public static void registerHandler(String forward, String project, String publicDomains,
             String privateDomains, UserAccountType accountType, String email, String password) {
+        if (isAuth()) {
+            Users.overview();
+        }
+
         checkAuthenticity();
 
         String errorMessage = null;
@@ -79,8 +82,7 @@ public class Authentication extends BaseController {
                 flash.success("You are now logged in, " + email + ".");
                 response.setCookie(REMEMBER_COOKIE, Crypto.sign(email) + "-" + email, "30d");
                 existingUserByEmail.onLogin();
-                redirectToForwardURL();
-                redirect("/");
+                Users.overview();
             } else {
                 Logger.info("Email (%s) matches a user, password (%s) does not", email, password);
                 errorMessage = "That email address is already registered by a user, and you didn't enter the correct password.";
@@ -89,7 +91,7 @@ public class Authentication extends BaseController {
 
         if (!validation.email(email).ok) {
             errorMessage = "Please enter a valid email address.";
-        } else if (!validation.required(name).ok) {
+        } else if (!validation.required(project).ok) {
             errorMessage = "Please enter a company or project name.";
         } else if (!validation.required(password).ok) {
             errorMessage = "Please enter a password.";
@@ -97,7 +99,7 @@ public class Authentication extends BaseController {
 
         if (errorMessage != null) {
             // Errors -- go back to the form.
-            Logger.info("At least one error in registration form. Email = %s, password = %s, name = %s, publicDomains = %s, privateDomains = %s, accountType = %s", email, password, name, publicDomains, privateDomains, accountType);
+            Logger.info("At least one error in registration form. Email = %s, password = %s, name = %s, publicDomains = %s, privateDomains = %s, accountType = %s", email, password, project, publicDomains, privateDomains, accountType);
             flash.put("userRegisterError", errorMessage);
             params.flash();
             Validation.keep();
@@ -110,19 +112,18 @@ public class Authentication extends BaseController {
         }
 
         // Everything is OK, register.
-        User user = new User(email, password, name, accountType);
+        User user = new User(email, password, project, accountType);
         user.create();
         Domain.createAll(Domain.toPublicDomains(publicDomains, user));
         Domain.createAll(Domain.toPrivateDomains(privateDomains, user));
 
-        play.Logger.info("User has registered. ID = %d, name = %s", user.id, user.name);
-
         // Login.
         session.put(LOGIN_SESSION, email);
         response.setCookie(REMEMBER_COOKIE, Crypto.sign(email) + "-" + email, "30d");
-        redirectToForwardURL();
-        // @todo - where to?
-        redirect("/");
+
+        play.Logger.info("User has registered. ID = %d, project = %s", user.id, user.project);
+
+        Users.overview();
     }
 
     /**
@@ -132,8 +133,7 @@ public class Authentication extends BaseController {
      */
     public static void login(String forward, String overrideMessage) {
         if (isAuth()) {
-            redirectToForwardURL();
-            renderText("forward not set");
+            Users.overview();
         }
         render("Authentication/login.html", forward, overrideMessage);
     }
@@ -141,8 +141,11 @@ public class Authentication extends BaseController {
     /**
      * Receive and validate the login form.
      */
-    @Check(value = Checks.Condition.NOT_LOGGED_IN, onFail = Checks.FailAction.GO_TO_INDEX)
     public static void loginHandler(String forward, String email, String password) {
+        if (isAuth()) {
+            Users.overview();
+        }
+
         checkAuthenticity();
 
         if (email.isEmpty()) {
@@ -154,11 +157,10 @@ public class Authentication extends BaseController {
         if (user instanceof User) {
             // Correct email/password. Set cookie and session data so the user is logged in for 90 days.
             session.put(LOGIN_SESSION, user.email);
-            flash.success("You are now logged in, " + user.name + ".");
+            flash.success("You are now logged in, " + user.project + ".");
             response.setCookie(REMEMBER_COOKIE, Crypto.sign(user.email) + "-" + user.email, "90d");
             user.onLogin();
-            redirectToForwardURL();
-            redirect("/");
+            Users.overview();
         } else {
             flash.put("userLoginError", "Incorrect email/password combination.");
             params.flash();
@@ -219,7 +221,7 @@ public class Authentication extends BaseController {
         } else if (user.getValidationCode().equals(vc)) {
             render("Authentication/reset-password.html", user);
         } else {
-            error("Wrong code for user " + user.name);
+            error("Wrong code for user " + user.project);
         }
     }
 
@@ -240,7 +242,7 @@ public class Authentication extends BaseController {
             // Everything is OK - change password.
             user.setPassword(password);
             user.save();
-            play.Logger.info("User %s has reset their password", user.name);
+            play.Logger.info("User %s has reset their password", user.project);
 
             // Login.
             session.put(LOGIN_SESSION, user.email);
@@ -250,7 +252,7 @@ public class Authentication extends BaseController {
             flash.success("Your password has been reset and you are now logged in.");
             controllers.Application.index();
         } else {
-            error("Wrong code for user " + user.name);
+            error("Wrong code for user " + user.project);
         }
     }
 

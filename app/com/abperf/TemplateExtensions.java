@@ -18,6 +18,16 @@ final public class TemplateExtensions extends JavaExtensions {
         // Prevent this class from being instantiated.
     }
 
+    public static RawData colorHTML(final String html) {
+        String coloredHTML = escapeHtml(html).toString().
+                replaceAll("( [a-z]+\\=)", "<span style=\"color:green;\">$1</span>").
+                replaceAll("(&quot;[\\w ]+&quot;)", "<span style=\"color:#E08700;\">$1</span>").
+                replace("&lt;style", "<span style=\"color:blue;\">&lt;style</span>").
+                replace("&quot;&gt;", "&quot;<span style=\"color:blue;\">&gt;</span>").
+                replace("&lt;/style&gt;", "<span style=\"color:blue;\">&lt;/style&gt;</span>");
+        return new RawData(coloredHTML);
+    }
+
     /**
      * Replace "aA" with "a<wbr />A". Display using {@code raw()}.
      */

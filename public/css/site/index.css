@@ -1,10 +1,12 @@
 #index-left {
     float: left;
     width: 47%;
-    text-align: justify;
 }
 #index-left h1 {
     margin-bottom: 0;
+}
+#index-left p {
+    text-align: justify;
 }
 
 #index-right {

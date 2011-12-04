@@ -23,8 +23,12 @@ abperf.debug = function() {
 
     addStyles();
     var container = addContainer();
-    for (var testGroupName in abperf.styles.testGroups) {
-        addTestGroup(abperf.styles.testGroups[testGroupName], container);
+    if (abperf.styles.testGroups.length > 0) {
+        for (var testGroupName in abperf.styles.testGroups) {
+            addTestGroup(abperf.styles.testGroups[testGroupName], container);
+        }
+    } else {
+        goog.dom.setTextContent(container, 'There are no tests in this document');
     }
 }
 

@@ -39,6 +39,8 @@ Optional args:
         <link rel="shortcut icon" type="image/x-icon" href="@{'/public/favicon.ico'}" />
 
         #{get 'moreHead' /}
+
+        <script src="@@{TrackingBeta.clientScripts}"></script>
     </head>
     <body #{if bodyID != null} id="${bodyID.raw()}" #{/} #{if bodyClass != null} class="${bodyClass.raw()}" #{/} >
         <header>

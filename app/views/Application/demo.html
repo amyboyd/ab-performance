@@ -11,7 +11,7 @@
 </style>
 
 <style type="abperf" name="background color">
-    body { background-color: black; color: white; }
+    body { background-color: cyan; color: black; }
 </style>
 #{/}
 
@@ -36,14 +36,7 @@
 
         <p>In this page's HTML, there are three tests:</p>
 
-        <code><pre>%{
-            print demoTests.escape().toString()
-                .replaceAll(/( [a-z]+\=)/, '<span style="color:green;">$1</span>')
-                .replaceAll(/(&quot;[\w ]+&quot;)/, '<span style="color:#E08700;">$1</span>')
-                .replace('&lt;style', '<span style="color:blue;">&lt;style</span>')
-                .replace('&quot;&gt;', '&quot;<span style="color:blue;">&gt;</span>')
-                .replace('&lt;/style&gt;', '<span style="color:blue;">&lt;/style&gt;</span>')
-            }%</pre></code>
+        <code><pre>${demoTests.colorHTML()}</pre></code>
 
         <p>The debugger has opened in the bottom right corner. You can open this at
             any time during development by calling <tt>abperf.debug()</tt>, in the Chrome

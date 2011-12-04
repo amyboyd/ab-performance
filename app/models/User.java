@@ -21,7 +21,7 @@ public class User extends Model {
     @Required
     @MaxSize(40)
     @MinSize(2)
-    public String name;
+    public String project;
 
     @Required
     @Email
@@ -91,10 +91,10 @@ public class User extends Model {
         return null;
     }
 
-    public User(String email, String password, String name, UserAccountType accountType) {
+    public User(String email, String password, String project, UserAccountType accountType) {
         this.email = email;
         this.password = password;
-        this.name = name;
+        this.project = project;
         this.accountType = accountType;
         this.pageViewQuota = accountType.pageViewQuota;
         this.pageViewQuotaGenerous = (int) (accountType.pageViewQuota + (Math.floor(Math.random() * 100.0d + 1.0d)));
@@ -102,7 +102,7 @@ public class User extends Model {
 
     @Override
     public String toString() {
-        return name;
+        return project;
     }
 
     public boolean hasReachedPageViewQuota() {

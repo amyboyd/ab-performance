@@ -1,24 +1,35 @@
 #{extends 'layout.html' /}
 #{set title: 'Features - ' + SITE_NAME /}
 
-<div id="features-left">
+<article id="features-article">
     <h1>Features</h1>
 
     <ul>
-        <li><b>Tests are written in CSS</b>. All web developers already know how to write
-            CSS, so there is no learning curve.</li>
-        <li><b>Debugging is easy</b> - just run <tt>abperf.debug()</tt> in the Chrome or
-            Firebug console.</li>
-        <li>The JavaScript file is <b>less than 15 KB</b>. That is about the
-            same as Google Analytics. This small file will not slow down your pages.</li>
-        <li>The <b>report is delivered within an hour</b> of your page view limit being reached.</li>
+        <li>
+            <p>
+                <b>Tests are written in CSS</b>. All web developers already know how to write
+                CSS, so there is no learning curve. Here is a example test:
+            </p>
+
+            <code><pre>${'<style type="abperf" name="content">\n  p { font-size: 120%; }\n  a { color: green; }\n</style>'.colorHTML()}</pre></code>
+        </li>
+
+        <li>
+            <b>Debugging is easy</b> - just run <tt>abperf.debug()</tt> in the
+            Chrome or Firebug console. You can run it
+            <a href="#" onclick="abperf.debug(); return false;">right now</a>.
+        </li>
+
+        <li>
+            The JavaScript file is <b>less than 15 KB</b>. That is about the
+            same as Google Analytics. This small file will not slow down your pages.
+        </li>
+
+        <li>
+            The <b>report is delivered within an hour</b> of your page view limit
+            being reached.
+        </li>
     </ul>
 
-    #{include 'Application/_try-it-now-button.html' /}
-</div>
-
-<div id="features-right">
-    #{include 'Application/_how-it-works.html' /}
-</div>
-
-<div class="clearfix"></div>
+    #{text/try-it-now-button /}
+</article>
