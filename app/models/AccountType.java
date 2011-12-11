@@ -10,11 +10,11 @@ public enum AccountType {
             pageViewQuota = 1000;
         }
     },
-    BETA_10000() {
+    BETA_5000() {
         {
             price = MoneyUtils.ONE_HUNDRED;
             paid = true;
-            pageViewQuota = 10000;
+            pageViewQuota = 5000;
         }
     },
     UNLIMITED() {

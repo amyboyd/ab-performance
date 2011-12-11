@@ -29,33 +29,37 @@
     <p>
         <label>Page view quota:</label>
 
-        #{list models.UserAccountType.values()}
-            <br />
-            <input type="radio" name="accountType" id="reg-accountType-${_index}" tabindex="${305 + _index}"
-                   value="${_.name()}" #{if !_.paid}checked#{/} />
-            <label class="radio" for="reg-accountType-${_index}">
-                ${_.pageViewQuota.format('#,###')} page views
-                #{if !_.paid}- free while in beta #{/}
-            </label>
-        #{/}
+        <br />
+        <input type="radio" name="accountType" value="BETA_FREE" checked
+               id="reg-accountType-BETA_FREE" tabindex="303" />
+        <label class="radio" for="reg-accountType-BETA_FREE">
+            1,000 page views - free while in beta
+        </label>
+
+        <br />
+        <input type="radio" name="accountType" value="BETA_5000"
+               id="reg-accountType-BETA_5000" tabindex="304" />
+        <label class="radio" for="reg-accountType-BETA_5000">
+            5,000 page views - $${models.AccountType.BETA_5000.price}
+        </label>
     </p>
 
     <p>
         <label for="reg-email">Email Address:</label>
         <br />
         <input type="email" required="required" name="email" value="${flash.email}" size="40"
-               placeholder="name@example.com" tabindex="303" id="reg-email" />
+               placeholder="name@example.com" tabindex="310" id="reg-email" />
     </p>
 
     <p>
         <label for="reg-password">Password:</label>
         <br />
         <input type="password" required="required" name="password" value="" size="15"
-               tabindex="304" id="reg-password" />
+               tabindex="311" id="reg-password" />
     </p>
 
     <p>
-        <input type="submit" value="Continue" tabindex="305" class="cta" />
+        <input type="submit" value="Continue" tabindex="312" class="cta" />
     </p>
 
     <p>
