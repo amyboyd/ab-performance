@@ -11,7 +11,7 @@ import play.data.validation.*;
 public class PageView extends Model {
     @Required
     @ManyToOne(optional = false)
-    public User user;
+    public Project project;
 
     /**
      * A unique page view ID.
@@ -49,9 +49,9 @@ public class PageView extends Model {
         return pageView;
     }
 
-    public PageView(final User user, final String guid, final long time, final String url,
+    public PageView(final Project project, final String guid, final long time, final String url,
             final Map<String, String> tests) {
-        this.user = user;
+        this.project = project;
         this.url = url;
         this.time = new Date(time);
         this.guid = guid;

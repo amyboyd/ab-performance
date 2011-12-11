@@ -12,8 +12,7 @@ import play.db.jpa.*;
 @Table(name = "domain")
 public class Domain extends Model {
     /**
-     * Public domains must be unique, and this is enforced in {@link #createAll(java.util.Set)}.
-     * Private domains do not have to be unique, because "localhost" etc is a common private domain.
+     * These do not have to be unique, because "localhost" etc is a common private domain.
      */
     @Required
     @Match(value = "([a-zA-Z0-9-]+\\.)+[a-zA-Z]+", message = "That isn't a valid domain format")
@@ -23,7 +22,7 @@ public class Domain extends Model {
 
     @Required
     @ManyToOne(optional = false)
-    public User user;
+    public Project project;
 
     @Required
     @Temporal(TemporalType.TIMESTAMP)
@@ -47,15 +46,15 @@ public class Domain extends Model {
         }
     }
 
-    public static Set<Domain> toPublicDomains(String domains, User user) {
-        return toDomains(domains, user, true);
+    public static Set<Domain> toPublicDomains(String domains, Project project) {
+        return toDomains(domains, project, true);
     }
 
-    public static Set<Domain> toPrivateDomains(String domains, User user) {
-        return toDomains(domains, user, false);
+    public static Set<Domain> toPrivateDomains(String domains, Project project) {
+        return toDomains(domains, project, false);
     }
 
-    private static Set<Domain> toDomains(String domains, User user, boolean isPublic) {
+    private static Set<Domain> toDomains(String domains, Project project, boolean isPublic) {
         Set<Domain> domainsSet = new HashSet<Domain>(5);
         for (String domain: domains.split("[\n, ]")) {
             domain = domain.trim();
@@ -64,7 +63,7 @@ public class Domain extends Model {
             if (domain.isEmpty()) {
                 continue;
             } else {
-                domainsSet.add(new Domain(domain, isPublic, user));
+                domainsSet.add(new Domain(domain, isPublic, project));
             }
         }
         return domainsSet;
@@ -76,17 +75,14 @@ public class Domain extends Model {
 
     public static void createAll(Set<Domain> domains) {
         for (Domain domain: domains) {
-            // Public domains must be unique. Private domains do not have to be unique.
-            if (!domain.isPublic || Domain.count("domain = ? and isPublic = true", domain.domain) == 0L) {
-                domain.create();
-            }
+            domain.create();
         }
     }
 
-    public Domain(String domain, boolean isPublic, User user) {
+    public Domain(String domain, boolean isPublic, Project project) {
         this.domain = domain;
         this.isPublic = isPublic;
-        this.user = user;
+        this.project = project;
     }
 
     public void setDomain(final String domain) {

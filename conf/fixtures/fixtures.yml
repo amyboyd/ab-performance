@@ -1,5 +1,4 @@
-User(Tester):
-    accountType: BETA_FREE
+User(Me):
     admin: true
     email: amy@amyboyd.co.uk
     emailConfirmed: true
@@ -8,12 +7,32 @@ User(Tester):
     name: Amy Testing
     password: purple
 
+Project(ABPerf):
+    name: AB Perf
+    accountType: UNLIMITED
+    user: Me
+
 Domain(Domain_1):
-    user: Tester
-    domain: localhost
+    project: ABPerf
+    domain: dev.abperf.com
     isPublic: false
 
 Domain(Domain_2):
-    user: Tester
+    project: ABPerf
+    domain: abperf.com
+    isPublic: true
+
+Project(ABPerfDemo):
+    name: AB Perf Demo
+    accountType: UNLIMITED
+    user: Me
+
+Domain(Domain_3):
+    project: ABPerfDemo
     domain: dev.abperf.com
+    isPublic: false
+
+Domain(Domain_4):
+    project: ABPerfDemo
+    domain: abperf.com
     isPublic: true

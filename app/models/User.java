@@ -15,14 +15,6 @@ import play.templates.JavaExtensions;
 @Entity
 @Table(name = "user")
 public class User extends Model {
-    /**
-     * Company or project name.
-     */
-    @Required
-    @MaxSize(40)
-    @MinSize(2)
-    public String project;
-
     @Required
     @Email
     @MaxSize(255)
@@ -38,17 +30,8 @@ public class User extends Model {
     @NoBinding
     public String password;
 
-    @Enumerated(EnumType.STRING)
-    public UserAccountType accountType;
-
     @Column(name = "is_admin") // "admin" is a reserved keyword.
     public boolean admin;
-
-    /**
-     * How the user heard of the site.
-     */
-    @MaxSize(255)
-    public String howHear;
 
     public int loginCount;
 
@@ -61,20 +44,10 @@ public class User extends Model {
     public Date registeredAt;
 
     @OneToMany(mappedBy = "user")
-    public Set<Domain> domains;
-
-    public int pageViews;
-
-    public int pageViewQuota;
-
-    public int pageViewQuotaGenerous;
+    public Set<Project> projects;
 
     public static User findByEmail(final String email) {
         return find("email", email).first();
-    }
-
-    public static boolean isNameUsed(final String name) {
-        return count("name", name) > 0L;
     }
 
     /**
@@ -91,22 +64,14 @@ public class User extends Model {
         return null;
     }
 
-    public User(String email, String password, String project, UserAccountType accountType) {
+    public User(String email, String password) {
         this.email = email;
         this.password = password;
-        this.project = project;
-        this.accountType = accountType;
-        this.pageViewQuota = accountType.pageViewQuota;
-        this.pageViewQuotaGenerous = (int) (accountType.pageViewQuota + (Math.floor(Math.random() * 100.0d + 1.0d)));
     }
 
     @Override
     public String toString() {
-        return project;
-    }
-
-    public boolean hasReachedPageViewQuota() {
-        return pageViews >= pageViewQuotaGenerous;
+        return email;
     }
 
     public void onLogin() {
@@ -175,8 +140,6 @@ public class User extends Model {
     protected void prePersist() {
         if (registeredAt == null) {
             registeredAt = new Date();
-        } else if (accountType == null) {
-            throw new IllegalStateException("User must have an account type");
         }
     }
 

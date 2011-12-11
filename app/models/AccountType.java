@@ -3,7 +3,7 @@ package models;
 import com.abperf.MoneyUtils;
 import java.math.BigDecimal;
 
-public enum UserAccountType {
+public enum AccountType {
     BETA_FREE() {
         {
             price = MoneyUtils.ZERO;
@@ -16,11 +16,15 @@ public enum UserAccountType {
             paid = true;
             pageViewQuota = 10000;
         }
+    },
+    UNLIMITED() {
+        {
+            price = MoneyUtils.ZERO;
+            paid = false;
+            pageViewQuota = Integer.MAX_VALUE;
+        }
     };
 
-    /**
-     * Total price in US dollars.
-     */
     public BigDecimal price;
 
     public boolean paid;

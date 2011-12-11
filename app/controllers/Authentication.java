@@ -2,7 +2,8 @@ package controllers;
 
 import models.Domain;
 import models.User;
-import models.UserAccountType;
+import models.AccountType;
+import models.Project;
 import play.Logger;
 import play.data.validation.*;
 import play.libs.Crypto;
@@ -64,8 +65,8 @@ public class Authentication extends BaseController {
      * Receive and validate the register form.
      * If an already-registered email address is submitted and the password is correct, user is logged in.
      */
-    public static void registerHandler(String forward, String project, String publicDomains,
-            String privateDomains, UserAccountType accountType, String email, String password) {
+    public static void registerHandler(String forward, String projectName, String publicDomains,
+            String privateDomains, AccountType accountType, String email, String password) {
         if (isAuth()) {
             Users.overview();
         }
@@ -91,7 +92,7 @@ public class Authentication extends BaseController {
 
         if (!validation.email(email).ok) {
             errorMessage = "Please enter a valid email address.";
-        } else if (!validation.required(project).ok) {
+        } else if (!validation.required(projectName).ok) {
             errorMessage = "Please enter a company or project name.";
         } else if (!validation.required(password).ok) {
             errorMessage = "Please enter a password.";
@@ -99,7 +100,7 @@ public class Authentication extends BaseController {
 
         if (errorMessage != null) {
             // Errors -- go back to the form.
-            Logger.info("At least one error in registration form. Email = %s, password = %s, name = %s, publicDomains = %s, privateDomains = %s, accountType = %s", email, password, project, publicDomains, privateDomains, accountType);
+            Logger.info("At least one error in registration form. Email = %s, password = %s, name = %s, publicDomains = %s, privateDomains = %s, accountType = %s", email, password, projectName, publicDomains, privateDomains, accountType);
             flash.put("userRegisterError", errorMessage);
             params.flash();
             Validation.keep();
@@ -112,16 +113,18 @@ public class Authentication extends BaseController {
         }
 
         // Everything is OK, register.
-        User user = new User(email, password, project, accountType);
+        User user = new User(email, password);
         user.create();
-        Domain.createAll(Domain.toPublicDomains(publicDomains, user));
-        Domain.createAll(Domain.toPrivateDomains(privateDomains, user));
+        Project project = new Project(projectName, accountType, user);
+        project.create();
+        Domain.createAll(Domain.toPublicDomains(publicDomains, project));
+        Domain.createAll(Domain.toPrivateDomains(privateDomains, project));
 
         // Login.
         session.put(LOGIN_SESSION, email);
         response.setCookie(REMEMBER_COOKIE, Crypto.sign(email) + "-" + email, "30d");
 
-        play.Logger.info("User has registered. ID = %d, project = %s", user.id, user.project);
+        play.Logger.info("User has registered. User = %d, project = %s", user.id, project.id);
 
         Users.overview();
     }
@@ -157,7 +160,7 @@ public class Authentication extends BaseController {
         if (user instanceof User) {
             // Correct email/password. Set cookie and session data so the user is logged in for 90 days.
             session.put(LOGIN_SESSION, user.email);
-            flash.success("You are now logged in, " + user.project + ".");
+            flash.success("You are now logged in.");
             response.setCookie(REMEMBER_COOKIE, Crypto.sign(user.email) + "-" + user.email, "90d");
             user.onLogin();
             Users.overview();
@@ -221,7 +224,7 @@ public class Authentication extends BaseController {
         } else if (user.getValidationCode().equals(vc)) {
             render("Authentication/reset-password.html", user);
         } else {
-            error("Wrong code for user " + user.project);
+            error("Wrong code for user " + user.id);
         }
     }
 
@@ -242,7 +245,7 @@ public class Authentication extends BaseController {
             // Everything is OK - change password.
             user.setPassword(password);
             user.save();
-            play.Logger.info("User %s has reset their password", user.project);
+            play.Logger.info("User %s has reset their password", user.id);
 
             // Login.
             session.put(LOGIN_SESSION, user.email);
@@ -252,7 +255,7 @@ public class Authentication extends BaseController {
             flash.success("Your password has been reset and you are now logged in.");
             controllers.Application.index();
         } else {
-            error("Wrong code for user " + user.project);
+            error("Wrong code for user " + user.id);
         }
     }
 

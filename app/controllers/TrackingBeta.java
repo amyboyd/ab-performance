@@ -31,19 +31,19 @@ public class TrackingBeta extends BaseController {
             return;
         }
 
-        final User user = domain.user;
-        if (user.hasReachedPageViewQuota()) {
+        final Project project = domain.project;
+        if (project.hasReachedPageViewQuota()) {
             // 429 is a proposed status code. See here: http://tools.ietf.org/html/draft-nottingham-http-new-status-02#section-4
             response.status = 429;
             response.print("Page view limit has been reached");
             return;
         }
 
-        final PageView pageView = new PageView(domain.user, guid, time, url, tests);
+        final PageView pageView = new PageView(domain.project, guid, time, url, tests);
         pageView.save();
 
-        user.pageViews++;
-        user.save();
+        project.pageViews++;
+        project.save();
 
         response.setHeader("Content-Type", "text/plain");
         response.print(StringUtils.join(pageView.testIDsWithUnknownCSS, ','));
