@@ -39,9 +39,14 @@ abstract public class BaseController extends Controller {
         renderArgs.put("SITE_NAME", Constants.SITE_NAME);
         renderArgs.put("IS_DEV", Constants.IS_DEV);
         renderArgs.put("IS_PROD", Constants.IS_PROD);
+    }
 
+    @Before(priority = 10)
+    public static void setDevice() {
         Http.Header userAgent = request.headers.get("user-agent");
-        renderArgs.put("device", new UserDevice(userAgent != null ? userAgent.value() : ""));
+        UserDevice device = new UserDevice(userAgent != null ? userAgent.value() : "");
+        request.args.put("device", device);
+        renderArgs.put("device", device);
     }
 
     @Util

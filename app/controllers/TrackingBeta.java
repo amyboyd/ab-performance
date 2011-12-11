@@ -1,5 +1,6 @@
 package controllers;
 
+import com.abperf.UserDevice;
 import java.util.*;
 import models.*;
 import org.apache.commons.lang.StringUtils;
@@ -76,12 +77,17 @@ public class TrackingBeta extends BaseController {
     }
 
     public static void clientScripts() {
-        if (com.abperf.Constants.IS_DEV) {
-            clientScripts.getBundleFile().delete();
+        // Check the browser is supported: Chrome 5+, Firefox 4+, Safari 4+.
+        UserDevice device = (UserDevice) request.args.get("device");
+        if ((device.chrome && device.chromeVersion >= 5)
+                || (device.firefox && device.firefoxVersion >= 4)
+                || (device.safari && device.safariVersion >= 4)) {
+            // Browser is supported.
+            response.cacheFor("61d");
+            clientScripts.applyToResponse(request, response);
+        } else {
+            renderText("// Browser not supported");
         }
-
-        response.cacheFor("61d");
-        clientScripts.applyToResponse(request, response);
     }
 
     private static final ClosureBundle clientScripts = createClientScriptsBundle();

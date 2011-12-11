@@ -4,25 +4,9 @@ package com.abperf;
  * Determines which browser and version number is being used.
  */
 public class UserDevice {
-    public boolean ie;
+    public boolean ie, firefox, chrome, safari, opera;
 
-    public int ieVersion;
-
-    public boolean firefox;
-
-    public int firefoxVersion;
-
-    public boolean chrome;
-
-    public int chromeVersion;
-
-    public boolean safari;
-
-    public int safariVersion;
-
-    public boolean opera;
-
-    public int operaVersion;
+    public int ieVersion, firefoxVersion, chromeVersion, safariVersion, operaVersion;
 
     public UserDevice(final String userAgent) {
         if (userAgent.contains("MSIE")) {
