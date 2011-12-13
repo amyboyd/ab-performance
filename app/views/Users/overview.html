@@ -1,4 +1,30 @@
 #{extends 'layout.html' /}
-#{set title: currentUser.project + ' - ' + SITE_NAME /}
+#{set title: 'Your Account - ' + SITE_NAME /}
 
-${currentUser}
+<h1>Your Account</h1>
+
+#{list currentUser.projects, as: 'project'}
+    <section class="project">
+        <h2>${project}</h2>
+
+        <div class="project-left">
+            Page views:
+            <div class="page-views" data-min="0" data-value="${project.pageViews}" data-max="${project.pageViewQuota}">  
+                <div style="position:absolute;top:0;text-align:center;width:100%;font:statusbar;padding:2px;">
+                    ${project.pageViews} / ${project.pageViewQuota}
+                </div>   
+            </div>
+        </div>
+
+        <div class="project-right">
+            Pay
+        </div>
+
+        <div class="clearfix"></div>
+    </section>
+#{/}
+
+<div style="float:left"><a href="">Add another company/project...</a></div>
+<div style="float:right"><a href="@{Authentication.logout}">Logout</a></div>
+
+<script>projects.overviewPage();</script>

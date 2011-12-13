@@ -40,6 +40,7 @@ Optional args:
 
         #{get 'moreHead' /}
 
+        <script src="@@{Bundles.siteScripts}"></script>
         <script src="@@{TrackingBeta.clientScripts}"></script>
     </head>
     <body #{if bodyID != null} id="${bodyID.raw()}" #{/} #{if bodyClass != null} class="${bodyClass.raw()}" #{/} >
@@ -56,7 +57,7 @@ Optional args:
                     <li>&bull;</li>
                     <li>
                         #{if currentUser}
-                            <a href="@{Authentication.logout}">Logout</a>
+                            <a href="@{Users.overview}">Your Account</a>
                         #{/}
                         #{else}
                             <a href="@{Authentication.login(request.url)}">Login</a>
@@ -74,6 +75,8 @@ Optional args:
             #{if flash?.error}<p class="flash-message flash-message-error">${flash.error}</p><div style="clear: both;"></div>#{/if}
 
             #{doLayout /}
+
+            <div class="clearfix"></div>
         </section>
 
         <footer>
