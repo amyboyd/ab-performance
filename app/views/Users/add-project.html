@@ -1,0 +1,13 @@
+#{extends 'layout.html' /}
+#{set title: 'Add Another Company/Project - ' + SITE_NAME /}
+
+<h1>Add Another Company/Project</h1>
+
+#{form @Users.addProjectHandler(), method:'post', onsubmit:"this.submit.value='Doing things...';this.submit.disabled=1;"}
+    #{include 'Users/_project-form.html' /}
+
+    <p>
+        <input type="submit" value="Save" tabindex="312" class="cta" name="submit" />
+    </p>
+#{/form}
+

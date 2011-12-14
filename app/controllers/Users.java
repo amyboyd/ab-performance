@@ -1,5 +1,7 @@
 package controllers;
 
+import models.AccountType;
+import models.Domain;
 import models.Project;
 import models.User;
 import play.Logger;
@@ -20,44 +22,69 @@ public class Users extends BaseController {
         overview();
     }
 
-    /**
-     * Form to editPublicProfile profile.
-     * Show subscription information (if Pro), and links to upgrade, downgrade and close shop.
-     */
-    public static void editDetails(String forward) {
-        requireAuthenticatedUser();
-        render("Sell/profile.html");
+    public static void addProject() {
+        render("Users/add-project.html");
     }
 
-    /**
-     * Save profile details. Avatar and images are not submitted to this action.
-     */
-    public static void editDetailsHandler(String forward) {
+    public static void addProjectHandler(String projectName, String publicDomains,
+            String privateDomains, AccountType accountType) {
         requireHttpMethod("POST");
         checkAuthenticity();
 
-        final User user = requireAuthenticatedUser();
-        user.edit("user", params.all());
+        User user = requireAuthenticatedUser();
 
-        validation.valid(user);
-        if (Validation.hasErrors()) {
-            Validation.keep();
-            params.flash();
-            flash.error(com.abperf.Constants.FORM_HAD_ERRORS_MESSAGE);
-            editDetails(forward);
+        Project project = new Project(projectName, accountType, user);
+        project.create();
+        Domain.createAll(Domain.toPublicDomains(publicDomains, project));
+        Domain.createAll(Domain.toPrivateDomains(privateDomains, project));
+
+        play.Logger.info("New project. User = %d, project = %s", user.id, project.id);
+
+        if (project.waitingForPayment()) {
+            Users.continueToPaypal(project.id);
+        } else {
+            Users.overview();
         }
-
-        user.save();
-
-        flash.success("Your changes have been saved");
-        redirectToForwardURL();
     }
+//
+//    /**
+//     * Form to editPublicProfile profile.
+//     * Show subscription information (if Pro), and links to upgrade, downgrade and close shop.
+//     */
+//    public static void editDetails(String forward) {
+//        requireAuthenticatedUser();
+//        render("Sell/profile.html");
+//    }
+//
+//    /**
+//     * Save profile details. Avatar and images are not submitted to this action.
+//     */
+//    public static void editDetailsHandler(String forward) {
+//        requireHttpMethod("POST");
+//        checkAuthenticity();
+//
+//        final User user = requireAuthenticatedUser();
+//        user.edit("user", params.all());
+//
+//        validation.valid(user);
+//        if (Validation.hasErrors()) {
+//            Validation.keep();
+//            params.flash();
+//            flash.error(com.abperf.Constants.FORM_HAD_ERRORS_MESSAGE);
+//            editDetails(forward);
+//        }
+//
+//        user.save();
+//
+//        flash.success("Your changes have been saved");
+//        redirectToForwardURL();
+//    }
 
     /**
      * Form to change email.
      */
     public static void changeEmail(String forward) {
-        render("users/Profiles/change-email.html");
+        render("Users/change-email.html");
     }
 
     /**

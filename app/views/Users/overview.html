@@ -18,7 +18,10 @@
 
         <div class="project-right">
             #{if project.waitingForPayment()}
-                <a href="@{continueToPaypal(project.id)}">Payment required: ${project.currency.format(project.price)}</a>
+                <a href="@{continueToPaypal(project.id)}"><strong>Payment required:</strong> ${project.currency.format(project.price)}</a>
+            #{/}
+            #{elseif !project.isFree()}
+                Payment received (${project.currency.format(project.price)})
             #{/}
         </div>
 
@@ -26,7 +29,7 @@
     </section>
 #{/}
 
-<div style="float:left"><a href="">Add another company/project...</a></div>
+<div style="float:left"><a href="@{Users.addProject}">Add another company/project...</a></div>
 <div style="float:right"><a href="@{Authentication.logout}">Logout</a></div>
 
 <script>projects.overviewPage();</script>

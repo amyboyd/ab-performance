@@ -71,6 +71,10 @@ public class Project extends Model {
     }
 
     public boolean waitingForPayment() {
-        return (price != null && price.doubleValue() != 0) && paymentReceivedAt == null;
+        return !isFree() && paymentReceivedAt == null;
+    }
+
+    public boolean isFree() {
+        return (price == null || price.doubleValue() == 0);
     }
 }

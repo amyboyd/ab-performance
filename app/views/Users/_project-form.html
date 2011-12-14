@@ -1,0 +1,42 @@
+<p>
+    <label for="reg-project-name">Company or project name:</label>
+    <br />
+    <input type="text" required="required" name="projectName" tabindex="300" id="reg-project-name"
+           size="40" value="${flash.projectName}" />
+</p>
+
+<p>
+    <label for="reg-public-domains">Public domains your website runs on:</label>
+    <br />
+    <textarea required="required" name="publicDomains" cols="50" rows="4"
+              placeholder="e.g. example.com, blog.example.com, forum.example.com"
+              tabindex="301" id="reg-public-domains">${flash.publicDomains}</textarea>
+</p>
+
+<p>
+    <label for="reg-private-domains">Private domains you do development on:</label>
+    <br />
+    <textarea name="privateDomains" cols="50" rows="4"
+              placeholder="e.g. localhost, dev.example.com, staff.example.com"
+              tabindex="302" id="reg-private-domains">${flash.privateDomains}</textarea>
+    <br />
+    (page views on private domains do not count towards your quota)
+</p>
+
+<p>
+    <label>Page view quota:</label>
+
+    <br />
+    <input type="radio" name="accountType" value="BETA_FREE" checked
+           id="reg-accountType-BETA_FREE" tabindex="303" />
+    <label class="radio" for="reg-accountType-BETA_FREE">
+        1,000 page views - free while in beta
+    </label>
+
+    <br />
+    <input type="radio" name="accountType" value="BETA_5000"
+           id="reg-accountType-BETA_5000" tabindex="304" />
+    <label class="radio" for="reg-accountType-BETA_5000">
+        5,000 page views - $${models.AccountType.BETA_5000.price}
+    </label>
+</p>
