@@ -20,8 +20,19 @@
             #{if project.waitingForPayment()}
                 <a href="@{continueToPaypal(project.id)}"><strong>Payment required:</strong> ${project.currency.format(project.price)}</a>
             #{/}
-            #{elseif !project.isFree()}
-                Payment received (${project.currency.format(project.price)})
+            #{else}
+                <a href="@{editProject(project.id)}">Edit settings</a>
+                <br />
+
+                #{if project.isReportReady()}
+                    <a href="@{report(project.id)}">Download report</a>
+                #{/}
+                #{elseif project.hasReachedPageViewQuota()}
+                    Your report will be ready to download soon...
+                #{/}
+                #{else}
+                    Your report will be ready when you reach your page view quota.
+                #{/}
             #{/}
         </div>
 

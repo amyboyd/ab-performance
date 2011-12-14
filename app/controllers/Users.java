@@ -12,12 +12,12 @@ public class Users extends BaseController {
         render();
     }
 
-    public static void continueToPaypal(Long id) {
+    public static void continueToPaypal(final Long id) {
         Project project = Project.findById(id);
         render("Users/continue-to-paypal.html", project);
     }
 
-    public static void justPaidProject(Long id) {
+    public static void justPaidProject(final Long id) {
         Logger.info("Just paid project: " + id);
         overview();
     }
@@ -26,14 +26,14 @@ public class Users extends BaseController {
         render("Users/add-project.html");
     }
 
-    public static void addProjectHandler(String projectName, String publicDomains,
-            String privateDomains, AccountType accountType) {
+    public static void addProjectHandler(final String projectName, final String publicDomains,
+            final String privateDomains, final AccountType accountType) {
         requireHttpMethod("POST");
         checkAuthenticity();
 
-        User user = requireAuthenticatedUser();
+        final User user = requireAuthenticatedUser();
 
-        Project project = new Project(projectName, accountType, user);
+        final Project project = new Project(projectName, accountType, user);
         project.create();
         Domain.createAll(Domain.toPublicDomains(publicDomains, project));
         Domain.createAll(Domain.toPrivateDomains(privateDomains, project));
@@ -46,39 +46,44 @@ public class Users extends BaseController {
             Users.overview();
         }
     }
-//
-//    /**
-//     * Form to editPublicProfile profile.
-//     * Show subscription information (if Pro), and links to upgrade, downgrade and close shop.
-//     */
-//    public static void editDetails(String forward) {
-//        requireAuthenticatedUser();
-//        render("Sell/profile.html");
-//    }
-//
-//    /**
-//     * Save profile details. Avatar and images are not submitted to this action.
-//     */
-//    public static void editDetailsHandler(String forward) {
-//        requireHttpMethod("POST");
-//        checkAuthenticity();
-//
-//        final User user = requireAuthenticatedUser();
-//        user.edit("user", params.all());
-//
-//        validation.valid(user);
-//        if (Validation.hasErrors()) {
-//            Validation.keep();
-//            params.flash();
-//            flash.error(com.abperf.Constants.FORM_HAD_ERRORS_MESSAGE);
-//            editDetails(forward);
-//        }
-//
-//        user.save();
-//
-//        flash.success("Your changes have been saved");
-//        redirectToForwardURL();
-//    }
+
+    public static void report(final Long id) {
+        final Project project = Project.findById(id);
+        if (!project.isReportReady()) {
+            flash.error("Your report is not ready yet");
+            overview();
+        }
+
+        // @todo
+    }
+
+    // @todo
+    public static void editProject(final Long id) {
+        requireAuthenticatedUser();
+        render();
+    }
+
+    // @todo
+    public static void editProjectHandler(final Long id) {
+        requireHttpMethod("POST");
+        checkAuthenticity();
+
+        final User user = requireAuthenticatedUser();
+        user.edit("user", params.all());
+
+        validation.valid(user);
+        if (Validation.hasErrors()) {
+            Validation.keep();
+            params.flash();
+            flash.error(com.abperf.Constants.FORM_HAD_ERRORS_MESSAGE);
+            editProject(id);
+        }
+
+        user.save();
+
+        flash.success("Your changes have been saved");
+        redirectToForwardURL();
+    }
 
     /**
      * Form to change email.

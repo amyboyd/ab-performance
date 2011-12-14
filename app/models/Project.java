@@ -51,6 +51,10 @@ public class Project extends Model {
         return pageViews >= pageViewQuota;
     }
 
+    public boolean isReportReady() {
+        return false; // @todo
+    }
+
     @Override
     public String toString() {
         return name;
