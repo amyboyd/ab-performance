@@ -7,6 +7,8 @@ User(Me):
     name: Amy Testing
     password: purple
 
+## Project 1 ##
+
 Project(ABPerf):
     name: AB Perf
     accountType: UNLIMITED
@@ -22,6 +24,8 @@ Domain(Domain_2):
     domain: abperf.com
     isPublic: true
 
+## Project 2 ##
+
 Project(ABPerfDemo):
     name: AB Perf Demo
     accountType: UNLIMITED
@@ -35,4 +39,26 @@ Domain(Domain_3):
 Domain(Domain_4):
     project: ABPerfDemo
     domain: abperf.com
+    isPublic: true
+
+## Project 3 ##
+
+Project(Example):
+    name: Example Project
+    accountType: BETA_5000
+    user: Me
+
+Domain(Example_Domain_1):
+    project: Example
+    domain: localhost
+    isPublic: false
+
+Domain(Example_Domain_2):
+    project: Example
+    domain: example.com
+    isPublic: true
+
+Domain(Example_Domain_3):
+    project: Example
+    domain: example.org
     isPublic: true

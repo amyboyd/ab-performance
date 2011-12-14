@@ -7,6 +7,7 @@ GET     /terms                                                  Application.term
 GET     /privacy                                                Application.privacy
 *       /auth/{action}                                          Authentication.{action}
 *       /me/{action}                                            Users.{action}
+*       /paypal-ipn-listener/{action}                           PaypalIPNListener.{action}
 
 
 # Tracking

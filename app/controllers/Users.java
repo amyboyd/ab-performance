@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Project;
 import models.User;
 import play.Logger;
 import play.data.validation.Validation;
@@ -7,6 +8,16 @@ import play.data.validation.Validation;
 public class Users extends BaseController {
     public static void overview() {
         render();
+    }
+
+    public static void continueToPaypal(Long id) {
+        Project project = Project.findById(id);
+        render("Users/continue-to-paypal.html", project);
+    }
+
+    public static void justPaidProject(Long id) {
+        Logger.info("Just paid project: " + id);
+        overview();
     }
 
     /**

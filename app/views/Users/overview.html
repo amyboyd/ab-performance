@@ -17,7 +17,9 @@
         </div>
 
         <div class="project-right">
-            Pay
+            #{if project.waitingForPayment()}
+                <a href="@{continueToPaypal(project.id)}">Payment required: ${project.currency.format(project.price)}</a>
+            #{/}
         </div>
 
         <div class="clearfix"></div>

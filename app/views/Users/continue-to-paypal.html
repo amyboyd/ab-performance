@@ -1,0 +1,54 @@
+*{
+The form values are used by Paypal, and are described here:
+https://www.paypal.com/cgi-bin/webscr?cmd=p/pdn/howto_checkout-outside
+}*
+<html>
+    <head>
+        <title>Redirecting...</title>
+    </head>
+    <body>
+        <p style="font-size: 21px;">
+            If you are not automatically redirected to PayPal, please click the button below.
+        </p>
+
+        <form action="${play.configuration.get('paypal.ipnUrl')}" method="post" id="form">
+            <input type="submit" value="Continue to PayPal" style="font-size: 21px;" />
+            <input type="hidden" name="cmd" value="_xclick" />
+
+            *{ Project }*
+            <input type="hidden" name="custom" value="project=${project.id}" />
+            <input type="hidden" name="item_name" value="${SITE_NAME}: ${project.accountType.pageViewQuota} page views for ${project}" />
+            <input type="hidden" name="currency_code" value="${project.currency.name()}" />
+            <input type="hidden" name="amount" value="${project.price}" />
+
+            *{ Seller }*
+            <input type="hidden" name="business" value="${play.configuration.get('application.billingEmailAddress')}" />
+
+            *{ Buyer }*
+            <input type="hidden" name="email" value="${project.user.email}" />
+
+            *{ Payment page }*
+            *{ Image must be 150x50 }*
+            <input type="hidden" name="image_url" value="@@{'/public/images/logo-150x50.png'}" />
+            <input type="hidden" name="no_note" value="1" />
+            <input type="hidden" name="no_shipping" value="1" />
+            <input type="hidden" name="cbt" value="Return to ${SITE_NAME}" />
+
+            *{ URLs }*
+            %{
+            returnURL = play.mvc.Router.reverse("Users.justPaidProject")
+            returnURL = returnURL.add("id", project.id)
+            returnURL.absolute()
+
+            cancelURL = play.mvc.Router.reverse("Users.overview")
+            cancelURL.absolute()
+            }%
+            <input type="hidden" name="notify_url" value="@@{PaypalIPNListener.project}" />
+            <input type="hidden" name="return" value="${returnURL}" />
+            <input type="hidden" name="cancel_return" value="${cancelURL}" />
+        </form>
+        <script>
+            document.getElementById("form").submit();
+        </script>
+    </body>
+</html>

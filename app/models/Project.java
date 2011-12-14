@@ -1,6 +1,9 @@
 package models;
 
-import java.util.*;
+import com.abperf.Currency;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Set;
 import javax.persistence.*;
 import play.data.validation.*;
 import play.db.jpa.Model;
@@ -27,6 +30,17 @@ public class Project extends Model {
 
     public int pageViews, pageViewQuota;
 
+    /**
+     * Null or 0.00 if free.
+     */
+    public BigDecimal price;
+
+    @Enumerated(EnumType.STRING)
+    public Currency currency;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date paymentReceivedAt;
+
     public Project(final String name, final AccountType accountType, final User user) {
         this.name = name;
         this.accountType = accountType;
@@ -52,5 +66,11 @@ public class Project extends Model {
     public void setAccountType(final AccountType accountType) {
         this.accountType = accountType;
         this.pageViewQuota = accountType.pageViewQuota;
+        this.price = accountType.price;
+        this.currency = Currency.USD;
+    }
+
+    public boolean waitingForPayment() {
+        return (price != null && price.doubleValue() != 0) && paymentReceivedAt == null;
     }
 }

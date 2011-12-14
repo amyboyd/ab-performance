@@ -68,6 +68,7 @@ public class Authentication extends BaseController {
     public static void registerHandler(String forward, String projectName, String publicDomains,
             String privateDomains, AccountType accountType, String email, String password) {
         if (isAuth()) {
+            flash.error("You are already logged in...");
             Users.overview();
         }
 
@@ -126,7 +127,11 @@ public class Authentication extends BaseController {
 
         play.Logger.info("User has registered. User = %d, project = %s", user.id, project.id);
 
-        Users.overview();
+        if (project.waitingForPayment()) {
+            Users.continueToPaypal(project.id);
+        } else {
+            Users.overview();
+        }
     }
 
     /**
