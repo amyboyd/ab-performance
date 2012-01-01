@@ -1,5 +1,9 @@
 %{ domain = (com.abperf.Constants.IS_PROD ? 'abperf.com' : 'dev.abperf.com') }%
 
+#{if com.abperf.Constants.IS_DEV}
+    GET     /{folder}/deps.js                                   Dev.closureDepsJS
+#{/}
+
 GET     /                                                       Application.index
 GET     /demo                                                   Application.demo
 GET     /features                                               Application.features
