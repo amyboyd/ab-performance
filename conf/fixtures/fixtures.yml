@@ -17,12 +17,12 @@ Project(ABPerf):
 Domain(Domain_1):
     project: ABPerf
     domain: dev.abperf.com
-    isPublic: false
+    access: PRIVATE
 
 Domain(Domain_2):
     project: ABPerf
     domain: abperf.com
-    isPublic: true
+    access: PUBLIC
 
 ## Project 2 ##
 
@@ -34,12 +34,12 @@ Project(ABPerfDemo):
 Domain(Domain_3):
     project: ABPerfDemo
     domain: dev.abperf.com
-    isPublic: false
+    access: PRIVATE
 
 Domain(Domain_4):
     project: ABPerfDemo
     domain: abperf.com
-    isPublic: true
+    access: PUBLIC
 
 ## Project 3 ##
 
@@ -51,14 +51,14 @@ Project(Example):
 Domain(Example_Domain_1):
     project: Example
     domain: localhost
-    isPublic: false
+    access: PRIVATE
 
 Domain(Example_Domain_2):
     project: Example
     domain: example.com
-    isPublic: true
+    access: PUBLIC
 
 Domain(Example_Domain_3):
     project: Example
     domain: example.org
-    isPublic: true
+    access: PUBLIC

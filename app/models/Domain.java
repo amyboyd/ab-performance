@@ -18,7 +18,8 @@ public class Domain extends Model {
     @Match(value = "([a-zA-Z0-9-]+\\.)+[a-zA-Z]+", message = "That isn't a valid domain format")
     public String domain;
 
-    public boolean isPublic;
+    @Enumerated(EnumType.STRING)
+    public DomainAccess access;
 
     @Required
     @ManyToOne(optional = false)
@@ -42,19 +43,19 @@ public class Domain extends Model {
 
             return find("domain", domain).first();
         } catch (MalformedURLException ex) {
-            throw new RuntimeException("Malformed URL: " + url);
+            throw new RuntimeException("Malformed URL: " + url, ex);
         }
     }
 
     public static Set<Domain> toPublicDomains(String domains, Project project) {
-        return toDomains(domains, project, true);
+        return toDomains(domains, project, DomainAccess.PUBLIC);
     }
 
     public static Set<Domain> toPrivateDomains(String domains, Project project) {
-        return toDomains(domains, project, false);
+        return toDomains(domains, project, DomainAccess.PRIVATE);
     }
 
-    private static Set<Domain> toDomains(String domains, Project project, boolean isPublic) {
+    private static Set<Domain> toDomains(String domains, Project project, DomainAccess access) {
         Set<Domain> domainsSet = new HashSet<Domain>(5);
         for (String domain: domains.split("[\n, ]")) {
             domain = domain.trim();
@@ -63,7 +64,7 @@ public class Domain extends Model {
             if (domain.isEmpty()) {
                 continue;
             } else {
-                domainsSet.add(new Domain(domain, isPublic, project));
+                domainsSet.add(new Domain(domain, access, project));
             }
         }
         return domainsSet;
@@ -79,13 +80,19 @@ public class Domain extends Model {
         }
     }
 
-    public Domain(String domain, boolean isPublic, Project project) {
+    public Domain(String domain, DomainAccess access, Project project) {
         this.domain = domain;
-        this.isPublic = isPublic;
+        this.access = access;
         this.project = project;
     }
 
     public void setDomain(final String domain) {
         this.domain = removeWWW(domain);
+    }
+
+    public enum DomainAccess {
+        PUBLIC,
+        PRIVATE;
+
     }
 }

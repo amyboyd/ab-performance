@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.*;
+import models.Domain.DomainAccess;
 import play.data.validation.*;
 import play.db.jpa.Model;
 
@@ -83,19 +84,19 @@ public class Project extends Model {
     }
 
     public String publicDomainsAsString() {
-        return domainsAsString(true);
+        return domainsAsString(DomainAccess.PUBLIC);
     }
 
     public String privateDomainsAsString() {
-        return domainsAsString(false);
+        return domainsAsString(DomainAccess.PRIVATE);
     }
 
-    private String domainsAsString(boolean publicOrPrivate) {
+    private String domainsAsString(DomainAccess access) {
         StringBuilder sb = new StringBuilder(50);
         int i = 0;
 
         for (Domain domain: domains) {
-            if (publicOrPrivate == domain.isPublic) {
+            if (domain.access.equals(access)) {
                 if (i++ > 0) {
                     sb.append('\n');
                 }
