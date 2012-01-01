@@ -81,4 +81,28 @@ public class Project extends Model {
     public boolean isFree() {
         return (price == null || price.doubleValue() == 0);
     }
+
+    public String publicDomainsAsString() {
+        return domainsAsString(true);
+    }
+
+    public String privateDomainsAsString() {
+        return domainsAsString(false);
+    }
+
+    private String domainsAsString(boolean publicOrPrivate) {
+        StringBuilder sb = new StringBuilder(50);
+        int i = 0;
+
+        for (Domain domain: domains) {
+            if (publicOrPrivate == domain.isPublic) {
+                if (i++ > 0) {
+                    sb.append('\n');
+                }
+                sb.append(domain.domain);
+            }
+        }
+
+        return sb.toString();
+    }
 }

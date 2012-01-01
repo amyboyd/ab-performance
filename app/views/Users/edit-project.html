@@ -1,0 +1,14 @@
+#{extends 'layout.html' /}
+#{set title: 'Edit ' + project + ' - ' + SITE_NAME /}
+
+<h1>Edit ${project}</h1>
+
+#{form @Users.editProjectHandler(), method:'post', onsubmit:"this.submit.value='Saving...';this.submit.disabled=1;"}
+    #{include 'Users/_project-form.html' /}
+
+    <p>
+        <input type="submit" value="Save" tabindex="312" class="cta" name="submit" />
+    </p>
+
+    <input type="hidden" name="id" value="${project.id}" />
+#{/form}

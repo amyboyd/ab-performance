@@ -1,11 +1,13 @@
 package controllers;
 
+import java.util.Date;
 import models.AccountType;
 import models.Domain;
 import models.Project;
 import models.User;
 import play.Logger;
 import play.data.validation.Validation;
+import play.mvc.Util;
 
 public class Users extends BaseController {
     public static void overview() {
@@ -13,12 +15,17 @@ public class Users extends BaseController {
     }
 
     public static void continueToPaypal(final Long id) {
-        Project project = Project.findById(id);
+        final Project project = getProjectByIDandSecure(id);
         render("Users/continue-to-paypal.html", project);
     }
 
     public static void justPaidProject(final Long id) {
+        final Project project = getProjectByIDandSecure(id);
+        project.paymentReceivedAt = new Date();
+        project.save();
+
         Logger.info("Just paid project: " + id);
+
         overview();
     }
 
@@ -48,19 +55,20 @@ public class Users extends BaseController {
     }
 
     public static void report(final Long id) {
-        final Project project = Project.findById(id);
+        final Project project = getProjectByIDandSecure(id);
         if (!project.isReportReady()) {
             flash.error("Your report is not ready yet");
             overview();
         }
 
         // @todo
+
+        render(project);
     }
 
-    // @todo
     public static void editProject(final Long id) {
-        requireAuthenticatedUser();
-        render();
+        final Project project = getProjectByIDandSecure(id);
+        render("Users/edit-project.html", project);
     }
 
     // @todo
@@ -68,10 +76,10 @@ public class Users extends BaseController {
         requireHttpMethod("POST");
         checkAuthenticity();
 
-        final User user = requireAuthenticatedUser();
-        user.edit("user", params.all());
+        final Project project = getProjectByIDandSecure(id);
+        project.edit("project", params.all());
 
-        validation.valid(user);
+        validation.valid(project);
         if (Validation.hasErrors()) {
             Validation.keep();
             params.flash();
@@ -79,10 +87,10 @@ public class Users extends BaseController {
             editProject(id);
         }
 
-        user.save();
+        project.save();
 
         flash.success("Your changes have been saved");
-        redirectToForwardURL();
+        overview();
     }
 
     /**
@@ -144,7 +152,7 @@ public class Users extends BaseController {
         }
     }
 
-    public static void resendConfirmationEmail(String forward) {
+    public static void resendConfirmationEmail(final String forward) {
         final User user = requireAuthenticatedUser();
         if (user.emailConfirmed) {
             flash.error("Your email address is already confirmed");
@@ -176,5 +184,19 @@ public class Users extends BaseController {
         } else {
             renderText("This email has not been registered before.");
         }
+    }
+
+    /**
+     * Get the project and ensure security is OK.
+     */
+    @Util
+    private static Project getProjectByIDandSecure(final Long id) {
+        final Project project = Project.findById(id);
+        notFoundIfNull(project, "Project " + id + " not found");
+        if (!project.user.equals(requireAuthenticatedUser())) {
+            Logger.info(requireAuthenticatedUser() + " trying to access project " + project.id);
+            forbidden();
+        }
+        return project;
     }
 }
