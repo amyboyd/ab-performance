@@ -1,3 +1,0 @@
-Hello ${user},
-
-Please click here to confirm your new email address (${user.email}): @@{Users.confirmEmail(user.id, user.getValidationCode())}

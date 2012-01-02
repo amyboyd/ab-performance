@@ -273,7 +273,7 @@ public class Authentication extends BaseController {
 
     /**
      * Save new password. The user must enter hir old password correctly, then
-     * a new password twice. No confirmation email is sent.
+     * a new password twice.
      */
     public static void changePasswordHandler(String forward,
             String oldPassword, String newPassword1, String newPassword2) {

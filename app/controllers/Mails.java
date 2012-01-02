@@ -16,31 +16,9 @@ public class Mails extends Mailer {
 
     private static final String TEAM_ADDRESS = play.Play.configuration.getProperty("application.teamEmailAddress");
 
-    /**
-     * After registering, send a welcome email, which also has a confirmation link.
-     * @param user The new user.
-     */
-    public static void welcome(final User user) {
-        setSubject("Your new %s account", SITE_NAME);
-        addRecipient(formatAddress(user));
-        setFrom(OUTBOUND_ADDRESS);
-        setReplyTo(TEAM_ADDRESS);
-
-        send(user);
-    }
-
     public static void forgotPassword(final User user) {
         setSubject("Forgot your password on " + SITE_NAME + "? Create a new password here");
         addRecipient(formatAddress(user));
-        setFrom(OUTBOUND_ADDRESS);
-        setReplyTo(TEAM_ADDRESS);
-
-        send(user);
-    }
-
-    public static void confirmEmailChange(final User user) {
-        setSubject("Confirm your new email address");
-        addRecipient(user.email);
         setFrom(OUTBOUND_ADDRESS);
         setReplyTo(TEAM_ADDRESS);
 

@@ -101,7 +101,7 @@ public class Users extends BaseController {
     }
 
     /**
-     * Save user's new email defaultDeliveryAddress. No confirmation email is sent.
+     * Save user's new email address.
      */
     public static void changeEmailHandler(String newEmail, String forward) {
         checkAuthenticity();
@@ -122,7 +122,7 @@ public class Users extends BaseController {
 
         // All is OK.
 
-        // Authentication depends on the email defaultDeliveryAddress, so re-authenticate.
+        // Authentication depends on the email address, so re-authenticate.
         session.put("email", newEmail);
         response.setCookie("remember", play.libs.Crypto.sign(newEmail) + "-" + newEmail, "30d");
 
@@ -130,60 +130,9 @@ public class Users extends BaseController {
         user.emailConfirmed = false;
         user.save();
 
-        Mails.confirmEmailChange(user);
-
-        flash.success("Please check your new email address' inbox. We have sent you a confirmation email.");
+        flash.success("Your new email address has been saved.");
         redirectToForwardURL();
-        Application.index();
-    }
-
-    public static void confirmEmail(final Long id, final String code) {
-        final User user = User.findById(id);
-        if (user == null) {
-            error("No user with ID: " + id);
-        } else if (user.getValidationCode().equals(code)) {
-            user.emailConfirmed = true;
-            user.save();
-            Logger.info("User (%s) confirmed email address (%s)", user.id, user.email);
-            flash.success("Your registration and email address have been confirmed.");
-            controllers.Application.index();
-        } else {
-            error("Wrong code (" + code + ") for ID (" + id + ")");
-        }
-    }
-
-    public static void resendConfirmationEmail(final String forward) {
-        final User user = requireAuthenticatedUser();
-        if (user.emailConfirmed) {
-            flash.error("Your email address is already confirmed");
-            redirectToForwardURL();
-        } else if (user.email == null) {
-            flash.error("You have not set an address address yet. You can do that just now, below.");
-            changeEmail(forward);
-        } else {
-            Logger.info("Resending email address confirmation email to %s", user);
-            controllers.Mails.welcome(user);
-            flash.success("We have sent another email. Please check your inbox (and spam folder)");
-            redirectToForwardURL();
-        }
-    }
-
-    /**
-     * Return plain-text describing the registration status of an email address.
-     */
-    public static void checkEmail(final String email) {
-        if (email == null || email.isEmpty()) {
-            renderText("");
-        }
-        if (!validation.email(email).ok) {
-            renderText("This is not a valid email address.");
-        }
-        final User user = User.find("email = ?", email).first();
-        if (user != null) {
-            renderText("This email is registered to a user.");
-        } else {
-            renderText("This email has not been registered before.");
-        }
+        Users.overview();
     }
 
     /**

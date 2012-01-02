@@ -1,3 +1,0 @@
-Thank you for using ${com.abperf.Constants.SITE_NAME}!
-
-Please confirm your email address by clicking this link: @@{Users.confirmEmail(user.id, user.getValidationCode())}

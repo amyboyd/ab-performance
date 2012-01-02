@@ -142,11 +142,4 @@ public class User extends Model {
             registeredAt = new Date();
         }
     }
-
-    @PostPersist
-    protected void postPersist() {
-        if (email != null) {
-            controllers.Mails.welcome(this);
-        }
-    }
 }
