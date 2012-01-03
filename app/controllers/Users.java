@@ -71,23 +71,20 @@ public class Users extends BaseController {
         render("Users/edit-project.html", project);
     }
 
-    // @todo
-    public static void editProjectHandler(final Long id) {
+    public static void editProjectHandler(final Long id, final String projectName,
+            final String publicDomains, final String privateDomains) {
         requireHttpMethod("POST");
         checkAuthenticity();
 
         final Project project = getProjectByIDandSecure(id);
-        project.edit("project", params.all());
-
-        validation.valid(project);
-        if (Validation.hasErrors()) {
-            Validation.keep();
-            params.flash();
-            flash.error(com.abperf.Constants.FORM_HAD_ERRORS_MESSAGE);
-            editProject(id);
+        if (!project.name.equals(projectName)) {
+            project.name = projectName;
+            project.save();
         }
 
-        project.save();
+        Domain.deleteAllByProject(project);
+        Domain.createAll(Domain.toPublicDomains(publicDomains, project));
+        Domain.createAll(Domain.toPrivateDomains(privateDomains, project));
 
         flash.success("Your changes have been saved");
         overview();

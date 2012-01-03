@@ -29,13 +29,6 @@ public class Domain extends Model {
     @Temporal(TemporalType.TIMESTAMP)
     public Date createdAt;
 
-    @PrePersist
-    protected void prePersist() {
-        if (createdAt == null) {
-            createdAt = new Date();
-        }
-    }
-
     public static Domain findDomainByURL(final String url) {
         try {
             String domain = new URL(url).getHost();
@@ -47,16 +40,20 @@ public class Domain extends Model {
         }
     }
 
-    public static Set<Domain> toPublicDomains(String domains, Project project) {
+    public static void deleteAllByProject(final Project project) {
+        delete("project = ?", project);
+    }
+
+    public static Set<Domain> toPublicDomains(final String domains, final Project project) {
         return toDomains(domains, project, DomainAccess.PUBLIC);
     }
 
-    public static Set<Domain> toPrivateDomains(String domains, Project project) {
+    public static Set<Domain> toPrivateDomains(final String domains, final Project project) {
         return toDomains(domains, project, DomainAccess.PRIVATE);
     }
 
-    private static Set<Domain> toDomains(String domains, Project project, DomainAccess access) {
-        Set<Domain> domainsSet = new HashSet<Domain>(5);
+    private static Set<Domain> toDomains(final String domains, final Project project, final DomainAccess access) {
+        final Set<Domain> domainsSet = new HashSet<Domain>(5);
         for (String domain: domains.split("[\n, ]")) {
             domain = domain.trim();
             domain = removeWWW(domain);
@@ -74,13 +71,13 @@ public class Domain extends Model {
         return (domain.startsWith("www.") ? domain.substring(4) : domain);
     }
 
-    public static void createAll(Set<Domain> domains) {
-        for (Domain domain: domains) {
+    public static void createAll(final Set<Domain> domains) {
+        for (final Domain domain: domains) {
             domain.create();
         }
     }
 
-    public Domain(String domain, DomainAccess access, Project project) {
+    public Domain(final String domain, final DomainAccess access, final Project project) {
         this.domain = domain;
         this.access = access;
         this.project = project;
@@ -88,6 +85,13 @@ public class Domain extends Model {
 
     public void setDomain(final String domain) {
         this.domain = removeWWW(domain);
+    }
+
+    @PrePersist
+    protected void prePersist() {
+        if (createdAt == null) {
+            createdAt = new Date();
+        }
     }
 
     public enum DomainAccess {
