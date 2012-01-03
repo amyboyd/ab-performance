@@ -3,6 +3,7 @@ package controllers;
 import models.Domain;
 import models.User;
 import models.AccountType;
+import models.Domain.DomainAccess;
 import models.Project;
 import play.Logger;
 import play.data.validation.*;
@@ -118,8 +119,8 @@ public class Authentication extends BaseController {
         user.create();
         Project project = new Project(projectName, accountType, user);
         project.create();
-        Domain.createAll(Domain.toPublicDomains(publicDomains, project));
-        Domain.createAll(Domain.toPrivateDomains(privateDomains, project));
+        Domain.createAll(publicDomains, project, DomainAccess.PUBLIC);
+        Domain.createAll(privateDomains, project, DomainAccess.PRIVATE);
 
         // Login.
         session.put(LOGIN_SESSION, email);

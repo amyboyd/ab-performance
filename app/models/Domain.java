@@ -40,16 +40,14 @@ public class Domain extends Model {
         }
     }
 
-    public static void deleteAllByProject(final Project project) {
+    public static void deleteAll(final Project project) {
         delete("project = ?", project);
     }
 
-    public static Set<Domain> toPublicDomains(final String domains, final Project project) {
-        return toDomains(domains, project, DomainAccess.PUBLIC);
-    }
-
-    public static Set<Domain> toPrivateDomains(final String domains, final Project project) {
-        return toDomains(domains, project, DomainAccess.PRIVATE);
+    public static void createAll(final String domains, final Project project, final DomainAccess access) {
+        for (final Domain domain: toDomains(domains, project, access)) {
+            domain.create();
+        }
     }
 
     private static Set<Domain> toDomains(final String domains, final Project project, final DomainAccess access) {
@@ -69,12 +67,6 @@ public class Domain extends Model {
 
     private static String removeWWW(final String domain) {
         return (domain.startsWith("www.") ? domain.substring(4) : domain);
-    }
-
-    public static void createAll(final Set<Domain> domains) {
-        for (final Domain domain: domains) {
-            domain.create();
-        }
     }
 
     public Domain(final String domain, final DomainAccess access, final Project project) {

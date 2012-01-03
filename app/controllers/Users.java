@@ -3,6 +3,7 @@ package controllers;
 import java.util.Date;
 import models.AccountType;
 import models.Domain;
+import models.Domain.DomainAccess;
 import models.Project;
 import models.User;
 import play.Logger;
@@ -42,8 +43,9 @@ public class Users extends BaseController {
 
         final Project project = new Project(projectName, accountType, user);
         project.create();
-        Domain.createAll(Domain.toPublicDomains(publicDomains, project));
-        Domain.createAll(Domain.toPrivateDomains(privateDomains, project));
+
+        Domain.createAll(publicDomains, project, DomainAccess.PUBLIC);
+        Domain.createAll(privateDomains, project, DomainAccess.PRIVATE);
 
         play.Logger.info("New project. User = %d, project = %s", user.id, project.id);
 
@@ -82,9 +84,9 @@ public class Users extends BaseController {
             project.save();
         }
 
-        Domain.deleteAllByProject(project);
-        Domain.createAll(Domain.toPublicDomains(publicDomains, project));
-        Domain.createAll(Domain.toPrivateDomains(privateDomains, project));
+        Domain.deleteAll(project);
+        Domain.createAll(publicDomains, project, DomainAccess.PUBLIC);
+        Domain.createAll(privateDomains, project, DomainAccess.PRIVATE);
 
         flash.success("Your changes have been saved");
         overview();
