@@ -6,8 +6,10 @@ import java.util.Date;
 import java.util.Set;
 import javax.persistence.*;
 import models.Domain.DomainAccess;
+import org.apache.commons.lang.StringUtils;
 import play.data.validation.*;
 import play.db.jpa.Model;
+import play.libs.Codec;
 
 @Entity
 @Table(name = "project")
@@ -41,6 +43,19 @@ public class Project extends Model {
 
     @Temporal(TemporalType.TIMESTAMP)
     public Date paymentReceivedAt;
+
+    /**
+     * How many page views the project had at the time of the report being generated.
+     * Should be a multiple of 1000.
+     */
+    public int reportPageViews;
+
+    /**
+     * When the latest report was generated.
+     */
+    public Date reportGeneratedAt;
+
+    public String reportOutputDir;
 
     public Project(final String name, final AccountType accountType, final User user) {
         this.name = name;
@@ -81,6 +96,16 @@ public class Project extends Model {
 
     public boolean isFree() {
         return (price == null || price.doubleValue() == 0);
+    }
+
+    /**
+     * @return String with 12 alpha-numeric characters.
+     */
+    public String getUUID() {
+        return StringUtils.reverse(Codec.hexSHA1(id.toString()).
+                substring(0, 12)).
+                toUpperCase().
+                intern();
     }
 
     public String publicDomainsAsString() {

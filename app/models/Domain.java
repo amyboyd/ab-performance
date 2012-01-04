@@ -1,5 +1,7 @@
 package models;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -77,6 +79,21 @@ public class Domain extends Model {
 
     public void setDomain(final String domain) {
         this.domain = removeWWW(domain);
+    }
+
+    public JsonObject toJSONobject() {
+        JsonObject json = new JsonObject();
+        json.addProperty("id", id);
+        json.addProperty("domain", domain);
+        return json;
+    }
+
+    public static JsonArray toJSONarray(Collection<Domain> domains) {
+        JsonArray json = new JsonArray();
+        for (Domain aDomain: domains) {
+            json.add(aDomain.toJSONobject());
+        }
+        return json;
     }
 
     @PrePersist

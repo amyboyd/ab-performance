@@ -138,7 +138,7 @@ public class Users extends BaseController {
      * Get the project and ensure security is OK.
      */
     @Util
-    private static Project getProjectByIDandSecure(final Long id) {
+    static Project getProjectByIDandSecure(final Long id) {
         final Project project = Project.findById(id);
         notFoundIfNull(project, "Project " + id + " not found");
         if (!project.user.equals(requireAuthenticatedUser())) {

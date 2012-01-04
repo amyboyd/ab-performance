@@ -2,6 +2,7 @@
 
 #{if com.abperf.Constants.IS_DEV}
     GET     /{folder}/deps.js                                   Dev.closureDepsJS
+    GET     /dev/{action}                                       Dev.{action}
 #{/}
 
 GET     /                                                       Application.index
