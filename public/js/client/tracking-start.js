@@ -5,7 +5,6 @@
  */
 
 goog.provide('abperf.tracking.startRequest');
-goog.provide('abperf.tracking.startResponse');
 
 goog.require('abperf.globals');
 goog.require('abperf.httpPostRequest');
@@ -32,6 +31,7 @@ abperf.tracking.startRequest = function(installedTests) {
 }
 
 /**
+ * @private
  * @param {goog.net.XhrIo} response
  */
 abperf.tracking.startResponse = function(response) {

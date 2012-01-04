@@ -8,7 +8,9 @@ goog.provide('abperf.globals');
 goog.provide('abperf.httpPostRequest');
 goog.provide('abperf.getProjectID');
 
+goog.require('goog.dom');
 goog.require('goog.net.XhrIo');
+goog.require('goog.uri.utils');
 
 /** @const */
 abperf.globals.SERVER_URL = (goog.DEBUG ? 'http://dev.abperf.com/' : 'http://abperf.com/');
@@ -46,7 +48,7 @@ abperf.getProjectID = function() {
     var scripts = goog.dom.$$('script', null, document.head);
     for (var i = 0; i < scripts.length; i++) {
         var src = scripts[i].getAttribute('src');
-        if (src && src.indexOf('abperf.com/') > 0 && src.indexOf('client.js') > 0 && src.indexOf('?id=') > 0) {
+        if (src && src.indexOf('abperf.com') > 0 && src.indexOf('client.js') > 0 && src.indexOf('?id=') > 0) {
             // This is definitely the correct script. Get the ID and cache it.
             abperf.projectID_ = src.split('?id=')[1];
             return abperf.projectID_;

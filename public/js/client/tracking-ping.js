@@ -5,7 +5,6 @@
  */
 
 goog.provide('abperf.tracking.pingRequest');
-goog.provide('abperf.tracking.pingResponse');
 
 goog.require('abperf.globals');
 goog.require('abperf.httpPostRequest');
