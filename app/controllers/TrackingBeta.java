@@ -76,7 +76,10 @@ public class TrackingBeta extends BaseController {
         ok();
     }
 
-    public static void clientScripts() {
+    /**
+     * @param id The project ID. Only used client-side.
+     */
+    public static void clientScripts(int id) {
         // Check the browser is supported: Chrome 5+, Firefox 4+, Safari 4+.
         UserDevice device = (UserDevice) request.args.get("device");
         if ((device.chrome && device.chromeVersion >= 5)

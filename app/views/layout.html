@@ -41,7 +41,7 @@ Optional args:
         #{get 'moreHead' /}
 
         <script src="@@{Bundles.siteScripts}"></script>
-        <script src="@@{TrackingBeta.clientScripts}"></script>
+        <script src="@@{TrackingBeta.clientScripts(1)}"></script>
     </head>
     <body #{if bodyID != null} id="${bodyID.raw()}" #{/} #{if bodyClass != null} class="${bodyClass.raw()}" #{/} >
         <header>
