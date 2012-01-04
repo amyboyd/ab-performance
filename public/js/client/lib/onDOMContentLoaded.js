@@ -1,20 +1,19 @@
 goog.provide('onDOMContentLoaded');
 
-/** @private @type {boolean} */
-var onDOMContentLoadedIsFired = false;
-
 onDOMContentLoaded = function(callback) {
-    var onlyRunsOnce = function(evt) {
-        // Allow this function to run only once. Happens if browser supports both
-        // 'DOMContentLoaded' and 'load' events.
-        if (onDOMContentLoadedIsFired) {
+    function onlyRunsOnce() {
+        // This function will be called twice if the browser supports both 'DOMContentLoaded'
+        // and 'load' events. Stop it executing the second time.
+        if (onDOMContentLoaded.fired) {
             return;
         }
-        onDOMContentLoadedIsFired = true;
+        onDOMContentLoaded.fired = true;
 
         callback();
     }
 
-    addEventListener('load', onlyRunsOnce, false);
+    // It is impossible to detect if a browser supports the 'DOMContentLoaded' event, so we must
+    // set that and 'load'.
     addEventListener('DOMContentLoaded', onlyRunsOnce, false);
+    addEventListener('load', onlyRunsOnce, false);
 }
