@@ -1,16 +1,16 @@
 goog.provide('abperf');
 
+goog.require('abperf.persistence');
 goog.require('abperf.styles');
-goog.require('abperf.tracking');
-    goog.require('goog.dom');
-goog.require('goog.events');
-goog.require('goog.events.EventType');
+goog.require('abperf.tracking.startRequest');
+goog.require('goog.dom');
 goog.require('onDOMContentLoaded');
 
 // Start as soon as possible after all DOM elements are in the DOM tree.
 onDOMContentLoaded(function() {
-    abperf.styles.start();
-    abperf.tracking.start(abperf.styles.installedTests);
+    abperf.persistence.init();
+    abperf.styles.init();
+    abperf.tracking.startRequest(abperf.styles.installedTests);
 });
 
 /**

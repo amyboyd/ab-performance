@@ -4,7 +4,17 @@ goog.require('abperf.constants');
 goog.require('abperf.styles.Test');
 goog.require('abperf.styles.TestGroup');
 
-abperf.styles.start = function() {
+/**
+ * @fileOverview
+ *
+ * Finds all <style type="abperf"> elements in the document and constructs them into
+ * TestGroup and Test objects. The TestGroup's then choose which Test to run (either
+ * chosen now or remembered from the persistence storage). The chosen Test's are run.
+ *
+ * Only "abperf.styles.start()" may be called publicly.
+ */
+
+abperf.styles.init = function() {
     var elements = abperf.styles.getStyleElements();
     abperf.styles.tests = abperf.styles.createTests(elements);
     abperf.styles.testGroups = abperf.styles.createTestGroups(abperf.styles.tests);

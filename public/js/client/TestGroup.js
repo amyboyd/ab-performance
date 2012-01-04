@@ -1,6 +1,6 @@
 goog.provide('abperf.styles.TestGroup');
 
-goog.require('abperf.styles.RememberedTestChoice');
+goog.require('abperf.persistence');
 goog.require('goog.array');
 
 /**
@@ -42,19 +42,17 @@ abperf.styles.TestGroup.prototype.chooseTestAndInstallIt = function() {
  */
 abperf.styles.TestGroup.prototype.chooseTest = function() {
     // See if there is a test ID already remembered for this user/test-name combo.
-    var remembered = new abperf.styles.RememberedTestChoice(this.name);
+    var persistedID = abperf.persistence.getTestID(this.name);
 
-    if (remembered.isValid()) {
+    if (persistedID) {
+        // persistedID is an ID or "none". It is not null.
         if (goog.DEBUG) {
-            console.log(this.name + ': chose ' + remembered.id + ' (remembered)');
+            console.log(this.name + ': chose ' + persistedID + ' (from persistence)');
         }
 
-        // Update last page view time.
-        remembered.save();
-        
-        // This will (correctly) return null if remembered.id is 'none'.
+        // Return the Test with the remembered ID, or null if the ID is "none".
         return goog.array.find(this.tests, function(test) {
-            return (remembered.id === test.id);
+            return (persistedID === test.id);
         });
     }
 
@@ -71,12 +69,10 @@ abperf.styles.TestGroup.prototype.chooseTest = function() {
         chosen = testsClone[0];
     }
 
-    // Remember it.
-    remembered.id = (chosen !== null ? chosen.id : null);
-    remembered.save();
+    abperf.persistence.setTestID(this.name, chosen === null ? 'none' : chosen.id);
 
     if (goog.DEBUG) {
-        console.log(this.name + ': chose ' + remembered.id);
+        console.log(this.name + ': chose ' + (chosen === null ? 'none' : chosen.id));
     }
 
     return chosen;

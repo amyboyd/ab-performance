@@ -29,16 +29,16 @@ public class Bundles extends Controller {
                 new String[] { "projects" });
 
     public static void siteStyles() {
-        siteStyles.getBundleFile().delete();
-        siteStyles.getBundleFileGzip().delete();
+        //siteStyles.getBundleFile().delete();
+        //siteStyles.getBundleFileGzip().delete();
 
         response.cacheFor("70d");
         siteStyles.applyToResponse(request, response);
     }
 
     public static void siteScripts() {
-        siteScripts.getBundleFile().delete();
-        siteScripts.getBundleFileGzip().delete();
+        //siteScripts.getBundleFile().delete();
+        //siteScripts.getBundleFileGzip().delete();
 
         response.cacheFor("70d");
         siteScripts.applyToResponse(request, response);
