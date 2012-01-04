@@ -1,12 +1,18 @@
+/**
+ * @fileOverview
+ *
+ * Start page view tracking.
+ */
+
 goog.provide('abperf.tracking.startRequest');
 goog.provide('abperf.tracking.startResponse');
 
-goog.require('abperf.tracking.POST');
-goog.require('abperf.constants');
+goog.require('abperf.globals');
+goog.require('abperf.httpPostRequest');
 goog.require('abperf.tracking.pingRequest');
 
 /** @private @const */
-var START_URL = abperf.constants.SERVER_URL + 'beta/tracking/start';
+var START_URL = abperf.globals.SERVER_URL + 'beta/tracking/start';
 
 /**
  * Start tracking the page view.
@@ -15,14 +21,14 @@ var START_URL = abperf.constants.SERVER_URL + 'beta/tracking/start';
  */
 abperf.tracking.startRequest = function(installedTests) {
     var data = {
-        'guid': abperf.constants.START_TIME,
-        'time': abperf.constants.START_TIME,
+        'guid': abperf.globals.startTime,
+        'time': abperf.globals.startTime,
         'url': window.location.toString()
     };
     for (var testName in installedTests) {
         data['tests[' + testName + ']'] = (installedTests[testName] != null ? installedTests[testName].id : 'none');
     }
-    abperf.tracking.POST(START_URL, data, abperf.tracking.startResponse);
+    abperf.httpPostRequest(START_URL, data, abperf.tracking.startResponse);
 }
 
 /**
@@ -34,7 +40,7 @@ abperf.tracking.startResponse = function(response) {
         // Everything is OK.
         // The response text is the comma-seperated IDs of any CSS that needs to be
         // supplied to the server. These are sent to the sever in the next ping.
-        abperf.constants.cssToSupply = response.getResponseText();
+        abperf.globals.cssToSupply = response.getResponseText();
 
         setTimeout(abperf.tracking.pingRequest, 5000);
     } else if (status === 402 || status === 429) {

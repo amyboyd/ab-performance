@@ -1,9 +1,3 @@
-goog.provide('abperf.styles');
-
-goog.require('abperf.constants');
-goog.require('abperf.styles.Test');
-goog.require('abperf.styles.TestGroup');
-
 /**
  * @fileOverview
  *
@@ -13,6 +7,12 @@ goog.require('abperf.styles.TestGroup');
  *
  * Only "abperf.styles.start()" may be called publicly.
  */
+
+goog.provide('abperf.styles');
+
+goog.require('abperf.globals');
+goog.require('abperf.styles.Test');
+goog.require('abperf.styles.TestGroup');
 
 abperf.styles.init = function() {
     var elements = abperf.styles.getStyleElements();

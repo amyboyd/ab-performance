@@ -1,14 +1,20 @@
+/**
+ * @fileOverview
+ *
+ * Ping requests to the server.
+ */
+
 goog.provide('abperf.tracking.pingRequest');
 goog.provide('abperf.tracking.pingResponse');
 
-goog.require('abperf.tracking.POST');
-goog.require('abperf.constants');
+goog.require('abperf.globals');
+goog.require('abperf.httpPostRequest');
 goog.require('abperf.interactions');
 goog.require('abperf.styles');
 goog.require('goog.string');
 
 /** @private @const */
-var PING_URL = abperf.constants.SERVER_URL + 'beta/tracking/ping';
+var PING_URL = abperf.globals.SERVER_URL + 'beta/tracking/ping';
 
 /** @private @type {string} */
 var lastPingStatus = 'active';
@@ -36,22 +42,22 @@ abperf.tracking.pingRequest = function() {
         consecutiveActivePings = (status === 'active' ? consecutiveActivePings + 1 : 0);
 
         var data = {
-            'guid': abperf.constants.START_TIME,
+            'guid': abperf.globals.startTime,
             'status': status,
             'time': now
         };
 
-        if (!goog.string.isEmptySafe(abperf.constants.cssToSupply)) {
+        if (!goog.string.isEmptySafe(abperf.globals.cssToSupply)) {
             // Server does not know the CSS for at least one test ID, so tell the server what the CSS is.
-            var idArray = abperf.constants.cssToSupply.split(',');
+            var idArray = abperf.globals.cssToSupply.split(',');
             for (var i = 0; i < idArray.length; i++) {
                 var id = idArray[i];
                 data['css[' + id + ']'] = abperf.styles.findTestByID(id).css;
             }
-            abperf.constants.cssToSupply = null;
+            abperf.globals.cssToSupply = null;
         }
 
-        abperf.tracking.POST(PING_URL, data);
+        abperf.httpPostRequest(PING_URL, data);
     }
 
     // When the user has been active on the page for a long time, reduce the ping frequency.

@@ -1,12 +1,16 @@
-goog.provide('abperf.persistence');
-
-goog.require('store');
-
 /**
  * @fileOverview
  *
  * Persists values between page views and visits. The persistence lasts for 3 hours.
  */
+
+goog.provide('abperf.persistence');
+
+goog.require('abperf.getProjectID');
+goog.require('store');
+
+/** @const @private */
+var LOCAL_STORAGE_KEY = 'abperf-' + abperf.getProjectID();
 
 /**
  * Members are:
@@ -16,7 +20,7 @@ goog.require('store');
  * @private
  * @type {object}
  */
-var pData = store.get('abperf');
+var pData = store.get(LOCAL_STORAGE_KEY);
 
 abperf.persistence.init = function() {
     if (pData === null || typeof pData === 'undefined') {
@@ -66,5 +70,5 @@ abperf.persistence.isExpired = function() {
 
 /** @private */
 abperf.persistence.save = function() {
-    store.set('abperf', pData);
+    store.set(LOCAL_STORAGE_KEY, pData);
 }
