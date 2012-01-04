@@ -1,11 +1,20 @@
 goog.provide('abperf.tracking.pingRequest');
 goog.provide('abperf.tracking.pingResponse');
 
-goog.require('abperf.tracking');
+goog.require('abperf.tracking.POST');
 goog.require('abperf.constants');
+goog.require('abperf.interactions');
+goog.require('abperf.styles');
+goog.require('goog.string');
 
 /** @private @const */
 var PING_URL = abperf.constants.SERVER_URL + 'beta/tracking/ping';
+
+/** @private @type {string} */
+var lastPingStatus = 'active';
+
+/** @private @type {number} */
+var consecutiveActivePings = 0;
 
 /**
  * Tell the server if the user is active on the page, or inactive (in another tab, AFK, etc).
@@ -13,7 +22,7 @@ var PING_URL = abperf.constants.SERVER_URL + 'beta/tracking/ping';
  */
 abperf.tracking.pingRequest = function() {
     var now = Date.now();
-    var timeSinceLastInteraction = now - lastInteraction;
+    var timeSinceLastInteraction = now - abperf.interactions.lastDate;
     var status = (timeSinceLastInteraction > 18000) ? 'inactive' : 'active';
 
     if (goog.DEBUG) {
@@ -27,27 +36,27 @@ abperf.tracking.pingRequest = function() {
         consecutiveActivePings = (status === 'active' ? consecutiveActivePings + 1 : 0);
 
         var data = {
-            'guid': START_TIME,
+            'guid': abperf.constants.START_TIME,
             'status': status,
             'time': now
         };
 
-        if (!goog.string.isEmptySafe(cssToSupply)) {
+        if (!goog.string.isEmptySafe(abperf.constants.cssToSupply)) {
             // Server does not know the CSS for at least one test ID, so tell the server what the CSS is.
-            var idArray = cssToSupply.split(',');
+            var idArray = abperf.constants.cssToSupply.split(',');
             for (var i = 0; i < idArray.length; i++) {
                 var id = idArray[i];
                 data['css[' + id + ']'] = abperf.styles.findTestByID(id).css;
             }
-            cssToSupply = null;
+            abperf.constants.cssToSupply = null;
         }
 
-        sendDataToURL(PING_URL, data);
+        abperf.tracking.POST(PING_URL, data);
     }
 
     // When the user has been active on the page for a long time, reduce the ping frequency.
     var pingFrequency = (consecutiveActivePings <= 10 ? 10000
         : (consecutiveActivePings <= 15 ? 20000
             : 30000));
-    setTimeout(abperf.tracking.ping, pingFrequency);
+    setTimeout(abperf.tracking.pingRequest, pingFrequency);
 }

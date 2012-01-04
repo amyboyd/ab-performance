@@ -1,21 +1,22 @@
 goog.provide('abperf.tracking.startRequest');
 goog.provide('abperf.tracking.startResponse');
 
-goog.require('abperf.tracking');
+goog.require('abperf.tracking.POST');
 goog.require('abperf.constants');
+goog.require('abperf.tracking.pingRequest');
 
 /** @private @const */
 var START_URL = abperf.constants.SERVER_URL + 'beta/tracking/start';
 
 /**
- * Start tracking interaction with the page.
+ * Start tracking the page view.
  *
  * @param {object<string, Test>} installedTests
  */
 abperf.tracking.startRequest = function(installedTests) {
     var data = {
-        'guid': START_TIME,
-        'time': START_TIME,
+        'guid': abperf.constants.START_TIME,
+        'time': abperf.constants.START_TIME,
         'url': window.location.toString()
     };
     for (var testName in installedTests) {
@@ -25,32 +26,23 @@ abperf.tracking.startRequest = function(installedTests) {
 }
 
 /**
- * @param {XMLHttpResponse} response
+ * @param {goog.net.XhrIo} response
  */
 abperf.tracking.startResponse = function(response) {
-    console.log(response);
-
     var status = response.getStatus();
     if (status === 200) {
         // Everything is OK.
         // The response text is the comma-seperated IDs of any CSS that needs to be
         // supplied to the server. These are sent to the sever in the next ping.
-        cssToSupply = response.getResponseText();
+        abperf.constants.cssToSupply = response.getResponseText();
 
-        setTimeout(abperf.tracking.ping, 5000);
-
-        goog.events.listen(
-            window,
-            [goog.events.EventType.MOUSEMOVE, goog.events.EventType.SCROLL, goog.events.EventType.KEYPRESS],
-            abperf.tracking.interactionOccurred);
+        setTimeout(abperf.tracking.pingRequest, 5000);
     } else if (status === 402 || status === 429) {
         // Domain is not registered or page view limit has been exceeded.
         if (typeof console !== 'undefined') {
             console.log('AB Perf:', response.getResponseText());
         }
-    } else {
-        if (goog.DEBUG) {
-            console.log('Unexpected status:', status);
-        }
+    } else if (goog.DEBUG) {
+        console.log('Unexpected status:', status);
     }
 }
