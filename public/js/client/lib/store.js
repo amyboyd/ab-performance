@@ -1,10 +1,12 @@
-/*
-From https://github.com/marcuswestin/store.js
-Copyright (c) 2010-2011 Marcus Westin
+/**
+@fileOverview
 
 store.js uses localStorage when available, and falls back on globalStorage for
 earlier versions of Firefox and the userData behavior in IE6 and IE7. No flash
 to slow down your page load. No cookies to fatten your network requests.
+
+From https://github.com/marcuswestin/store.js
+Copyright (c) 2010-2011 Marcus Westin
 
 Examples:
 

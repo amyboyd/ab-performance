@@ -1,3 +1,11 @@
+/**
+ * @fileOverview
+ *
+ * Events caused by the user shows they are still interacting with the page,
+ * and not away making tea or in another tab. This data is used to keep
+ * temporal analytics (time spent on page, etc) accurate.
+ */
+
 goog.provide('abperf.interactions');
 
 goog.require('goog.events');
@@ -11,9 +19,7 @@ abperf.interactions.init = function() {
 }
 
 /**
- * A browser event by the user shows they are still interacting with the page,
- * and not away making tea or fighting zombies. This data is used to keep
- * temporal analytics (time spent on page, etc) accurate.
+ * Mouse-move/scroll/key-press handler.
  *
  * @private
  */

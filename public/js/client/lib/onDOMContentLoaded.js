@@ -1,3 +1,9 @@
+/**
+ * @fileOverview
+ *
+ * A function to add a DOMContentLoaded event listener.
+ */
+
 goog.provide('onDOMContentLoaded');
 
 onDOMContentLoaded = function(callback) {

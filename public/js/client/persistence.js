@@ -2,6 +2,9 @@
  * @fileOverview
  *
  * Persists values between page views and visits. The persistence lasts for 3 hours.
+ *
+ * Uses local storage (see store.js). Be careful to not erase any local storage set by other
+ * websites/applications!
  */
 
 goog.provide('abperf.persistence');
@@ -23,16 +26,11 @@ var LOCAL_STORAGE_KEY = 'abperf-' + abperf.getProjectID();
 var pData = store.get(LOCAL_STORAGE_KEY);
 
 abperf.persistence.init = function() {
-    if (pData === null || typeof pData === 'undefined') {
-        pData = {};
-    }
-
     if (abperf.persistence.isExpired()) {
         pData = {};
-    } else {
-        pData['date'] = Date.now();
     }
 
+    pData['date'] = Date.now();
     abperf.persistence.save();
 }
 
@@ -59,8 +57,8 @@ abperf.persistence.setTestID = function(testGroupName, testID) {
 
 /** @private */
 abperf.persistence.isExpired = function() {
-    if (typeof pData['date'] !== 'number') {
-        return false;
+    if (pData === null || pData === undefined || pData['date'] === undefined) {
+        return true;
     }
 
     var threeHours = 60 * 60 * 1000 * 3;

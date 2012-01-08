@@ -3,14 +3,11 @@
  *
  * Finds all <style type="abperf"> elements in the document and constructs them into
  * TestGroup and Test objects. The TestGroup's then choose which Test to run (either
- * chosen now or remembered from the persistence storage). The chosen Test's are run.
- *
- * Only "abperf.styles.start()" may be called publicly.
+ * chosen now or remembered from persistant storage). The chosen Test's are run.
  */
 
 goog.provide('abperf.styles');
 
-goog.require('abperf.globals');
 goog.require('abperf.styles.Test');
 goog.require('abperf.styles.TestGroup');
 
@@ -27,6 +24,7 @@ abperf.styles.init = function() {
 }
 
 /**
+ * @private
  * @return {array<HTMLStyleElement>} The <style> elements containing test CSS.
  */
 abperf.styles.getStyleElements = function() {
@@ -43,6 +41,7 @@ abperf.styles.getStyleElements = function() {
 }
 
 /**
+ * @private
  * @param {array<HTMLStyleElement>} elements
  * @return {array<abperf.styles.Test>}
  */
@@ -59,6 +58,7 @@ abperf.styles.createTests = function(elements) {
 }
 
 /**
+ * @private
  * @param {array<abperf.styles.Test>} tests
  * @return {object<string, abperf.styles.TestGroup>}
  */
@@ -75,6 +75,7 @@ abperf.styles.createTestGroups = function(tests) {
 }
 
 /**
+ * @private
  * @param {object<string, abperf.styles.TestGroup>} testGroups
  */
 abperf.styles.runTestGroups = function(testGroups) {
