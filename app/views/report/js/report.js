@@ -78,11 +78,7 @@ function render() {
 
     $('.show-css').click(function(evt) {
         evt.preventDefault();
-
-        // Show the lightbox.
-        document.getElementById('lightbox-white').style.display = 'block';
-        document.getElementById('lightbox-fade').style.display = 'block';
-
+        openLightbox();
         $('#lightbox-content').load(this.getAttribute('href'));
     });
 }
@@ -170,6 +166,16 @@ function countObjectSize(obj) {
         rv++;
     }
     return rv;
+}
+
+function openLightbox() {
+    document.getElementById('lightbox-white').style.display = 'block';
+    document.getElementById('lightbox-fade').style.display = 'block';
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox-white').style.display = 'none';
+    document.getElementById('lightbox-fade').style.display = 'none';
 }
 
 function waitUntilReady() {
