@@ -10,6 +10,7 @@ GET     /demo                                                   Application.demo
 GET     /features                                               Application.features
 GET     /terms                                                  Application.terms
 GET     /privacy                                                Application.privacy
+GET     /test-css                                               Application.testCSS
 *       /auth/{action}                                          Authentication.{action}
 *       /me/{action}                                            Users.{action}
 *       /paypal-ipn-listener/{action}                           PaypalIPNListener.{action}

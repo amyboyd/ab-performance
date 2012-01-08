@@ -43,7 +43,7 @@ function render() {
                     <tr>\
                         <th></th>\
                         <th></th>\
-                        <th>Page views per visit</th>\
+                        <th>Pages per visit</th>\
                         <th>Time per page</th>\
                         <th>Time on site</th>\
                         <th>Bounce rate</th>\
@@ -53,15 +53,20 @@ function render() {
                 <tbody>';
 
         for (var testID in allTestNamesAndIDs[testName]) {
-            html += '<tr>\
-                        <th>' + (testID === 'none' ? 'default page style' : testID) + '</th>\
-                        <th>show CSS</th>\
-                        <td>' + averagePageViewsPerUser(testName, testID) + '</td>\
-                        <td>' + averageTimePerPage(testName, testID) + ' secs</td>\
-                        <td>' + averageTimeOnSite(testName, testID) + ' secs</td>\
-                        <td>' + bounceRate(testName, testID) + '%</td>\
-                        <td>' + allTestNamesAndIDs[testName][testID] + '</td>\
-                    </tr>';
+            html += '<tr>';
+
+            if (testID === 'none') {
+                html += '<th>default page style</th> <th></th>';
+            } else {
+                html += '<th>' + testID + '</th> <th><a href="/test-css?id=' + testID + '" class="show-css" data-test-id="' + testID + '">show CSS</a></th>';
+            }
+
+            html += '<td>' + averagePageViewsPerUser(testName, testID) + '</td>\
+                    <td>' + averageTimePerPage(testName, testID) + ' secs</td>\
+                    <td>' + averageTimeOnSite(testName, testID) + ' secs</td>\
+                    <td>' + bounceRate(testName, testID) + '%</td>\
+                    <td>' + allTestNamesAndIDs[testName][testID] + '</td>\
+                </tr>';
         }
 
         html += '</tbody>\
@@ -70,6 +75,16 @@ function render() {
     }
 
     $('#status').text('');
+
+    $('.show-css').click(function(evt) {
+        evt.preventDefault();
+
+        // Show the lightbox.
+        document.getElementById('lightbox-white').style.display = 'block';
+        document.getElementById('lightbox-fade').style.display = 'block';
+
+        $('#lightbox-content').load(this.getAttribute('href'));
+    });
 }
 
 /**
