@@ -1,11 +1,17 @@
-%{ title = project.name + ' - report generated at ' + (new java.util.Date().format()) + ' after ' + project.pageViews + ' page views' }%
+%{ title = project.name + ' - Report After ' + project.pageViews + ' Page Views' }%
 <!DOCTYPE html>
 <html>
     <head>
         <title>${title}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="js/jquery.js"></script>
+        <script src="js/report.js"></script>
+        <link rel="stylesheet" href="css/report.css" />
     </head>
     <body>
         <h1>${title}</h1>
+
+        <div id="status">Loading...</div>
+        <div id="content"></div>
     </body>
 </html>

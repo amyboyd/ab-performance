@@ -1,5 +1,6 @@
 tmp
 logs
+reports
 nbproject
 build.xml
 public/closure

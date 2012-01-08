@@ -18,6 +18,6 @@ public class Dev extends BaseController {
 
         new ReportGenerator(project).execute();
 
-        renderText(project.reportOutputDir);
+        redirect("/" + project.reportOutputDir);
     }
 }

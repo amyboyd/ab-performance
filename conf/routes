@@ -14,6 +14,7 @@ GET     /privacy                                                Application.priv
 *       /me/{action}                                            Users.{action}
 *       /paypal-ipn-listener/{action}                           PaypalIPNListener.{action}
 
+GET     /reports                                                staticDir:reports/
 
 # Tracking
 # ~~~~~~~~

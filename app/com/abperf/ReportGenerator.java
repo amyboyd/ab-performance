@@ -3,7 +3,9 @@ package com.abperf;
 import java.util.*;
 import models.Domain;
 import models.Domain.DomainAccess;
+import models.PageView;
 import models.Project;
+import models.TestCSS;
 import play.Play;
 import play.libs.IO;
 import play.templates.TemplateLoader;
@@ -31,8 +33,9 @@ public class ReportGenerator {
 
         renderIndex();
         renderDomainsJSON();
-//        renderPageViewsGroupedByTestJSON();
-        renderTestsJSON();
+        renderPageViewsJSON();
+        IO.copyDirectory(Play.getFile(templateDir + "js/"), Play.getFile(project.reportOutputDir + "js/"));
+        IO.copyDirectory(Play.getFile(templateDir + "css/"), Play.getFile(project.reportOutputDir + "css/"));
 
         project.save();
     }
@@ -49,14 +52,9 @@ public class ReportGenerator {
         _writeToOutputFile("public-domains.json", Domain.toJSONarray(domains).toString());
     }
 
-    private void renderPageViewsJSONgroupedByTestID() {
-//        final List<PageView> views = PageView.find("project = ? order by test", project).fetch();
-//        _writeToOutputFile("page-views.json", PageView.toJSONarray(views).toString());
-    }
-
-    private void renderTestsJSON() {
-//        final List<TestCSS> tests = TestCSS.find("project = ? and access = ?", project, DomainAccess.PUBLIC).fetch();
-//        _writeToOutputFile("public-domains.json", Domain.toJSONarray(tests).toString());
+    private void renderPageViewsJSON() {
+        final List<PageView> views = PageView.find("project = ?", project).fetch();
+        _writeToOutputFile("page-views.json", PageView.toJSONarray(views).toString());
     }
 
     private String _renderTemplate(final String filename, final Map<String, Object> renderArgs) {

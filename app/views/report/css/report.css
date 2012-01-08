@@ -1,0 +1,30 @@
+body {
+    font: 13px verdana;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    margin-top: 0;
+}
+
+table {
+    border: 3px double #ccc;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+th, td {
+    text-align: left;
+    padding: 3px 5px;
+    margin: 0;
+}
+thead th {
+    background-color: #C1F0F4;
+}
+tbody th {
+    background-color: #E0FFFF;
+    font-size: 11px;
+}
+tbody td {
+    border: 1px solid #ddd;
+}

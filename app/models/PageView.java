@@ -1,11 +1,11 @@
 package models;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.Map.Entry;
 import javax.persistence.*;
 import play.data.validation.Required;
 import play.data.validation.URL;
@@ -79,5 +79,27 @@ public class PageView extends Model {
         final JsonParser parser = new JsonParser();
         testsJSON = parser.parse(tests).getAsJsonObject();
         pingsJSON = parser.parse(pings).getAsJsonObject();
+    }
+
+    public JsonObject toJSONobject() {
+        final JsonObject json = new JsonObject();
+        json.addProperty("id", id);
+        json.addProperty("url", url);
+        json.addProperty("time", Long.valueOf(time.getTime()));
+        json.addProperty("user", user);
+        json.add("pings", pingsJSON);
+        json.add("tests", testsJSON);
+        for (final Entry<String, JsonElement> entry: testsJSON.entrySet()) {
+            json.addProperty("test-" + entry.getKey(), entry.getValue().getAsString());
+        }
+        return json;
+    }
+
+    public static JsonArray toJSONarray(final Collection<PageView> pvs) {
+        final JsonArray json = new JsonArray();
+        for (final PageView pv: pvs) {
+            json.add(pv.toJSONobject());
+        }
+        return json;
     }
 }
