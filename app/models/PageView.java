@@ -1,10 +1,15 @@
 package models;
 
-import com.google.gson.*;
-import java.util.*;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import javax.persistence.*;
-import play.db.jpa.*;
-import play.data.validation.*;
+import play.data.validation.Required;
+import play.data.validation.URL;
+import play.db.jpa.Model;
 
 @Entity
 @Table(name = "page_view")
@@ -13,18 +18,15 @@ public class PageView extends Model {
     @ManyToOne(optional = false)
     public Project project;
 
-    /**
-     * A unique page view ID.
-     */
-    @Required
-    public String guid;
-
     @Required
     @URL
     public String url;
 
     @Required
     public Date time;
+
+    @Required
+    public String user;
 
     @Lob
     private String tests;
@@ -41,20 +43,12 @@ public class PageView extends Model {
     @Transient
     public List<String> testIDsWithUnknownCSS;
 
-    public static PageView findByGUID(final String guid) {
-        final PageView pageView = find("guid", guid).first();
-        if (pageView == null) {
-            throw new RuntimeException("GUID " + guid + " is not already in the database");
-        }
-        return pageView;
-    }
-
-    public PageView(final Project project, final String guid, final long time, final String url,
-            final Map<String, String> tests) {
+    public PageView(final Project project, final long time, final String url,
+            final Map<String, String> tests, final String user) {
         this.project = project;
         this.url = url;
         this.time = new Date(time);
-        this.guid = guid;
+        this.user = user;
 
         this.testsJSON = new JsonObject();
         this.pingsJSON = new JsonObject();

@@ -1,11 +1,15 @@
 package controllers;
 
 import com.abperf.UserDevice;
-import java.util.*;
-import models.*;
+import java.util.Map;
+import java.util.UUID;
+import models.Domain;
+import models.PageView;
+import models.Project;
+import models.TestCSS;
 import org.apache.commons.lang.StringUtils;
-import play.libs.optimization.ClosureBundle;
 import play.Logger;
+import play.libs.optimization.ClosureBundle;
 import play.mvc.Http.StatusCode;
 import play.mvc.Util;
 
@@ -13,13 +17,12 @@ public class TrackingBeta extends BaseController {
     /**
      * Response code may be 200, 402 or 429.
      *
-     * @param guid A unique page request ID.
      * @param time Time the page loaded at.
      * @param url
      * @param tests The map key is the test group name and the value is the test ID.
+     * @param user
      */
-    public static void start(final String guid, final long time, final String url,
-            final Map<String, String> tests) {
+    public static void start(final long time, final String url, final Map<String, String> tests, String user) {
         allowCrossDomain();
         onlyPOSTallowed();
 
@@ -27,7 +30,7 @@ public class TrackingBeta extends BaseController {
         if (domain == null) {
             response.status = StatusCode.PAYMENT_REQUIRED; // 402
             response.print("This domain is not registered to any user");
-            Logger.error("URL is on an unregistered domain:" + url);
+            Logger.error("URL is on an unregistered domain: " + url);
             return;
         }
 
@@ -39,33 +42,45 @@ public class TrackingBeta extends BaseController {
             return;
         }
 
-        final PageView pageView = new PageView(domain.project, guid, time, url, tests);
-        pageView.save();
+        boolean newUser = false;
+        if (user == null) {
+            user = UUID.randomUUID().toString();
+            newUser = true;
+        }
+
+        final PageView pageView = new PageView(domain.project, time, url, tests, user);
+        pageView.create();
 
         project.pageViews++;
         project.save();
 
         response.setHeader("Content-Type", "text/plain");
-        response.print(StringUtils.join(pageView.testIDsWithUnknownCSS, ','));
+        response.print("pv=" + pageView.id);
+        if (newUser) {
+            response.print("user=" + user + "\n");
+        }
+        if (!pageView.testIDsWithUnknownCSS.isEmpty()) {
+            response.print("css=" + StringUtils.join(pageView.testIDsWithUnknownCSS, ',') + "\n");
+        }
         ok();
     }
 
     /**
-     * @param guid The unique page request ID.
+     * @param pv {@link PageView#id}
      * @param time Time the page loaded at.
      * @param status "active" or "inactive".
      * @param css The keys are the test IDs, the values are the CSS.
      */
-    public static void ping(final String guid, final long time, final String status,
+    public static void ping(final long pv, final long time, final String status,
             final Map<String, String> css) {
         allowCrossDomain();
         onlyPOSTallowed();
 
-        PageView pageView = PageView.findByGUID(guid);
+        final PageView pageView = PageView.findById(pv);
         pageView.pingsJSON.addProperty(String.valueOf(time), status);
         // We must call "setJSONstringsFromJSONobjects" manually so that at least one field changes.
-        // If no field changes *before* JPA hooks, then no hooks are called and as a result there is
-        // no need to save the object.
+        // If no field changes *before* JPA hooks, then no hooks are called and there is no need to
+        // save the object.
         pageView.setJSONstringsFromJSONobjects();
         pageView.save();
 
@@ -79,7 +94,7 @@ public class TrackingBeta extends BaseController {
     /**
      * @param id The project ID. Only used client-side.
      */
-    public static void clientScripts(int id) {
+    public static void clientScripts(final int id) {
         // Check the browser is supported: Chrome 5+, Firefox 4+, Safari 4+.
         UserDevice device = (UserDevice) request.args.get("device");
         if ((device.chrome && device.chromeVersion >= 5)
@@ -101,7 +116,7 @@ public class TrackingBeta extends BaseController {
                 "client-beta.js",
                 "public/closure/closure/bin/build/closurebuilder.py",
                 null,
-//                com.google.javascript.jscomp.CompilationLevel.ADVANCED_OPTIMIZATIONS,
+                //                com.google.javascript.jscomp.CompilationLevel.ADVANCED_OPTIMIZATIONS,
                 new String[] {
                     "public/closure/closure/goog",
                     "public/closure/third_party/closure",

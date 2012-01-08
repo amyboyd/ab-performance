@@ -35,7 +35,7 @@ abperf.persistence.init = function() {
 }
 
 /**
- * @return {string?} The Test ID is one is persisted, else null.
+ * @return {string?} The Test ID if one is persisted, else null.
  */
 abperf.persistence.getTestID = function(testGroupName) {
     if (pData && pData['tests'] && pData['tests'][testGroupName]) {
@@ -45,13 +45,30 @@ abperf.persistence.getTestID = function(testGroupName) {
 
 /**
  * @param {string} testGroupName
- * @param {string} testID Either a test ID or "none". Must not be null.
+ * @param {string} testID Either a Test ID or "none". Must not be null.
  */
 abperf.persistence.setTestID = function(testGroupName, testID) {
     if (typeof pData['tests'] === 'undefined') {
         pData['tests'] = {};
     }
     pData['tests'][testGroupName] = testID;
+    abperf.persistence.save();
+}
+
+/**
+ * @return {string?} The user ID if one is persisted, else null.
+ */
+abperf.persistence.getUserID = function() {
+    if (pData && pData['user']) {
+        return pData['user'];
+    }
+}
+
+/**
+ * @param {string} userID Must not be null.
+ */
+abperf.persistence.setUserID = function(userID) {
+    pData['user'] = userID;
     abperf.persistence.save();
 }
 

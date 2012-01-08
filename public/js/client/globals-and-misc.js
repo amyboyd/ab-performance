@@ -15,6 +15,8 @@ goog.require('goog.uri.utils');
 /** @const */
 abperf.globals.SERVER_URL = (goog.DEBUG ? 'http://dev.abperf.com/' : 'http://abperf.com/');
 
+abperf.globals.pageViewID = null;
+
 /** Time the page was loaded. */
 // Don't declare this as a constant, because Closure Compiler will inline Date.now()!
 abperf.globals.startTime = Date.now();

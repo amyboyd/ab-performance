@@ -20,7 +20,6 @@ onDOMContentLoaded(function() {
     abperf.interactions.init();
 
     // These can be safely deleted to reduce memory usage.
-    delete abperf.persistence;
     delete abperf.styles.init;
     delete abperf.styles.getStyleElements;
     delete abperf.styles.createTests;

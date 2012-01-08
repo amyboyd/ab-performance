@@ -10,6 +10,7 @@ goog.require('abperf.globals');
 goog.require('abperf.httpPostRequest');
 goog.require('abperf.interactions');
 goog.require('abperf.styles');
+goog.require('abperf.persistence');
 goog.require('goog.string');
 
 /** @private @const */
@@ -41,7 +42,7 @@ abperf.tracking.pingRequest = function() {
         consecutiveActivePings = (status === 'active' ? consecutiveActivePings + 1 : 0);
 
         var data = {
-            'guid': abperf.globals.startTime,
+            'pv': abperf.globals.pageViewID,
             'status': status,
             'time': now
         };
