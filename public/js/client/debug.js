@@ -6,6 +6,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.fx.Dragger');
 goog.require('goog.style');
+goog.require('goog.object');
 
 goog.exportSymbol('abperf.debug', abperf.debug);
 
@@ -23,12 +24,12 @@ abperf.debug = function() {
 
     addStyles();
     var container = addContainer();
-    if (abperf.styles.testGroups.length > 0) {
+    if (goog.object.isEmpty(abperf.styles.testGroups)) {
+        goog.dom.setTextContent(container, 'There are no tests in this document');
+    } else {
         for (var testGroupName in abperf.styles.testGroups) {
             addTestGroup(abperf.styles.testGroups[testGroupName], container);
         }
-    } else {
-        goog.dom.setTextContent(container, 'There are no tests in this document');
     }
 }
 
