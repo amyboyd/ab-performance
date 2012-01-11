@@ -5,6 +5,8 @@
         <title>${title}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script src="js/jquery.js"></script>
+        <script src="js/TestStatCalculator.js"></script>
+        <script src="js/ui.js"></script>
         <script src="js/report.js"></script>
         <link rel="stylesheet" href="css/report.css" />
     </head>
@@ -15,7 +17,7 @@
         <div id="content"></div>
 
         <div id="lightbox-white">
-            <p><a href="#" onclick="closeLightbox(); return false;">Close</a></p>
+            <p><a href="#" onclick="ui.closeLightbox(); return false;">Close</a></p>
             <tt><code id="lightbox-content"></code></tt>
         </div>
         <div id="lightbox-fade"></div>
