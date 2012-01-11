@@ -1,6 +1,8 @@
 package controllers;
 
 import com.abperf.UserDevice;
+import com.alienmegacorp.bundles.ClosureBundle;
+import com.google.javascript.jscomp.CompilationLevel;
 import java.util.Map;
 import java.util.UUID;
 import models.Domain;
@@ -9,7 +11,7 @@ import models.PageView;
 import models.Project;
 import models.TestCSS;
 import org.apache.commons.lang.StringUtils;
-import play.libs.optimization.ClosureBundle;
+import play.Play;
 import play.mvc.Http.StatusCode;
 import play.mvc.Util;
 
@@ -102,8 +104,10 @@ public class TrackingBeta extends BaseController {
         pageView.setJSONstringsFromJSONobjects();
         pageView.save();
 
-        for (final String id: css.keySet()) {
-            TestCSS.setCSS(id, css.get(id));
+        if (css != null && !css.isEmpty()) {
+            for (final String id: css.keySet()) {
+                TestCSS.setCSS(id, css.get(id));
+            }
         }
 
         ok();
@@ -120,7 +124,7 @@ public class TrackingBeta extends BaseController {
                 || (device.safari && device.safariVersion >= 4)) {
             // Browser is supported.
             response.cacheFor("61d");
-            clientScripts.applyToResponse(request, response);
+            Bundles.sendBundle(clientScripts);
         } else {
             renderText("// Browser not supported");
         }
@@ -131,15 +135,15 @@ public class TrackingBeta extends BaseController {
     @Util
     private static ClosureBundle createClientScriptsBundle() {
         final ClosureBundle bundle = new ClosureBundle(
-                "client-beta.js",
-                "public/closure/closure/bin/build/closurebuilder.py",
-                com.google.javascript.jscomp.CompilationLevel.ADVANCED_OPTIMIZATIONS,
-                new String[] {
-                    "public/closure/closure/goog",
-                    "public/closure/third_party/closure",
-                    "public/js/client", },
-                new String[] { "abperf", "abperf.debug" });
+                Play.getFile("public/bundles/client-beta.js"),
+                Play.getFile("public/js/client"));
+        bundle.setClosureLibraryDir(Play.getFile("public/closure"));
+        bundle.setCopyrightNotice("Copyright 2012 A/B Performance");
+        bundle.setCompilationLevel(CompilationLevel.ADVANCED_OPTIMIZATIONS);
+        bundle.setEntryNamespaces("abperf", "abperf.debug");
         bundle.setOutputWrapper("(function(){ %output% })();");
+        ClosureBundle.setPythonExecutable(Play.configuration.getProperty("python"));
+
         return bundle;
     }
 

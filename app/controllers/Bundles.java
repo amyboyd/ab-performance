@@ -1,46 +1,94 @@
 package controllers;
 
-import play.libs.optimization.*;
+import com.alienmegacorp.bundles.Bundle;
+import com.alienmegacorp.bundles.ClosureBundle;
+import com.alienmegacorp.bundles.StylesheetsBundle;
+import com.google.javascript.jscomp.CompilationLevel;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import play.Play;
 import play.mvc.Controller;
+import play.mvc.Http;
+import play.mvc.Util;
 
 /**
  * Serves CSS styles and JavaScripts, merged and compiled to improve performance.
  */
 public class Bundles extends Controller {
-    private static final Bundle siteStyles = new StylesheetsBundle(
-            "site.css",
-            new String[] {
-                "public/css/html5-reset.css",
-                "public/css/main.css",
-                "public/css/site/tags.css",
-                "public/css/site/index.css",
-                "public/css/site/features.css",
-                "public/css/site/projects.css",
-                "public/css/site/auth.css", });
+    private static final StylesheetsBundle siteStyles = createSiteStylesBundle();
 
-    private static final ClosureBundle siteScripts = new ClosureBundle(
-                "site.js",
-                "public/closure/closure/bin/build/closurebuilder.py",
-                com.google.javascript.jscomp.CompilationLevel.ADVANCED_OPTIMIZATIONS,
-                new String[] {
-                    "public/closure/closure/goog",
-                    "public/closure/third_party/closure",
-                    "public/js/site", },
-                new String[] { "projects" });
+    private static final ClosureBundle siteScripts = createSiteScriptsBundle();
+
+    @Util
+    private static ClosureBundle createSiteScriptsBundle() {
+        final ClosureBundle bundle = new ClosureBundle(
+                Play.getFile("public/bundles/site.js"),
+                Play.getFile("public/js/site"));
+        bundle.setClosureLibraryDir(Play.getFile("public/closure"));
+        bundle.setCopyrightNotice("Copyright 2012 A/B Performance");
+        bundle.setCompilationLevel(CompilationLevel.ADVANCED_OPTIMIZATIONS);
+        bundle.setEntryNamespaces(new String[] { "projects" });
+        bundle.setDefineToBooleanLiteral("goog.DEBUG", Play.mode.isDev());
+        ClosureBundle.setPythonExecutable(Play.configuration.getProperty("python"));
+
+        return bundle;
+    }
+
+    @Util
+    private static StylesheetsBundle createSiteStylesBundle() {
+        final StylesheetsBundle bundle = new StylesheetsBundle(
+                Play.getFile("public/bundles/site.css"),
+                Play.getFile("public/css/html5-reset.css"),
+                Play.getFile("public/css/main.css"),
+                Play.getFile("public/css/site"));
+        bundle.setCopyrightNotice("Copyright 2012 A/B Performance");
+
+        return bundle;
+    }
 
     public static void siteStyles() {
-        //siteStyles.getBundleFile().delete();
-        //siteStyles.getBundleFileGzip().delete();
-
         response.cacheFor("70d");
-        siteStyles.applyToResponse(request, response);
+        sendBundle(siteStyles);
     }
 
     public static void siteScripts() {
-        //siteScripts.getBundleFile().delete();
-        //siteScripts.getBundleFileGzip().delete();
-
         response.cacheFor("70d");
-        siteScripts.applyToResponse(request, response);
+        sendBundle(siteScripts);
+    }
+
+    /**
+     * If the browser supports GZIP, return the GZIP file. If not supported, return the plain-text file.
+     */
+    @Util
+    static void sendBundle(final Bundle bundle) {
+        if (!bundle.getOutputFile().exists() || !bundle.getOutputFileGzip().exists()) {
+            bundle.compile();
+        }
+
+        response.setHeader("Content-Type", bundle.getMimeType());
+
+        // If the browser supports GZIP, return the GZIP file.
+        final Http.Header acceptEncodingHeader = request.headers.get("accept-encoding"); // key must be lower-case.
+        if (acceptEncodingHeader != null && acceptEncodingHeader.value().contains("gzip")) {
+            response.setHeader("Content-Encoding", "gzip");
+            response.setHeader("Content-Length", bundle.getOutputFileGzip().length() + "");
+
+            try {
+                // renderBinary() will override any caching headers.
+                response.direct = new FileInputStream(bundle.getOutputFileGzip());
+            } catch (final FileNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        } else {
+            // GZIP not supported by the browser.
+            response.setHeader("Content-Length", bundle.getOutputFile().length() + "");
+
+            try {
+                // renderBinary() will override any caching headers.
+                response.direct = new FileInputStream(bundle.getOutputFile());
+            } catch (final FileNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 }
