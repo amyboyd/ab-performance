@@ -17,4 +17,14 @@ projects.overviewPage = function() {
         pb.setMaximum(el.getAttribute('data-max'));
         pb.decorate(el);
     }
+
+    var showHTMLlinks = goog.dom.$$('a', 'show-html');
+    for (i = 0; i < showHTMLlinks.length; i++) {
+        var link = showHTMLlinks[i];
+        goog.events.listen(link, goog.events.EventType.CLICK, function(evt) {
+            evt.preventDefault();
+            var projectID = evt.target.getAttribute('data-project-id');
+            goog.dom.$('embed-html-' + projectID).style.display = 'block';
+        });
+    }
 }

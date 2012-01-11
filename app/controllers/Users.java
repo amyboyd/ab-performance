@@ -89,6 +89,11 @@ public class Users extends BaseController {
         overview();
     }
 
+    public static void getHTML(final Long id) {
+        final Project project = getProjectByIDandSecure(id);
+        render("Users/get-html.html", project);
+    }
+
     /**
      * Form to change email.
      */

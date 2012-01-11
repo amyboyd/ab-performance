@@ -17,17 +17,25 @@
         </div>
 
         <div class="project-right">
-            #{if project.waitingForPayment()}
-                <a href="@{continueToPaypal(project.id)}"><strong>Payment required:</strong> ${project.currency.format(project.price)}</a>
-            #{/}
-            #{else}
-                <a href="@{editProject(project.id)}">Edit settings</a>
-                <br />
-                <a href="@{report(project.id)}">Access your report</a>
-            #{/}
+            <p>
+                #{if project.waitingForPayment()}
+                    <a href="@{continueToPaypal(project.id)}"><strong>Payment required:</strong> ${project.currency.format(project.price)}</a>
+                #{/}
+                #{else}
+                    <a href="@{editProject(project.id)}">Edit settings</a>
+                    <br />
+                    <a href="@{report(project.id)}">Access your report</a>
+                    <br />
+                    <a href="@{getHTML(project.id)}" class="show-html" data-project-id="${project.id}">Install / get the code</a>
+                #{/}
+            </p>
         </div>
 
         <div class="clearfix"></div>
+
+        <p class="embed-html" id="embed-html-${project.id}">
+            #{include 'Users/_embed-html.html' /}
+        </p>
     </section>
 #{/}
 

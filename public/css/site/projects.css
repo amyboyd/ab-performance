@@ -33,3 +33,7 @@
 
 .project-right {
 }
+
+.project .embed-html {
+    display: none;
+}
