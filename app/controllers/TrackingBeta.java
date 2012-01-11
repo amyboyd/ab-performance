@@ -142,6 +142,7 @@ public class TrackingBeta extends BaseController {
         bundle.setCompilationLevel(CompilationLevel.ADVANCED_OPTIMIZATIONS);
         bundle.setEntryNamespaces("abperf", "abperf.debug");
         bundle.setOutputWrapper("(function(){ %output% })();");
+        bundle.setDefineToBooleanLiteral("goog.DEBUG", Play.mode.isDev());
         ClosureBundle.setPythonExecutable(Play.configuration.getProperty("python"));
 
         return bundle;

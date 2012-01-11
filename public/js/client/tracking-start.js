@@ -64,6 +64,10 @@ abperf.tracking.startResponse = function(response) {
         // being on an unregistered or private domain, etc.
         console.log('AB Perf:', text);
     } else if (console !== undefined) {
-        console.log('AB Perf: unexpected status', status, text);
+        if (status === 0) {
+            console.log('AB Perf: unexpected status 0. Maybe compiled DEV instead of PROD or vice versa.');
+        } else {
+            console.log('AB Perf: unexpected status', status, text);
+        }
     }
 }
