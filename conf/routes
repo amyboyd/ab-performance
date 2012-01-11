@@ -15,7 +15,9 @@ GET     /test-css                                               Application.test
 *       /me/{action}                                            Users.{action}
 *       /paypal-ipn-listener/{action}                           PaypalIPNListener.{action}
 
-GET     /reports                                                staticDir:reports/
+GET     /reports/generate                                       Application.generateReport
+GET     /reports/getcss                                         Application.reportCSS
+GET     /reports/reports                                        staticDir:reports/
 
 # Tracking
 # ~~~~~~~~

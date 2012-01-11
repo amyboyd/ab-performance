@@ -93,7 +93,9 @@ function showCSS(evt) {
 
     var testID = this.getAttribute('data-test-id');
 
-    $('#lightbox-content').load('/test-css?id=' + testID);
+    $.get('/reports/getcss?testID=' + testID, function(css) {
+        $('#lightbox-content').html('<pre>' + css + '</pre>');
+    });
 }
 
 function showData(evt) {
@@ -138,7 +140,7 @@ function averagePageViewsPerUser(testName, testID) {
 }
 
 /**
- * @return Average time per page, in seconds.
+ * @return {number} Average time per page, in seconds.
  */
 function averageTimePerPage(testName, testID) {
     var totalTimeOnPagesInSeconds = 0;
@@ -156,14 +158,14 @@ function averageTimePerPage(testName, testID) {
 }
 
 /**
- * @return Average time a user is on the site, in seconds.
+ * @return {number} Average time a user is on the site, in seconds.
  */
 function averageTimeOnSite(testName, testID) {
     return averageTimePerPage(testName, testID) * averagePageViewsPerUser(testName, testID);
 }
 
 /**
- * @return The approximate length of time spent on the page, in seconds.
+ * @return {number} The approximate length of time spent on the page, in seconds.
  */
 function timeOnPage(pageView) {
     if (countObjectSize(pageView.pings) === 0) {
@@ -192,7 +194,7 @@ function timeOnPage(pageView) {
     timeOnPage /= 1000;
     timeOnPage = timeOnPage.toFixed(0);
 
-    return timeOnPage;
+    return Number(timeOnPage);
 }
 
 /**
