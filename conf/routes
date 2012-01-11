@@ -10,14 +10,11 @@ GET     /demo                                                   Application.demo
 GET     /features                                               Application.features
 GET     /terms                                                  Application.terms
 GET     /privacy                                                Application.privacy
-GET     /test-css                                               Application.testCSS
-*       /auth/{action}                                          Authentication.{action}
-*       /me/{action}                                            Users.{action}
-*       /paypal-ipn-listener/{action}                           PaypalIPNListener.{action}
 
-GET     /reports/generate                                       Application.generateReport
-GET     /reports/getcss                                         Application.reportCSS
+GET     /reports/generate                                       Users.report
+GET     /reports/getcss                                         Users.reportCSS
 GET     /reports/reports                                        staticDir:reports/
+
 
 # Tracking
 # ~~~~~~~~
@@ -29,6 +26,13 @@ POST    ${domain}/beta/tracking/ping                            TrackingBeta.pin
     GET     ${domain}/beta/tracking/ping                        TrackingBeta.ping
     GET     ${domain}/deps.js                                   staticFile:public/closure/closure/goog/deps.js
 #{/if}
+
+
+# Catch-alls
+# ~~~~~~~~~~
+*       /auth/{action}                                          Authentication.{action}
+*       /me/{action}                                            Users.{action}
+*       /paypal-ipn-listener/{action}                           PaypalIPNListener.{action}
 
 
 # Admin

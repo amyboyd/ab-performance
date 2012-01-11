@@ -4,11 +4,11 @@ import com.abperf.UserDevice;
 import java.util.Map;
 import java.util.UUID;
 import models.Domain;
+import models.Domain.DomainAccess;
 import models.PageView;
 import models.Project;
 import models.TestCSS;
 import org.apache.commons.lang.StringUtils;
-import play.Logger;
 import play.libs.optimization.ClosureBundle;
 import play.mvc.Http.StatusCode;
 import play.mvc.Util;
@@ -17,28 +17,46 @@ public class TrackingBeta extends BaseController {
     /**
      * Response code may be 200, 402 or 429.
      *
+     * @param proj Project ID.
      * @param time Time the page loaded at.
      * @param url
      * @param tests The map key is the test group name and the value is the test ID.
      * @param user
      */
-    public static void start(final long time, final String url, final Map<String, String> tests, String user) {
+    public static void start(final Long proj, final long time, final String url,
+            final Map<String, String> tests, String user) {
         allowCrossDomain();
         onlyPOSTallowed();
 
-        final Domain domain = Domain.findDomainByURL(url);
-        if (domain == null) {
-            response.status = StatusCode.PAYMENT_REQUIRED; // 402
-            response.print("This domain is not registered to any user");
-            Logger.error("URL is on an unregistered domain: " + url);
+        if (tests.isEmpty()) {
+            response.print("There are no AB tests on this page.");
+            response.status = StatusCode.FORBIDDEN;
             return;
         }
 
-        final Project project = domain.project;
+        final Project project = Project.findById(proj);
         if (project.hasReachedPageViewQuota()) {
-            // 429 is a proposed status code. See here: http://tools.ietf.org/html/draft-nottingham-http-new-status-02#section-4
-            response.status = 429;
-            response.print("Page view limit has been reached");
+            response.print("Page view limit has been reached.");
+            response.status = StatusCode.FORBIDDEN;
+            return;
+        }
+
+        if (project.waitingForPayment()) {
+            response.print("Waiting for payment.");
+            response.status = StatusCode.FORBIDDEN;
+            return;
+        }
+
+        final Domain domain = Domain.findByProjectAndURL(project, url);
+        if (domain == null) {
+            response.print("This domain is not assigned to " + project.name);
+            response.status = StatusCode.FORBIDDEN;
+            return;
+        }
+
+        if (domain.access.equals(DomainAccess.PRIVATE)) {
+            response.print("This domain is private. It does not count towards your page view quota.");
+            response.status = StatusCode.FORBIDDEN;
             return;
         }
 
@@ -57,10 +75,10 @@ public class TrackingBeta extends BaseController {
         response.setHeader("Content-Type", "text/plain");
         response.print("pv=" + pageView.id);
         if (newUser) {
-            response.print("user=" + user + "\n");
+            response.print("\nuser=" + user);
         }
         if (!pageView.testIDsWithUnknownCSS.isEmpty()) {
-            response.print("css=" + StringUtils.join(pageView.testIDsWithUnknownCSS, ',') + "\n");
+            response.print("\ncss=" + StringUtils.join(pageView.testIDsWithUnknownCSS, ','));
         }
         ok();
     }

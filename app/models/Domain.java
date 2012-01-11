@@ -31,12 +31,12 @@ public class Domain extends Model {
     @Temporal(TemporalType.TIMESTAMP)
     public Date createdAt;
 
-    public static Domain findDomainByURL(final String url) {
+    public static Domain findByProjectAndURL(final Project project, final String url) {
         try {
             String domain = new URL(url).getHost();
             domain = removeWWW(domain);
 
-            return find("domain", domain).first();
+            return find("project = ? and domain = ?", project, domain).first();
         } catch (MalformedURLException ex) {
             throw new RuntimeException("Malformed URL: " + url, ex);
         }

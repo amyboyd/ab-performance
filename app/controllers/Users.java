@@ -1,11 +1,9 @@
 package controllers;
 
+import com.abperf.*;
 import java.util.Date;
-import models.AccountType;
-import models.Domain;
+import models.*;
 import models.Domain.DomainAccess;
-import models.Project;
-import models.User;
 import play.Logger;
 import play.data.validation.Validation;
 import play.mvc.Util;
@@ -58,14 +56,13 @@ public class Users extends BaseController {
 
     public static void report(final Long id) {
         final Project project = getProjectByIDandSecure(id);
-        if (!project.isReportReady()) {
-            flash.error("Your report is not ready yet");
-            overview();
-        }
+        new ReportGenerator(project).execute();
+        redirect("/reports/" + project.reportOutputDir);
+    }
 
-        // @todo
-
-        render(project);
+    public static void reportCSS(final String testID) {
+        final TestCSS test = TestCSS.findByTestId(testID);
+        renderText(test.css);
     }
 
     public static void editProject(final Long id) {
