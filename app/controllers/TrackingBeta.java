@@ -133,8 +133,7 @@ public class TrackingBeta extends BaseController {
         final ClosureBundle bundle = new ClosureBundle(
                 "client-beta.js",
                 "public/closure/closure/bin/build/closurebuilder.py",
-                null,
-                //                com.google.javascript.jscomp.CompilationLevel.ADVANCED_OPTIMIZATIONS,
+                com.google.javascript.jscomp.CompilationLevel.ADVANCED_OPTIMIZATIONS,
                 new String[] {
                     "public/closure/closure/goog",
                     "public/closure/third_party/closure",

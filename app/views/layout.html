@@ -42,6 +42,38 @@ Optional args:
 
         <script src="@@{Bundles.siteScripts}"></script>
         <script src="@@{TrackingBeta.clientScripts(1)}"></script>
+        <style type="abperf" name="call to action">
+            a.cta,
+            button.cta,
+            input.cta {
+                background: red;
+                background: -webkit-gradient(linear,left top,left bottom,from(orange),to(red));
+                background: -moz-linear-gradient(top,orange,red);
+            }
+            a.cta:hover,
+            button.cta:hover,
+            input.cta:hover {
+                border-color: orange;
+            }
+        </style>
+        <style type="abperf" name="call to action">
+            a.cta,
+            button.cta,
+            input.cta {
+                background: red;
+                background: -webkit-gradient(linear,left top,left bottom,from(red),to(orange));
+                background: -moz-linear-gradient(top,red,orange);
+            }
+            a.cta:hover,
+            button.cta:hover,
+            input.cta:hover {
+                border-color: orange;
+            }
+        </style>
+        <style type="abperf" name="background">
+            body { background-color: white; }
+            #content { border: none; }
+        </style>
     </head>
     <body #{if bodyID != null} id="${bodyID.raw()}" #{/} #{if bodyClass != null} class="${bodyClass.raw()}" #{/} >
         <header>

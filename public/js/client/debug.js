@@ -42,7 +42,7 @@ function addStyles() {
 #abperf-debug .group { float: left; margin-right: 10px; } \
 #abperf-debug .group h6 { color: beige; font-size: 15px; font-weight: bold; margin: 0 0 0.5em; padding: 0; } \
 #abperf-debug .group ol { margin: 0; padding: 0 0 0 11px; } \
-#abperf-debug .group li { color: beige; font-size: 12px; cursor: pointer; margin: 0.5em 0 0.5em 1em; } \
+#abperf-debug .group li { color: beige; font-size: 12px; cursor: pointer; margin: 0.5em 0 0.5em 1em; padding: 0; } \
 #abperf-debug .group li:hover { color: orange; } \
 #abperf-debug .group li.installed { color: orange; text-decoration: underline; } \
 ');
@@ -105,7 +105,7 @@ function addNoTest(testGroup, list) {
         'class': (abperf.styles.installedTests[testGroup.name] === null ? 'installed' : '')
     });
 
-    goog.dom.setTextContent(listItem, 'none');
+    goog.dom.setTextContent(listItem, 'default page style');
     goog.dom.appendChild(list, listItem);
 
     goog.events.listen(listItem, goog.events.EventType.CLICK, changeTest);
