@@ -43,6 +43,7 @@ function render() {
                     <tr>\
                         <th></th>\
                         <th></th>\
+                        <th></th>\
                         <th>Pages per visit</th>\
                         <th>Time per page</th>\
                         <th>Time on site</th>\
@@ -53,19 +54,26 @@ function render() {
                 <tbody>';
 
         for (var testID in allTestNamesAndIDs[testName]) {
-            html += '<tr>';
+            html += '<tr>'
+                + '<th>' + (testID === 'none' ? 'default page style' : testID) + '</th>';
 
-            if (testID === 'none') {
-                html += '<th>default page style</th> <th></th>';
-            } else {
-                html += '<th>' + testID + '</th> <th><a href="/test-css?id=' + testID + '" class="show-css" data-test-id="' + testID + '">show CSS</a></th>';
+            // Link to show CSS.
+            html += '<th>';
+            if (testID !== 'none') {
+                html += '<a href="/test-css?id=' + testID + '" class="show-css" data-test-id="' + testID + '">CSS</a>';
             }
+            html += '</th>';
+
+            // Link to show JSON data.
+            html += '<th>'
+                + '<span class="fake-link show-data" data-test-name="' + testName + '" data-test-id="' + testID + '">data</span>'
+                + '</th>';
 
             html += '<td>' + averagePageViewsPerUser(testName, testID) + '</td>\
                     <td>' + averageTimePerPage(testName, testID) + ' secs</td>\
                     <td>' + averageTimeOnSite(testName, testID) + ' secs</td>\
                     <td>' + bounceRate(testName, testID) + '%</td>\
-                    <td>' + allTestNamesAndIDs[testName][testID] + '</td>\
+                    <td>' + countPageViews(testName, testID) + '</td>\
                 </tr>';
         }
 
@@ -74,13 +82,42 @@ function render() {
         $('#content')[0].innerHTML += html;
     }
 
+    $('.show-css').click(showCSS);
+    $('.show-data').click(showData);
     $('#status').text('');
+}
 
-    $('.show-css').click(function(evt) {
-        evt.preventDefault();
-        openLightbox();
-        $('#lightbox-content').load(this.getAttribute('href'));
-    });
+function showCSS(evt) {
+    evt.preventDefault();
+    openLightbox();
+
+    var testID = this.getAttribute('data-test-id');
+
+    $('#lightbox-content').load('/test-css?id=' + testID);
+}
+
+function showData(evt) {
+    evt.preventDefault();
+    openLightbox();
+
+    var testName = this.getAttribute('data-test-name');
+    var testID = this.getAttribute('data-test-id');
+
+    var json = '';
+    for (var i = 0; i < pageViews.length; i++) {
+        if (pageViews[i]['test-' + testName] === testID) {
+            if (json !== '') {
+                json += ',';
+            }
+            json += JSON.stringify(pageViews[i]);
+        }
+    }
+
+    $('#lightbox-content').text('[' + json + ']');
+}
+
+function countPageViews(testName, testID) {
+    return allTestNamesAndIDs[testName][testID];
 }
 
 /**
@@ -104,22 +141,58 @@ function averagePageViewsPerUser(testName, testID) {
  * @return Average time per page, in seconds.
  */
 function averageTimePerPage(testName, testID) {
-    forEachPageView(testName, testID, function(pv) {
-        // @todo
-        });
+    var totalTimeOnPagesInSeconds = 0;
 
-    return Math.random() * 100;
+    forEachPageView(testName, testID, function(pv) {
+        totalTimeOnPagesInSeconds += timeOnPage(pv);
+    });
+
+    var average = totalTimeOnPagesInSeconds / countPageViews(testName, testID);
+
+    // Round it.
+    average = average.toFixed(0);
+
+    return average;
 }
 
 /**
  * @return Average time a user is on the site, in seconds.
  */
 function averageTimeOnSite(testName, testID) {
-    forEachPageView(testName, testID, function(pv) {
-        // @todo
-        });
+    return averageTimePerPage(testName, testID) * averagePageViewsPerUser(testName, testID);
+}
 
-    return Math.random() * 100;
+/**
+ * @return The approximate length of time spent on the page, in seconds.
+ */
+function timeOnPage(pageView) {
+    if (countObjectSize(pageView.pings) === 0) {
+        return 10;
+    }
+
+    var lastTime = pageView.time; // the start time.
+    var lastStatus = 'active';
+
+    var timeOnPage = 0;
+
+    for (var time in pageView.pings) {
+        var status = pageView.pings[time];
+
+        if (lastStatus === 'active' && status === 'active') {
+            timeOnPage += (time - lastTime);
+        } else if (lastStatus === 'active' && status === 'inactive') {
+            timeOnPage += ((time - lastTime) / 2);
+        }
+
+        lastTime = time;
+        lastStatus = status;
+    }
+
+    // Convert to seconds and round it.
+    timeOnPage /= 1000;
+    timeOnPage = timeOnPage.toFixed(0);
+
+    return timeOnPage;
 }
 
 /**
@@ -176,6 +249,7 @@ function openLightbox() {
 function closeLightbox() {
     document.getElementById('lightbox-white').style.display = 'none';
     document.getElementById('lightbox-fade').style.display = 'none';
+    document.getElementById('lightbox-content').innerHTML = null;
 }
 
 function waitUntilReady() {
