@@ -1,8 +1,6 @@
 package controllers;
 
-import com.alienmegacorp.bundles.Bundle;
-import com.alienmegacorp.bundles.ClosureBundle;
-import com.alienmegacorp.bundles.StylesheetsBundle;
+import com.alienmegacorp.bundles.*;
 import com.google.javascript.jscomp.CompilationLevel;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,6 +8,7 @@ import play.Play;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Util;
+import play.templates.*;
 
 /**
  * Serves CSS styles and JavaScripts, merged and compiled to improve performance.
@@ -42,6 +41,12 @@ public class Bundles extends Controller {
                 Play.getFile("public/css/main.css"),
                 Play.getFile("public/css/site"));
         bundle.setCopyrightNotice("Copyright 2012 A/B Performance");
+        bundle.setSourcePreProcessor(new FileProcessor() {
+            @Override
+            public String execute(final String content) {
+                return TemplateLoader.loadString(content).render();
+            }
+        });
 
         return bundle;
     }
@@ -77,7 +82,7 @@ public class Bundles extends Controller {
                 // renderBinary() will override any caching headers.
                 response.direct = new FileInputStream(bundle.getOutputFileGzip());
             } catch (final FileNotFoundException ex) {
-                throw new RuntimeException(ex);
+                error(ex);
             }
         } else {
             // GZIP not supported by the browser.
@@ -87,7 +92,7 @@ public class Bundles extends Controller {
                 // renderBinary() will override any caching headers.
                 response.direct = new FileInputStream(bundle.getOutputFile());
             } catch (final FileNotFoundException ex) {
-                throw new RuntimeException(ex);
+                error(ex);
             }
         }
     }
