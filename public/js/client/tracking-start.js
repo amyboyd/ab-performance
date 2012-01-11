@@ -63,7 +63,7 @@ abperf.tracking.startResponse = function(response) {
         // Something (not an error) is preventing tracking. That could be lack of payment,
         // being on an unregistered or private domain, etc.
         console.log('AB Perf:', text);
-    } else if (goog.DEBUG) {
+    } else if (console !== undefined) {
         console.log('AB Perf: unexpected status', status, text);
     }
 }
