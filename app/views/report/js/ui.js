@@ -24,7 +24,7 @@ var ui = {
                 // Link to show CSS.
                 html += '<th>';
                 if (testID !== 'none') {
-                    html += '<a href="/test-css?id=' + testID + '" class="show-css" data-test-id="' + testID + '">CSS</a>';
+                    html += '<span class="fake-link show-css" data-test-id="' + testID + '">CSS</span>';
                 }
                 html += '</th>';
 
@@ -75,7 +75,7 @@ var ui = {
 
         var json = '';
         for (var i = 0; i < pageViews.length; i++) {
-            if (pageViews[i]['test-' + testName] === testID) {
+            if (pageViews[i]['tests'][testName] === testID) {
                 if (json !== '') {
                     json += ',';
                 }

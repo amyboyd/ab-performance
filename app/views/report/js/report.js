@@ -32,9 +32,10 @@ function waitUntilReady() {
     if (ready === FULLY_READY_NUMBER) {
         ui.render();
     } else {
-        setTimeout(waitUntilReady, 1000);
+        setTimeout(waitUntilReady, 200);
     }
 }
+
 waitUntilReady();
 
 // Domain data is not used at the moment.

@@ -1,11 +1,9 @@
 package models;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.util.*;
-import java.util.Map.Entry;
 import javax.persistence.*;
 import play.data.validation.Required;
 import play.data.validation.URL;
@@ -89,9 +87,6 @@ public class PageView extends Model {
         json.addProperty("user", user);
         json.add("pings", pingsJSON);
         json.add("tests", testsJSON);
-        for (final Entry<String, JsonElement> entry: testsJSON.entrySet()) {
-            json.addProperty("test-" + entry.getKey(), entry.getValue().getAsString());
-        }
         return json;
     }
 

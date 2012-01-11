@@ -33,6 +33,7 @@ TestStatCalculator.prototype.getTotalPageViews = function() {
     return this.totalPageViews;
 }
 
+
 // Calculators /////////////////////////////////////////////////
 
 /** @private */
@@ -98,12 +99,13 @@ TestStatCalculator.prototype.calculateBounceRate = function() {
     this.bounceRate = TestStatCalculator.round(this.bounceRate);
 }
 
+
 // Misc ////////////////////////////////////////////////////////
 
 /** @private */
 TestStatCalculator.prototype.forEachTest = function(callback) {
     for (var i = 0; i < pageViews.length; i++) {
-        if (pageViews[i]['test-' + this.testName] === this.testID) {
+        if (pageViews[i]['tests'][this.testName] === this.testID) {
             callback(pageViews[i]);
         }
     }
