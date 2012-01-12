@@ -1,8 +1,8 @@
 tmp
-logs
 reports
 nbproject
 build.xml
 public/closure
 public/uploads
 public/bundles
+precompiled

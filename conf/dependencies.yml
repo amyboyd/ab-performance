@@ -1,2 +1,2 @@
 require:
-    - play -> play master-localbuild
+    - play -> play
