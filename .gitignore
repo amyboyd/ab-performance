@@ -2,6 +2,7 @@ tmp
 reports
 nbproject
 build.xml
+logs/*
 public/closure
 public/uploads
 public/bundles
