@@ -17,11 +17,6 @@ Project(ABPerf):
 Domain(Domain_1):
     project: ABPerf
     domain: dev.abperf.com
-    access: PRIVATE
-
-Domain(Domain_2):
-    project: ABPerf
-    domain: abperf.com
     access: PUBLIC
 
 ## Project 2 ##
@@ -34,11 +29,6 @@ Project(ABPerfDemo):
 Domain(Domain_3):
     project: ABPerfDemo
     domain: dev.abperf.com
-    access: PRIVATE
-
-Domain(Domain_4):
-    project: ABPerfDemo
-    domain: abperf.com
     access: PUBLIC
 
 ## Project 3 ##
