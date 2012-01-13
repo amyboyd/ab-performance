@@ -1,14 +1,11 @@
 package com.abperf;
 
 import java.io.File;
-import java.sql.SQLException;
 import models.*;
 import play.Logger;
 import play.Play;
-import play.db.DB;
 import play.jobs.Job;
 import play.jobs.OnApplicationStart;
-import play.libs.IO;
 import play.test.Fixtures;
 
 /**
@@ -33,7 +30,8 @@ public class Bootstrap extends Job {
         isRunning = true;
 
         if (Constants.IS_DEV && User.count() == 0L) {
-            loadFixtures();
+            Fixtures.deleteAllModels();
+            Fixtures.loadModels("fixtures.yml");
         }
 
         File bundlesDir = Play.getFile("public/bundles");
@@ -43,20 +41,5 @@ public class Bootstrap extends Job {
 
         Logger.info("Finished bootstrap");
         isRunning = false;
-    }
-
-    private static void loadFixtures() {
-        Fixtures.deleteAllModels();
-
-        try {
-            for (int i = 1; i <= 16; i++) {
-                DB.execute(IO.readContentAsString(Play.getFile("conf/fixtures/IPAddress/" + i + ".sql")));
-            }
-            DB.getConnection().commit();
-        } catch (final SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-
-        Fixtures.loadModels("fixtures/fixtures.yml");
     }
 }
