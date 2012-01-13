@@ -13,7 +13,7 @@ GET     /privacy                                                Application.priv
 
 GET     /reports/generate                                       Users.report
 GET     /reports/getcss                                         Users.reportCSS
-GET     /reports/reports                                        staticDir:reports/
+GET     /reports/reports/                                       staticDir:reports/
 
 
 # Tracking
