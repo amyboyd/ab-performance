@@ -75,12 +75,6 @@ public class User extends Model {
     }
 
     public void onLogin() {
-        if (lastLogin != null) {
-            new UserNotification(
-                    "Your last login was on " + JavaExtensions.format(lastLogin, "EEEE d MMMM, yyyy").toString(),
-                    this).create();
-        }
-
         lastLogin = new Date();
         loginCount += 1;
         save();

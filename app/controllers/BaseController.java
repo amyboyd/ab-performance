@@ -26,12 +26,12 @@ abstract public class BaseController extends Controller {
         }
 
         User user = Authentication.findLoggedInUser();
-        if (user != null) {
-            postSuccessfulAuthenticate(user);
-            return;
-        }
 
-        postFailedAuthenticate();
+        request.args.put("isAuth", user != null);
+        renderArgs.put("isAuth", user != null);
+
+        request.args.put("currentUser", user);
+        renderArgs.put("currentUser", user);
     }
 
     @Before(priority = 10)
@@ -47,30 +47,6 @@ abstract public class BaseController extends Controller {
         UserDevice device = new UserDevice(userAgent != null ? userAgent.value() : "");
         request.args.put("device", device);
         renderArgs.put("device", device);
-    }
-
-    @Util
-    private static void postSuccessfulAuthenticate(User user) {
-        request.args.put("isAuth", true);
-        renderArgs.put("isAuth", true);
-
-        request.args.put("currentUser", user);
-        renderArgs.put("currentUser", user);
-
-        // Put some extra values in render args if not AJAX.
-        if (!request.isAjax()) {
-            // Limit number of notifications so they don't take up too much screen space.
-            renderArgs.put("notifications", UserNotification.findByUser(user, 5));
-        }
-    }
-
-    @Util
-    private static void postFailedAuthenticate() {
-        request.args.put("isAuth", false);
-        renderArgs.put("isAuth", false);
-
-        request.args.put("currentUser", null);
-        renderArgs.put("currentUser", null);
     }
 
     /**
