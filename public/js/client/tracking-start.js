@@ -21,12 +21,12 @@ var START_URL = abperf.globals.SERVER_URL + 'beta/tracking/start';
  * @param {object<string, Test>} installedTests
  */
 abperf.tracking.startRequest = function(installedTests) {
-    var data = {
-        'time': abperf.globals.startTime,
-        'url': window.location.toString(),
-        'user': abperf.persistence.getUserID(),
-        'proj': abperf.getProjectID()
-    };
+    // Write it this way to prevent Compiler renaming the keys...
+    var data = {};
+    data['time'] = abperf.globals.startTime;
+    data['url'] = window.location.toString();
+    data['user'] = abperf.persistence.getUserID();
+    data['proj'] = abperf.getProjectID();
     for (var testName in installedTests) {
         data['tests[' + testName + ']'] = (installedTests[testName] != null ? installedTests[testName].id : 'none');
     }

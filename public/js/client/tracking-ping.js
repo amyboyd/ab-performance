@@ -41,11 +41,11 @@ abperf.tracking.pingRequest = function() {
         lastPingStatus = status;
         consecutiveActivePings = (status === 'active' ? consecutiveActivePings + 1 : 0);
 
-        var data = {
-            'pv': abperf.globals.pageViewID,
-            'status': status,
-            'time': now
-        };
+        // Write it this way to prevent Compiler renaming the keys...
+        var data = {};
+        data['pv'] = abperf.globals.pageViewID;
+        data['status'] = status;
+        data['time'] = now;
 
         if (!goog.string.isEmptySafe(abperf.globals.cssToSupply)) {
             // Server does not know the CSS for at least one test ID, so tell the server what the CSS is.
