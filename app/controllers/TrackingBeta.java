@@ -160,6 +160,9 @@ public class TrackingBeta extends BaseController {
 
     @Util
     private static void allowCrossDomain() {
+        // This has the limitation of only allowing other hosts on the same port
+        // as AB Perf (80). There seems to be no way around this. The limitation
+        // is in our Terms Of Use.
         response.setHeader("Access-Control-Allow-Origin", "*");
     }
 }
