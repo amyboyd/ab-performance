@@ -36,6 +36,12 @@ public class TrackingBeta extends BaseController {
             return;
         }
 
+        if (proj == null || proj.longValue() == 0L) {
+            response.print("There should be an ID in your script tag, but it appears there isn't.");
+            response.status = StatusCode.FORBIDDEN;
+            return;
+        }
+
         final Project project = Project.findById(proj);
         if (project.hasReachedPageViewQuota()) {
             response.print("Page view limit has been reached.");

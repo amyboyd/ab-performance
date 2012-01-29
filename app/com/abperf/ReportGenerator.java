@@ -34,7 +34,6 @@ public class ReportGenerator {
         renderPageViewsJSON();
         IO.copyDirectory(Play.getFile(templateDir + "js/"), Play.getFile(project.reportOutputDir + "js/"));
         IO.copyDirectory(Play.getFile(templateDir + "css/"), Play.getFile(project.reportOutputDir + "css/"));
-        IO.copyDirectory(Play.getFile(templateDir + "images/"), Play.getFile(project.reportOutputDir + "images/"));
 
         project.save();
     }
