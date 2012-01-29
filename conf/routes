@@ -37,7 +37,7 @@ POST    ${domain}/beta/tracking/ping                            TrackingBeta.pin
 # Admin
 # ~~~~~
 GET     /admin/?                                                admin.Admin.index
-*       /admin/{module}/{action}                                admin.{module}.{action}
+*       /admin/{action}                                         admin.Admin.{action}
 
 
 # JS, CSS, images

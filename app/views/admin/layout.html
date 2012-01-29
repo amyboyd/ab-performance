@@ -5,25 +5,17 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
+        <link href="@{'/public/css/html5-reset.css'}" rel="stylesheet" />
         <style>
-            nav             { float: left; width: 200px; }
-            nav ul          { margin: 0; padding: 0; }
-            nav li          { list-style-type: none; }
-            #page-content   { margin-left: 220px; }
+            body    { margin: 20px; padding: 0; font: 17px sans-serif; }
+            table, h1, p { margin: 1em 0; }
+            h1      { font-size: 24px; }
+            td      { padding: 4px 6px; }
+            th, td  { border: 1px solid black; border-collapse: separate; }
         </style>
     </head>
     <body>
-        <p>
-            <a href="/">
-                <img src="@@{'/public/images/logo.png'}" />
-            </a>
-        </p>
-
-        <nav>
-            <ul>
-                <li><a href="">menu item</a></li>
-            </ul>
-        </nav>
+        <h1>Management</h1>
 
         <section id="page-content">
             #{if errors.size()}

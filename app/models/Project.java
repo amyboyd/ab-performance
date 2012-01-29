@@ -31,6 +31,9 @@ public class Project extends Model {
     @ManyToOne
     public User user;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date createdAt;
+
     public int pageViews, pageViewQuota;
 
     /**
@@ -45,8 +48,8 @@ public class Project extends Model {
     public Date paymentReceivedAt;
 
     /**
-     * How many page views the project had at the time of the report being generated.
-     * Should be a multiple of 1000.
+     * How many page views the project had at the time of the report being
+     * generated. Should be a multiple of 1000.
      */
     public int reportPageViews;
 
@@ -57,10 +60,12 @@ public class Project extends Model {
 
     public String reportOutputDir;
 
-    public Project(final String name, final AccountType accountType, final User user) {
+    public Project(final String name, final AccountType accountType,
+            final User user) {
         this.name = name;
         this.accountType = accountType;
         this.user = user;
+        this.createdAt = new Date();
     }
 
     public boolean hasReachedPageViewQuota() {
@@ -76,6 +81,9 @@ public class Project extends Model {
     protected void prePersist() {
         if (accountType == null) {
             throw new IllegalStateException("User must have an account type");
+        }
+        if (createdAt == null) {
+            createdAt = new Date();
         }
     }
 
@@ -110,6 +118,12 @@ public class Project extends Model {
 
     public String privateDomainsAsString() {
         return domainsAsString(DomainAccess.PRIVATE);
+    }
+
+    public String allDomainsAsString() {
+        return domainsAsString(DomainAccess.PUBLIC)
+                + '\n'
+                + domainsAsString(DomainAccess.PRIVATE);
     }
 
     private String domainsAsString(DomainAccess access) {

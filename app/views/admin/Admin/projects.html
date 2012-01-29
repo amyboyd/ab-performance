@@ -1,0 +1,32 @@
+#{extends 'admin/layout.html' /}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Company/project</th>
+            <th>Account type</th>
+            <th>Amount paid</th>
+            <th>Domains</th>
+            <th>User</th>
+            <th>Page views</th>
+            <th>Page view quota</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        #{list projects}
+            <tr>
+                <td>${_.id}</td>
+                <td>${_.name}</td>
+                <td>${_.accountType.name().toLowerCase().replace('_', ' ')}</td>
+                <td>#{if _.paymentReceivedAt} - ${_.currency.format(_.price)} #{/}</td>
+                <td>${_.allDomainsAsString().nl2br()}</td>
+                <td>${_.user}</td>
+                <td>${_.pageViews}</td>
+                <td>${_.pageViewQuota}</td>
+                <td>${_.createdAt?.since()}</td>
+            </tr>
+        #{/list}
+    </tbody>
+</table>

@@ -1,3 +1,23 @@
 #{extends 'admin/layout.html' /}
 
-<p>This is the admin index.</p>
+<table>
+    <tr>
+        <th>Projects</th>
+        <td>${projectsCount}</td>
+        <td><a href="@{projects()}">List</a></td>
+    </tr>
+    <tr>
+        <th>Accounts</th>
+        <td>${usersCount}</td>
+        <td><a href="@{users()}">List</a></td>
+    </tr>
+    <tr>
+        <th>Page views</th>
+        <td>${pageViewsCount}</td>
+        <td></td>
+    </tr>
+</table>
+
+<p>
+    <a href="@{applicationLogFile}">application.log</a>
+</p>

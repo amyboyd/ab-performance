@@ -1,0 +1,26 @@
+#{extends 'admin/layout.html' /}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Registered</th>
+            <th>Last login</th>
+            <th>Login count</th>
+            <th>Login failures</th>
+        </tr>
+    </thead>
+    <tbody>
+        #{list users}
+            <tr>
+                <td>${_.id}</td>
+                <td>${_.email}</td>
+                <td>${_.registeredAt?.since()}</td>
+                <td>${_.lastLogin?.since()}</td>
+                <td>${_.loginCount}</td>
+                <td>${_.loginFailures}</td>
+            </tr>
+        #{/list}
+    </tbody>
+</table>

@@ -10,7 +10,6 @@ import play.data.binding.NoBinding;
 import play.data.validation.*;
 import play.db.jpa.Model;
 import play.libs.Codec;
-import play.templates.JavaExtensions;
 
 @Entity
 @Table(name = "user")
@@ -21,6 +20,7 @@ public class User extends Model {
     @Column(unique = true)
     public String email;
 
+    // Not used
     public boolean emailConfirmed;
 
     /**
@@ -67,6 +67,7 @@ public class User extends Model {
     public User(String email, String password) {
         this.email = email;
         this.password = password;
+        this.registeredAt = new Date();
     }
 
     @Override
