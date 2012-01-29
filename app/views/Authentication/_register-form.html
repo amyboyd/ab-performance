@@ -1,4 +1,4 @@
-#{form @Authentication.registerHandler(forward), method:'post', onsubmit:"this.submit.value='Registering...';this.submit.disabled=1;"}
+#{form @Authentication.registerHandler(forward), method:'post', id:'reg-form', onsubmit:"this.submit.value='Registering...';this.submit.disabled=1;"}
     #{if flash.userRegisterError}<p class="flash-message">${flash.userRegisterError}</p>#{/if}
 
     #{include 'Users/_project-form.html' /}
@@ -18,11 +18,14 @@
     </p>
 
     <p>
-        <input type="submit" value="Continue" tabindex="312" class="cta" name="submit" />
+        <input type="checkbox" required="required" name="terms" tabindex="312"
+               id="reg-terms" #{if flash.terms}checked#{/} />
+        <label for="reg-terms">Do you agree to our
+            <a href="@{Application.terms}" target="_blank">terms of use and
+            privacy policy</a>?</label>
     </p>
 
     <p>
-        By clicking the "Continue" button above, you confirm that you agree to our
-        <a href="@{Application.terms}" target="_blank">terms of use and privacy policy</a>.
+        <input type="submit" value="Continue" tabindex="313" class="cta" name="submit" />
     </p>
 #{/form}

@@ -1,0 +1,10 @@
+#reg-form input#reg-terms {
+    position: relative;
+    top: -3px;
+    margin-right: 5px;
+}
+
+#reg-form input[type="radio"] {
+    position: relative;
+    top: -1px;
+}

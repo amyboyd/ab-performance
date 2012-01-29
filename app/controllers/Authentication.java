@@ -66,8 +66,9 @@ public class Authentication extends BaseController {
      * Receive and validate the register form.
      * If an already-registered email address is submitted and the password is correct, user is logged in.
      */
-    public static void registerHandler(String forward, String projectName, String publicDomains,
-            String privateDomains, AccountType accountType, String email, String password) {
+    public static void registerHandler(String forward, String projectName,
+            String publicDomains, String privateDomains, AccountType accountType,
+            String email, String password, boolean terms) {
         if (isAuth()) {
             flash.error("You are already logged in...");
             Users.overview();
@@ -98,6 +99,8 @@ public class Authentication extends BaseController {
             errorMessage = "Please enter a company or project name.";
         } else if (!validation.required(password).ok) {
             errorMessage = "Please enter a password.";
+        } else if (!terms) {
+            errorMessage = "You must argree to our terms of use.";
         }
 
         if (errorMessage != null) {
