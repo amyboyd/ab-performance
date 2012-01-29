@@ -126,7 +126,7 @@ Optional args:
         *{ JavaScript. }*
         #{get 'moreScripts' /}
 
-        #{if com.abperf.Constants.IS_PROD && !user?.admin}
+        #{if com.abperf.Constants.IS_PROD && !currentUser?.admin}
             <script type="text/javascript">
                 var _gaq = _gaq || [];
                 _gaq.push(['_setAccount', 'UA-25238227-4']);
