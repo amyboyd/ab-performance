@@ -7,3 +7,4 @@ public/closure
 public/uploads
 public/bundles
 precompiled
+hs_err_*.log
