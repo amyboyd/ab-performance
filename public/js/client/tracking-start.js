@@ -58,11 +58,12 @@ abperf.tracking.startResponse = function(response) {
             }
         }
 
-        setTimeout(abperf.tracking.pingRequest, 5000);
+        abperf.interactions.init();
     } else if (status === 403 && console !== undefined) {
         // Something (not an error) is preventing tracking. That could be lack of payment,
         // being on an unregistered or private domain, etc.
         console.log('AB Perf:', text);
+        abperf.persistence.clear();
     } else if (console !== undefined) {
         if (status === 0) {
             console.log('AB Perf: unexpected status 0. Maybe compiled DEV instead of PROD or vice versa.');

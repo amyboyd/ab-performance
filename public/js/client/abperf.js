@@ -17,7 +17,6 @@ onDOMContentLoaded(function() {
     abperf.persistence.init();
     abperf.styles.init();
     abperf.tracking.startRequest(abperf.styles.installedTests);
-    abperf.interactions.init();
 
     // These can be safely deleted to reduce memory usage.
     delete abperf.styles.init;
@@ -25,5 +24,4 @@ onDOMContentLoaded(function() {
     delete abperf.styles.createTests;
     delete abperf.styles.createTestGroups;
     delete abperf.styles.runTestGroups;
-    delete abperf.interactions.init;
 });

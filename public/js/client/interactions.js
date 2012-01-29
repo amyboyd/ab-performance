@@ -16,6 +16,8 @@ abperf.interactions.init = function() {
         window,
         [goog.events.EventType.MOUSEMOVE, goog.events.EventType.SCROLL, goog.events.EventType.KEYPRESS],
         abperf.interactions.onInteraction);
+
+    setTimeout(abperf.tracking.pingRequest, 5000);
 }
 
 /**

@@ -83,6 +83,11 @@ abperf.persistence.isExpired = function() {
     return pData['date'] < threeHoursAgo;
 }
 
+abperf.persistence.clear = function () {
+    pData = {};
+    abperf.persistence.save();
+}
+
 /** @private */
 abperf.persistence.save = function() {
     store.set(LOCAL_STORAGE_KEY, pData);
